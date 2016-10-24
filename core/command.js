@@ -48,6 +48,13 @@ CommandGroup.prototype.getCommand = function(command_trigger){
     return cmd;
 }
 
+//Looks up and calls a function by it's trigger
+//trigger       : string    - chat keyword that triggers the command
+//command_data  : object - object containing command/message data(user, channel, service, etc.)
+CommandGroup.prototype.call = function(trigger, command_data){
+    this.getCommand(trigger).call(command_data);
+}
+
 //Command object
 //trigger   : string    - chat keyword that triggers the command
 //action    : function  - function to be exectued on trigger
@@ -59,8 +66,14 @@ function Command(trigger, action){
 //Execute command action on trigger
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 Command.prototype.call = function(command_data){
-    //TODO: Log command once logging is a thing
-    this.action(command_data);
+    try{
+        //TODO: Log command once logging is a thing
+        return this.action(command_data);
+    }catch(e){
+        //TODO: Log error
+        return -1;
+    }
+    
 }
 
 module.exports.CommandGroup = CommandGroup;
