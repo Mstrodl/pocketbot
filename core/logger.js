@@ -10,6 +10,10 @@ module.exports.MESSAGE_TYPE = {
     Error = 3
 };
 
+module.exports.clearLogFile = function(){
+    fs.writeFileSync(logFile, "");
+}
+
 module.exports.log = function(msg, type=0){
     var final_msg = "";
 
@@ -30,7 +34,7 @@ module.exports.log = function(msg, type=0){
 
     console.log(final_msg);
     
-    fs.writeFile(logFile, final_msg, function(err){
+    fs.appendFile(logFile, final_msg, function(err){
         //Error logging threw an error. Panic
         console.log(chalk.red('[ERROR] Failed to log error:\n' + err));
     });
