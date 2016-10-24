@@ -1,0 +1,25 @@
+{
+  "name": "pocketbot",
+  "version": "1.0.0",
+  "description": "Official Discord Bot for PWG",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "engines": {
+    "node": "6.7.0"
+  },
+  "contributors": [
+      "Brian Franco <mastastealth@gmail.com>"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "discord.io": "^2.2.4",
+    "firebase": "^3.0.2",
+    "gm": "^1.22.0",
+    "node-wolfram": "0.0.1",
+    "steam-webapi": "^0.6.5",
+    "webshot": "^0.18.0",
+    "jsonfile": "^2.4.0"
+  }
+}
