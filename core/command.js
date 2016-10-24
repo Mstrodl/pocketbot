@@ -16,7 +16,7 @@ CommandGroup.prototype.add = function(command){
         throw new Error("Command undefined cannot be added to group '" + this.name + "'");
     }
 
-    if(typeof(command) != "Command"){
+    if(typeof(command) != "object"){
         throw new Error("Noncommand cannot be added to group '" + this.name + "'");
     }
 
@@ -30,7 +30,7 @@ CommandGroup.prototype.getCommand = function(command_trigger){
         throw new Error("Empty trigger given. Cannot get command");
     }
 
-    if(typeof(command) != "string"){
+    if(typeof(command_trigger) != "string"){
         throw new Error("Trigger not a string!");
     }
 
@@ -62,3 +62,6 @@ Command.prototype.call = function(command_data){
     //TODO: Log command once logging is a thing
     this.action(command_data);
 }
+
+module.exports.CommandGroup = CommandGroup;
+module.exports.Command = Command;
