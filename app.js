@@ -2,6 +2,7 @@
 
 // Get the libs
 let chat 	= require('discord.io'),
+	path 	= require('path'),
 	Fb 		= require("firebase"),
 	shot 	= require("webshot"), // ! -- what is this for?
 	fs 		= require('fs'),
@@ -11,10 +12,31 @@ let chat 	= require('discord.io'),
 
 // Modules
 let TOKEN 	= require('./core/tokens'),
-	command = require('./core/command')
+	command = require('./core/command'),
 	logger 	= require('./core/logger'),
 	vars 	= require('./core/vars');
 	// insert a thing for the rest of commands in './cmds/'
+
+let globalCommandManager	= new command.CommandManager();
+let basicCommandGroup 		= new command.CommandGroup('basic');
+
+globalCommandManager.addGroup(basicCommandGroup);
+
+//Parse the cmds dir and load any commands in there
+fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
+	if(err){
+		logger.log(err, logger.MESSAGE_TYPE.Error);
+		return;
+	}
+
+	for(var i = 0; i < files.length; i++){
+		let _cmds = require(path.join(__dirname, 'cmds', path.parse(files[i]).name)).commands;
+
+		_cmds.forEach(function(element) {
+			globalCommandManager.addCommand(element);
+		}, this);
+	}
+});
 
 // Initialize Firebase Stuff
 // ! -- Modularize it too?
@@ -41,5 +63,5 @@ let soldiers = Fb.database().ref("players"),
 let bot = new chat.Client({ token: "MjM2NTM3ODM3NzI4Njk0Mjgy.CuKmcg.ES1nrRi28OwB3AWUNS7rCfa1-Iw", autorun: true });
 
 bot.on('ready', function(event) {
-    logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.Info);
+    logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 });
