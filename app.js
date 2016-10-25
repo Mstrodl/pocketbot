@@ -3,10 +3,11 @@
 // Get the libs
 let chat = require('discord.io'),
 	Fb = require("firebase"),
-	shot = require("webshot"),
+	shot = require("webshot"), // ! -- what is this for?
 	fs = require('fs'),
 	gm = require('gm').subClass({ imageMagick: true }),
 	wc = require('node-wolfram'),
+	logger = require('./core/logger'),
 	steam = require('steam-webapi');
 
 // Modules
@@ -36,8 +37,8 @@ let soldiers = Fb.database().ref("players"),
 */
 
 // ! -- Probably doesn't work yet...
-let bot = new chat.Client({ token: "", autorun: true });
+let bot = new chat.Client({ token: "MjM2NTM3ODM3NzI4Njk0Mjgy.CuKmcg.ES1nrRi28OwB3AWUNS7rCfa1-Iw", autorun: true });
 
 bot.on('ready', function(event) {
-    console.log('Logged in as %s', bot.username);
+    logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.Info);
 });
