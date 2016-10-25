@@ -1,5 +1,29 @@
-//TODO: Log error when logging is
+var logger = require('./logger');
 
+//Command Manager, holds all the groups in one objecy
+function CommandManager(){
+    this.groups = {};
+}
+
+CommandManager.prototype.addGroup = function(group){
+    if(!group){
+        throw new Error("Group undefined cannot be added to manager");
+    }
+
+    this.groups[group.name] = group;
+}
+
+CommandManager.prototype.addCommand = function(command){
+    if(!command){
+        throw new Error("Command undefined cannot be added via manager");
+    }
+
+    if(!this.groups[command.groupName]){
+        throw new Error("Cannot add a command with a nonexistent group");
+    }
+
+    this.groups[command.groupName].add(command);
+}
 
 //Command Group object
 //name      : string - the name of the Group
@@ -14,10 +38,6 @@ function CommandGroup(name){
 CommandGroup.prototype.add = function(command){
     if(!command){
         throw new Error("Command undefined cannot be added to group '" + this.name + "'");
-    }
-
-    if(typeof(command) != "object"){
-        throw new Error("Noncommand cannot be added to group '" + this.name + "'");
     }
 
     this.commands[command.trigger] = command;
@@ -56,9 +76,11 @@ CommandGroup.prototype.call = function(trigger, command_data){
 }
 
 //Command object
-//trigger   : string    - chat keyword that triggers the command
-//action    : function  - function to be exectued on trigger
-function Command(trigger, action){
+//groupName     : string    - name of the group the command will belong to
+//trigger       : string    - chat keyword that triggers the command
+//action        : function  - function to be exectued on trigger
+function Command(groupName, trigger, action){
+    this.groupName = groupName;
     this.trigger = trigger;
     this.action = action;
 }
@@ -67,14 +89,16 @@ function Command(trigger, action){
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 Command.prototype.call = function(command_data){
     try{
-        //TODO: Log command once logging is a thing
-        return this.action(command_data);
+        let cmdResult = this.action(command_data);
+        logger.log(this.groupName + '- ' + this.trigger + ': ' + cmdResult);
+        return cmdResult;
     }catch(e){
-        //TODO: Log error
+        logger.log(this.groupName + '- ' + this.trigger + ': Failed to execute command:\n' + e);
         return -1;
     }
     
 }
 
-module.exports.CommandGroup = CommandGroup;
-module.exports.Command = Command;
+module.exports.CommandManager   = CommandManager;
+module.exports.CommandGroup     = CommandGroup;
+module.exports.Command          = Command;
