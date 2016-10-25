@@ -10,12 +10,13 @@ let chat = require('discord.io'),
 	steam = require('steam-webapi');
 
 // Modules
-let token = require('./core/tokens'),
+let TOKEN = require('./core/tokens'),
 	vars = require('./core/vars');
 	// insert a thing for the rest of commands in './cmds/'
 
 // Initialize Firebase Stuff
 // ! -- Modularize it too?
+/*
 let config = {
 	apiKey: FBKEY,
 	authDomain: "ltf-alpha-keys.firebaseapp.com",
@@ -32,6 +33,11 @@ let soldiers = Fb.database().ref("players"),
 	emails = Fb.database().ref("email"),
 	keys = Fb.database().ref("key"),
 	quotes = Fb.database().ref("quote");
+*/
 
 // ! -- Probably doesn't work yet...
-let bot = new chat.Client({ token: TOKEN, autorun: true });
+let bot = new chat.Client({ token: "", autorun: true });
+
+bot.on('ready', function(event) {
+    console.log('Logged in as %s', bot.username);
+});

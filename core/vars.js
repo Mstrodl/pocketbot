@@ -1,3 +1,5 @@
+const fs = require('fs');
+
 const book = '176530812576071680',
 	mastabot = '171782210800582656',
 	stealth = "98419293514919936",
@@ -19,7 +21,7 @@ let players = [], // Whoever is ready
 	mute = false, // Mute? :P
 	dance = '',
 	streamer = '',
-	wolf = new wc(WOLFID),
+	// wolf = new wc(WOLFID),
 	bookDelete = false,
 	// ! - Maybe this can be automated to read from the directory instead...
 	emotes = [
