@@ -1,18 +1,19 @@
 "use strict"
 
 // Get the libs
-let chat = require('discord.io'),
-	Fb = require("firebase"),
-	shot = require("webshot"), // ! -- what is this for?
-	fs = require('fs'),
-	gm = require('gm').subClass({ imageMagick: true }),
-	wc = require('node-wolfram'),
-	logger = require('./core/logger'),
-	steam = require('steam-webapi');
+let chat 	= require('discord.io'),
+	Fb 		= require("firebase"),
+	shot 	= require("webshot"), // ! -- what is this for?
+	fs 		= require('fs'),
+	gm 		= require('gm').subClass({ imageMagick: true }),
+	wc 		= require('node-wolfram'),
+	steam 	= require('steam-webapi');
 
 // Modules
-let TOKEN = require('./core/tokens'),
-	vars = require('./core/vars');
+let TOKEN 	= require('./core/tokens'),
+	command = require('./core/command')
+	logger 	= require('./core/logger'),
+	vars 	= require('./core/vars');
 	// insert a thing for the rest of commands in './cmds/'
 
 // Initialize Firebase Stuff
