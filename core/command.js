@@ -1,6 +1,6 @@
 var logger = require('./logger');
 
-//Command Manager, holds all the groups in one objecy
+//Command Manager, holds all the groups in one object
 function CommandManager(){
     this.groups = {};
 }
