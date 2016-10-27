@@ -14,6 +14,7 @@ let chat 	= require('discord.io'),
 let TOKEN 	= require('./core/tokens'),
 	command = require('./core/command'),
 	logger 	= require('./core/logger'),
+	helper	= require('./core/helpers'),
 	vars 	= require('./core/vars');
 	// insert a thing for the rest of commands in './cmds/'
 
@@ -21,6 +22,9 @@ let globalCommandManager	= new command.CommandManager();
 let basicCommandGroup 		= new command.CommandGroup('basic');
 
 globalCommandManager.addGroup(basicCommandGroup);
+
+//Clear the log file
+logger.clearLogFile();
 
 //Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
@@ -60,8 +64,42 @@ let soldiers = Fb.database().ref("players"),
 */
 
 // ! -- Probably doesn't work yet...
-let bot = new chat.Client({ token: "MjM2NTM3ODM3NzI4Njk0Mjgy.CuKmcg.ES1nrRi28OwB3AWUNS7rCfa1-Iw", autorun: true });
+let bot = new chat.Client({ token: "GETATOKEN", autorun: true });
 
 bot.on('ready', function(event) {
     logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
+});
+
+bot.on('message', function(user, userID, channelID, message, event){
+	//Remove whitespace
+	message = message.trim()
+
+	//Split message into args
+	let args = helper.getArgs(message);
+
+	//Prepare command_data object
+	let command_data = {
+		//Bot client object
+		bot: bot,
+		//Name of user who sent the message
+		user: user,
+		//ID of user who sent the message
+		userID: userID,
+		//ID of channel the message was sent in
+		channelID: channelID,
+		//Raw message string
+		message: message,
+		//Array of arguments/words in the message
+		args: args
+
+	}
+
+	try{
+		logger.log(user + ": " + message);
+		if(globalCommandManager.isTrigger(args[0])){
+			globalCommandManager.call(command_data, args[0]);
+		}
+	}catch(e){
+		logger.log(e.message, logger.MESSAGE_TYPE.Error);
+	}
 });
