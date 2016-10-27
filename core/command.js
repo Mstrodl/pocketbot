@@ -45,6 +45,22 @@ CommandManager.prototype.getCommand = function(trigger, group=null){
     }
 }
 
+CommandManager.prototype.isTrigger = function(trigger){
+    if(!trigger){
+        throw new Error("Bad argument");
+    }
+
+    for(var group_name in this.groups){
+        for(var command_trigger in this.groups[group_name].commands){
+            if(trigger == command_trigger){
+                return true;
+            }
+        }
+    }
+
+    return false;
+}
+
 CommandManager.prototype.call = function(data, trigger, group=null){
     return this.getCommand(trigger, group).call(data);
 }
@@ -114,10 +130,10 @@ function Command(groupName, trigger, action){
 Command.prototype.call = function(command_data){
     try{
         let cmdResult = this.action(command_data);
-        logger.log(this.groupName + '- ' + this.trigger + ': ' + cmdResult);
+        logger.log(this.groupName +': ' + cmdResult, logger.MESSAGE_TYPE.OK);
         return cmdResult;
     }catch(e){
-        logger.log(this.groupName + '- ' + this.trigger + ': Failed to execute command:\n' + e);
+        logger.log(this.groupName + ' - ' + this.trigger + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error);
         return -1;
     }
     
