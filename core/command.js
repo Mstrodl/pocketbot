@@ -1,10 +1,12 @@
 var logger = require('./logger');
 
 //Command Manager, holds all the groups in one object
+//groups    : object - key: group name, value: group object
 function CommandManager(){
     this.groups = {};
 }
 
+//Add/overwrites a given group in the CommandManager
 CommandManager.prototype.addGroup = function(group){
     if(!group){
         throw new Error("Group undefined cannot be added to manager");
@@ -13,6 +15,7 @@ CommandManager.prototype.addGroup = function(group){
     this.groups[group.name] = group;
 }
 
+//Adds/overwrites a given command to a given group, provided the group is handled by the manager instance
 CommandManager.prototype.addCommand = function(command){
     if(!command){
         throw new Error("Command undefined cannot be added via manager");
@@ -23,6 +26,27 @@ CommandManager.prototype.addCommand = function(command){
     }
 
     this.groups[command.groupName].add(command);
+}
+
+//Looks up a command in either all groups or a given group
+CommandManager.prototype.getCommand = function(trigger, group=null){
+    if(group == null){
+        //If no group is given, search in all groups
+        for(var key in this.groups){
+            return this.groups[key].getCommand(trigger);
+        }
+    }else{
+        //Check if the group exists and try and call the command
+        if(this.groups[group]){
+            return this.groups[group].getCommand(trigger);
+        }
+        //If the group does not exist, throw an error
+        throw new Error(group + " does not exist in this instance of the CommandManager");
+    }
+}
+
+CommandManager.prototype.call = function(data, trigger, group=null){
+    return this.getCommand(trigger, group).call(data);
 }
 
 //Command Group object
@@ -72,7 +96,7 @@ CommandGroup.prototype.getCommand = function(command_trigger){
 //trigger       : string    - chat keyword that triggers the command
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 CommandGroup.prototype.call = function(trigger, command_data){
-    this.getCommand(trigger).call(command_data);
+    return this.getCommand(trigger).call(command_data);
 }
 
 //Command object
