@@ -21,7 +21,7 @@ var Personality = function(name, avatar_path){
 
 //Sets this personality as the currently active one
 //command_data    : Info object
-Personality.prototype.set = function(command_data){
+Personality.prototype.set = function(command_data, callback){
     if(!command_data){
         throw new Error('No data given. Cannot change personality');
     }
@@ -42,6 +42,8 @@ Personality.prototype.set = function(command_data){
     command_data.bot.editUserInfo({avatar  : this.avatar_buffer}, function(err, res){
         if(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
+        }else{
+            callback(command_data);
         }
     });
 

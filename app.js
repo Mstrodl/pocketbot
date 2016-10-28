@@ -101,10 +101,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 	try{
 		logger.log(user + ": " + message);
 		if(globalCommandManager.isTrigger(args[0])){
-			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data);
-			//We need a delay so Discord can update bot data in time
-			setTimeout(function(){globalCommandManager.call(command_data, args[0]);}, 400);
-			//defaultPersona.set(bot);
+			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data, function(){globalCommandManager.call(command_data, args[0]);});
 		}
 	}catch(e){
 		logger.log(e.message, logger.MESSAGE_TYPE.Error);
