@@ -40,7 +40,7 @@ module.exports.log = function(msg, type=0){
 
     console.log(final_msg);
     
-    fs.appendFile(logFile, final_msg, function(err){
+    fs.appendFile(logFile, final_msg + '\n', function(err){
         if(err){
             //Error logging threw an error. Panic
             console.log(chalk.red('[ERROR] Failed to log error:\n' + err));
