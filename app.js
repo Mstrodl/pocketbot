@@ -104,6 +104,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data, function(){globalCommandManager.call(command_data, args[0]);});
 		}
 	}catch(e){
+		bot.sendMessage({to: channelID, message: "An error occured inside the '" + args[0] + "' command code"});
 		logger.log(e.message, logger.MESSAGE_TYPE.Error);
 	}
 });
