@@ -46,8 +46,10 @@ CommandManager.prototype.getCommand = function(trigger, group=null){
             return this.groups[group].getCommand(trigger);
         }
         //If the group does not exist, throw an error
-        throw new Error(group + " does not exist in this instance of the CommandManager");
+        return null;
     }
+
+    return null;
 }
 
 //Looks up a group by name and returns it if it is found
@@ -91,8 +93,25 @@ CommandManager.prototype.call = function(data, trigger, group=null){
             }
         }
     }
-
     return false;
+}
+
+//Gets the help text for either one or all commands
+CommandManager.prototype.getHelp = function(trigger=null){
+    if(trigger != null){
+        var cmd = this.getCommand(trigger);
+        if(cmd != null){
+            return '**' + trigger + '** - `' + cmd.description + '`';
+        }
+    }else{
+        var s = "";
+        for(var group in this.groups){
+            for(var cmd in this.groups[group].commands){
+                s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';
+            }
+        }
+        return s;
+    }
 }
 
 //Command Group object
@@ -156,9 +175,10 @@ CommandGroup.prototype.call = function(trigger, command_data){
 //groupName     : string    - name of the group the command will belong to
 //trigger       : string    - chat keyword that triggers the command
 //action        : function  - function to be exectued on trigger
-function Command(groupName, trigger, action){
+function Command(groupName, trigger, description="", action){
     this.groupName = groupName;
     this.trigger = trigger;
+    this.description = description;
     this.action = action;
 }
 

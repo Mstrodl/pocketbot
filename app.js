@@ -69,7 +69,7 @@ let soldiers = Fb.database().ref("players"),
 */
 
 //This stays a var. You change it back to let, we fight
-var bot = new chat.Client({ token: "GETAFUCKINGTOKENALREADY", autorun: true });
+var bot = new chat.Client({ token: "TOKERINOPLS", autorun: true });
 
 bot.on('ready', function(event) {
     logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
@@ -84,6 +84,8 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 	//Prepare command_data object
 	var command_data = {
+		//Command manager
+		commandManager: globalCommandManager,
 		//Bot client object
 		bot: bot,
 		//Name of user who sent the message
