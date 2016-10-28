@@ -14,14 +14,19 @@ let chat 	= require('discord.io'),
 let TOKEN 	= require('./core/tokens'),
 	command = require('./core/command'),
 	logger 	= require('./core/logger'),
+	persona = require('./core/personality'),
 	helper	= require('./core/helpers'),
 	vars 	= require('./core/vars');
-	// insert a thing for the rest of commands in './cmds/'
 
-let globalCommandManager	= new command.CommandManager();
-let basicCommandGroup 		= new command.CommandGroup('basic');
+var defaultPersona	= new persona('Masta\'s Face', './assets/avatars/masta.png');
+var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png')
+
+var globalCommandManager	= new command.CommandManager();
+var basicCommandGroup 		= new command.CommandGroup('basic', defaultPersona);
+var mjCommandGroup 			= new command.CommandGroup('mj', mjPersona);
 
 globalCommandManager.addGroup(basicCommandGroup);
+globalCommandManager.addGroup(mjCommandGroup);
 
 //Clear the log file
 logger.clearLogFile();
@@ -63,8 +68,8 @@ let soldiers = Fb.database().ref("players"),
 	quotes = Fb.database().ref("quote");
 */
 
-// ! -- Probably doesn't work yet...
-let bot = new chat.Client({ token: "GETATOKEN", autorun: true });
+//This stays a var. You change it back to let, we fight
+var bot = new chat.Client({ token: "GETAFUCKINGTOKENALREADY", autorun: true });
 
 bot.on('ready', function(event) {
     logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
@@ -75,10 +80,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 	message = message.trim()
 
 	//Split message into args
-	let args = helper.getArgs(message);
+	var args = helper.getArgs(message);
 
 	//Prepare command_data object
-	let command_data = {
+	var command_data = {
 		//Bot client object
 		bot: bot,
 		//Name of user who sent the message
@@ -91,13 +96,15 @@ bot.on('message', function(user, userID, channelID, message, event){
 		message: message,
 		//Array of arguments/words in the message
 		args: args
-
 	}
 
 	try{
 		logger.log(user + ": " + message);
 		if(globalCommandManager.isTrigger(args[0])){
-			globalCommandManager.call(command_data, args[0]);
+			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data);
+			//We need a delay so Discord can update bot data in time
+			setTimeout(function(){globalCommandManager.call(command_data, args[0]);}, 400);
+			//defaultPersona.set(bot);
 		}
 	}catch(e){
 		logger.log(e.message, logger.MESSAGE_TYPE.Error);

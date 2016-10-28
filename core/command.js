@@ -1,4 +1,5 @@
 var logger = require('./logger');
+var personality = require('./personality');
 
 //Command Manager, holds all the groups in one object
 //groups    : object - key: group name, value: group object
@@ -33,7 +34,11 @@ CommandManager.prototype.getCommand = function(trigger, group=null){
     if(group == null){
         //If no group is given, search in all groups
         for(var key in this.groups){
-            return this.groups[key].getCommand(trigger);
+            var cmd = this.groups[key].getCommand(trigger);
+
+            if(cmd != null){
+                return cmd;
+            }
         }
     }else{
         //Check if the group exists and try and call the command
@@ -43,6 +48,15 @@ CommandManager.prototype.getCommand = function(trigger, group=null){
         //If the group does not exist, throw an error
         throw new Error(group + " does not exist in this instance of the CommandManager");
     }
+}
+
+//Looks up a group by name and returns it if it is found
+CommandManager.prototype.getGroup = function(name){
+    if(!name){
+        throw new Error("Cannot search for group if no name given");
+    }
+
+    return this.groups[name];
 }
 
 CommandManager.prototype.isTrigger = function(trigger){
@@ -62,14 +76,40 @@ CommandManager.prototype.isTrigger = function(trigger){
 }
 
 CommandManager.prototype.call = function(data, trigger, group=null){
-    return this.getCommand(trigger, group).call(data);
+    if(!data){
+        throw new Error("No data passed to command");
+    }
+    
+    if(!trigger){
+        throw new Error("No trigger for call");
+    }
+
+    for(var group_name in this.groups){
+        for(var command_trigger in this.groups[group_name].commands){
+            if(trigger == command_trigger){
+                this.groups[group_name].call(trigger, data);
+            }
+        }
+    }
+
+    return false;
 }
 
 //Command Group object
-//name      : string - the name of the Group
-//commands  : object - key: command trigger, value: command object
-function CommandGroup(name){
+//name          : string - the name of the Group
+//personality   : Personality object, defining which "bot" should be used
+//commands      : object - key: command trigger, value: command object
+function CommandGroup(name, personality){
+    if(!name){
+        throw new Error("Cannot create nameless group");
+    }
+
+    if(!personality){
+        throw new Error("This is not Quartermaster, give it a personality");
+    }
+
     this.name = name;
+    this.personality = personality;
     this.commands = {};
 }
 
@@ -101,10 +141,6 @@ CommandGroup.prototype.getCommand = function(command_trigger){
         }
     }
 
-    if(cmd == null){
-        throw new Error("No command for trigger '" + command_trigger + "' found");
-    }
-
     return cmd;
 }
 
@@ -112,7 +148,8 @@ CommandGroup.prototype.getCommand = function(command_trigger){
 //trigger       : string    - chat keyword that triggers the command
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 CommandGroup.prototype.call = function(trigger, command_data){
-    return this.getCommand(trigger).call(command_data);
+    //this.personality.set(command_data.bot);
+    this.getCommand(trigger).call(command_data);
 }
 
 //Command object
@@ -129,7 +166,7 @@ function Command(groupName, trigger, action){
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 Command.prototype.call = function(command_data){
     try{
-        let cmdResult = this.action(command_data);
+        var cmdResult = this.action(command_data);
         logger.log(this.groupName +': ' + cmdResult, logger.MESSAGE_TYPE.OK);
         return cmdResult;
     }catch(e){
