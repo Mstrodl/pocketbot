@@ -5,17 +5,18 @@
  ---------------------------------------- */
 var exports = module.exports = {};
 
-exports.bot = '';
-exports.say = function(bot=exports.bot,msg,c=chan) {
-	bot.sendMessage({ to:c, message: msg });
+exports.say = function(msg,data,chan=false) {
+	let c = (chan) ? chan : data.channelID;
+	data.bot.sendMessage({ to:c, message: msg });
 }
 
-exports.sendImage = function(bot=exports.bot,t,user,c=chan) {
+exports.sendImage = function(t,user,data,chan=false) {
+	let c = (chan) ? chan : data.channelID;
 	let emoji = t.replace(/:/g, "");
 	let m = (user) ? '`@'+user+':`': null;
 	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz')) {
 		console.log('Uploading '+emoji+'.gif');
-		bot.uploadFile({
+		data.bot.uploadFile({
 			to: c,
 			file: emoji + '.gif',
 			filename: emoji + '.gif',
@@ -23,7 +24,7 @@ exports.sendImage = function(bot=exports.bot,t,user,c=chan) {
 		});
 	} else {
 		console.log('Uploading '+emoji+'.png');
-		bot.uploadFile({
+		data.bot.uploadFile({
 			to: c,
 			file: emoji + '.png',
 			filename: emoji + '.png',
@@ -32,19 +33,21 @@ exports.sendImage = function(bot=exports.bot,t,user,c=chan) {
 	}
 }
 
-exports.del = function(bot=exports.bot,msg,c=chan,t=0) {
+exports.del = function(msg,data,chan=false,t=100) {
+	let c = (chan) ? chan : data.channelID;
 	setTimeout( function() {
-		bot.deleteMessage({
+		data.bot.deleteMessage({
 			channelID: c,
 			messageID: msg
 		});
 	}, t);
 }
 
-exports.edit = function(bot=exports.bot,msg,t,c=chan) {
+exports.edit = function(msgID,data,text,chan=false) {
+	let c = (chan) ? chan : data.channelID;
 	bot.editMessage({
 		channelID: c,
-		messageID: msg,
-		message: t
+		messageID: msgID,
+		message: text
 	});
 }

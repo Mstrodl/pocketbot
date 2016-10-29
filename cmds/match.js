@@ -1,6 +1,7 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
-	x = require('../core/vars'),
+	x		= require('../core/vars'),
+	dio 	= require('../core/dio'),
 	// Smaller, local array so I don't have to iterate through
 	// every online user's role everytime...
 	players = [];
@@ -11,24 +12,13 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 		from = data.user,
 		fromID = data.userID,
 		uRoles = data.bot.servers[x.chan].members[fromID].roles,
-		isReady = uRoles.includes(x.lfg),
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: chan,
-				message: msg
-			});
-		};
+		isReady = uRoles.includes(x.lfg);
 
-	setTimeout( function() {
-		data.bot.deleteMessage({
-			channelID: chan,
-			messageID: data.messageID
-		});
-	}, 100);
+	dio.del( data.messageID, data);
 
 	// Check if user is a member (i.e. has key/game)
 	if (!uRoles.includes(x.member) && !uRoles.includes(x.mod) && !uRoles.includes(x.admin)) {
-		say(`Sorry ${from}. You'll need the game first!`);
+		dio.say(`Sorry ${from}. You'll need the game first!`, data);
 		return false;
 	}
 	// Check if player is already ready
@@ -45,11 +35,11 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 
 			console.log(from+" is ready");
 			if (players.length === 0) {
-				say(`:ok_hand: Awesome ${from}. I'll ping you when someone wants to play.`);
+				dio.say(`:ok_hand: Awesome ${from}. I'll ping you when someone wants to play.`, data);
 			} else if (players.length === 1) {
-				say(`Sweet. Hey <@${players[0]}>, <@${fromID}> wants to play. FIGHT! :crossed_swords:  Click to launch TnT: http://www.toothandtailgame.com/play`);
+				dio.say(`Sweet. Hey <@${players[0]}>, <@${fromID}> wants to play. FIGHT! :crossed_swords:  Click to launch TnT: http://www.toothandtailgame.com/play`, data);
 			} else {
-				say(`:ok_hand: Nice <@${fromID}>. There are a few people <@&${x.lfg}>, let's see who will play you...`);
+				dio.say(`:ok_hand: Nice <@${fromID}>. There are a few people <@&${x.lfg}>, let's see who will play you...`, data);
 			}
 			players.push(fromID);
 		});
@@ -63,7 +53,7 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 		];
 
 		let n = Math.floor( Math.random()*4 );
-		say(v[n]);
+		dio.say(v[n], data);
 	}
 });
 
@@ -83,27 +73,18 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 				return false;
 			}
 
-			data.bot.sendMessage({
-				to: chan,
-				message: `🕑 Okee dokes ${from}. Unmarking you from the list. :+1:`
-			});
+			dio.say(`🕑 Okee dokes ${from}. Unmarking you from the list. :+1:`, data);
 
 			let rem = players.indexOf(fromID);
 			if (rem != -1) players.splice(rem, 1);
 		});
 	} else {
-		data.bot.sendMessage({
-			to: chan,
-			message: `🕑 Uh, you were never ready to begin with ${from}, but thanks for letting us know.`
-		});
+		dio.say(`🕑 Uh, you were never ready to begin with ${from}, but thanks for letting us know.`, data);
 	}
 });
 
 let cmdVerify = new command('matchmake', '!verify', `This posts a Steam link which automatically verifies the TnT directory.`, function(data) {
-	data.bot.sendMessage({
-		to: data.channelID,
-		message: ":white_check_mark: Click here to verify your TnT files: http://toothandtailgame.com/verify"
-	});
+	dio.say(":white_check_mark: Click here to verify your TnT files: http://toothandtailgame.com/verify", data);
 });
 
 module.exports.commands = [cmdReady, cmdUnready, cmdVerify];

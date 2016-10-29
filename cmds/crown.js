@@ -1,6 +1,7 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x = require('../core/vars'),
+	dio = require('../core/dio'),
 	// Smaller, local array so I don't have to iterate through
 	// every online user's role everytime...
 	challengers = [];
@@ -8,28 +9,17 @@ let logger  = require('../core/logger'),
 let cmdCrown = new command('crown', '!crown', `This will give the referenced user the Crown role`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
-		uRoles = data.bot.servers[x.chan].members[fromID].roles,
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: chan,
-				message: msg
-			});
-		};;
+		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
 	if (uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
 		console.log('Crowning...');
 		let k = data.args[1];
 		if (k != undefined) {
-			setTimeout( function() {
-				data.bot.deleteMessage({
-					channelID: chan,
-					messageID: data.messageID
-				});
-			}, 100);
+			dio.del(data.messageID, data);
 
 			// Can't give crown to crown holder
 			if (data.bot.servers[x.chan].members[k].roles.includes(x.king)) {
-				say(`🕑 <@${k}> already has the Crown!`);
+				dio.say(`🕑 <@${k}> already has the Crown!`, data);
 				return false;
 			}
 
@@ -38,10 +28,10 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 				userID: k,
 				roleID: x.king
 			}, function(err,resp) {
-				if (!err) say(`:crown: <@${k}> has obtained the Crown!`);
+				if (!err) dio.say(`:crown: <@${k}> has obtained the Crown!`, data);
 			});
 		} else {
-			say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?");
+			dio.say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?", data);
 		}
 	}
 });
@@ -49,27 +39,16 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 let cmdDecrown = new command('crown', '!decrown', `This will remove the referenced user from the Crown role`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
-		uRoles = data.bot.servers[x.chan].members[fromID].roles,
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: chan,
-				message: msg
-			});
-		};
+		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
 	if (uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
 		console.log('Decrowning...');
 		let k = data.args[1];
 		if (k != undefined) {
-			setTimeout( function() {
-				data.bot.deleteMessage({
-					channelID: chan,
-					messageID: data.messageID
-				});
-			}, 100);
+			dio.del(data.messageID, data);
 
 			if (!data.bot.servers[x.chan].members[k].roles.includes(x.king)) {
-				say(`🕑 <@${k}> is just a peasant it seems.`);
+				dio.say(`🕑 <@${k}> is just a peasant it seems.`, data);
 				return false;
 			}
 			// Remove from king
@@ -79,10 +58,10 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 				roleID: x.king
 			}, function(err,resp) {
 				console.log(err,resp);
-				say(`The <@&${x.king}> has been taken!`);
+				dio.say(`The <@&${x.king}> has been taken!`, data);
 			});
 		} else {
-			say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?");
+			dio.say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?", data);
 		}
 	}
 });
@@ -91,30 +70,19 @@ let cmdChallenge = new command('crown', '!challenge', `This issues a challenge t
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID,
-		uRoles = data.bot.servers[x.chan].members[fromID].roles,
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: chan,
-				message: msg
-			});
-		};;
+		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
-	setTimeout( function() {
-		data.bot.deleteMessage({
-			channelID: chan,
-			messageID: data.messageID
-		});
-	}, 100);
+	dio.del(data.messageID, data);
 
 	if (challengers.includes(from)) {
-		say(`🕑 <@${fromID}>, you already challenged for the Crown in the past 24 hours.`)
+		dio.say(`🕑 <@${fromID}>, you already challenged for the Crown in the past 24 hours.`, data);
 	} else {
 		if (data.bot.servers[x.chan].members[fromID].roles.includes(king)) {
-			say(`🕑 You can't challenge yourself, silly.`);
+			dio.say(`🕑 You can't challenge yourself, silly.`, data);
 			return false;
 		}
 
-		say(`:crossed_swords: <@${fromID}> has challenged for the <@&${king}>`);
+		dio.say(`:crossed_swords: <@${fromID}> has challenged for the <@&${king}>`, data);
 		challengers.push(from);
 		// 24h timer - doesn't seem to work right
 		setTimeout(function(){

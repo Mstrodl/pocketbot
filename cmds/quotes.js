@@ -1,24 +1,19 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
-	x = require('../core/vars');
+	x 		= require('../core/vars'),
+	dio		= require('../core/dio');
 
 let cmdQuote = new command('quote', '!quote', `Specify a quote number to bring it up`, function(data) {
 	let quotes = data.db.quotes,
-		n = parseInt( data.args[1] ),
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: data.bot.channelID,
-				message: msg
-			});
-		};
+		n = parseInt( data.args[1] );
 
 	if (Number.isNaN(n)) {
-		say("🕑 I need a quote _number_, please.");
+		dio.say("🕑 I need a quote _number_, please.", data);
 	} else {
 		let qqq = quotes.orderByChild('id').equalTo(n).limitToLast(1);
 		qqq.once('value', function(snap) {
 			if (snap.val() === null) {
-				say("🕑 Quote doesn't exist.");
+				dio.say("🕑 Quote doesn't exist.", data);
 				return false;
 			}
 
@@ -26,12 +21,12 @@ let cmdQuote = new command('quote', '!quote', `Specify a quote number to bring i
 				let thequote = cS.val();
 				if ( thequote.hasOwnProperty('quote') ) {
 					if (thequote.quote.startsWith('http://') || thequote.quote.startsWith('https://')) {
-						say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ \n"+thequote.quote);
+						dio.say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ \n"+thequote.quote, data);
 					} else {
-						say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```");
+						dio.say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```", data);
 					}
 				} else {
-					say("🕑 Quote doesn't exist.");
+					dio.say("🕑 Quote doesn't exist.", data);
 				}
 			});
 		});
@@ -61,10 +56,7 @@ let cmdAddQuote = new command('quote', '!addquote', `Adds everything quoted into
 				let newquoteRef = quotes.push();
 				newquoteRef.set(newquote);
 
-				data.bot.sendMessage({
-					to: chan,
-					message: "Added quote #"+qid
-				});
+				dio.say(`Added quote #${qid}`, data);
 			}
 		});
 	});
@@ -75,16 +67,10 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 		from = data.user,
 		fromID = data.userID,
 		uRoles = data.bot.servers[x.chan].members[fromID].roles,
-		quotes = data.db.quotes,
-		say = function(msg) {
-			data.bot.sendMessage({
-				to: chan,
-				message: msg
-			});
-		};
+		quotes = data.db.quotes;
 
 	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) {
-		say("🕑 Only Moderators and above have this power.");
+		dio.say("🕑 Only Moderators and above have this power.", data);
 		return false;
 	}
 
@@ -92,12 +78,12 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 	let y = quotes.orderByChild('id').equalTo(qq).limitToLast(1);
 
 	if (Number.isNaN(qq)) {
-		say("🕑 I need a quote _number_, please.");
+		dio.say("🕑 I need a quote _number_, please.", data);
 	} else {
 		y.once('value', function(snap) {
 			snap.forEach(function(cS) {
 				if ( !cS.val().hasOwnProperty('quote') ) {
-					say("🕑 You cannot delete quotes that don't exist, scrub.");
+					dio.say("🕑 You cannot delete quotes that don't exist, scrub.", data);
 					return false;
 				}
 				// Valid quote number and not from archives
@@ -110,23 +96,11 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 					}
 
 					quotes.child(cS.key).set(delquote);
-					setTimeout( function() {
-						data.bot.deleteMessage({
-							channelID: chan,
-							messageID: data.messageID
-						});
-					}, 100);
-
-					say(`🕑 Deleted quote #${qq}`);
+					dio.del( data.messageID, data)
+					dio.say(`🕑 Deleted quote #${qq}`, data);
 				} else {
-					setTimeout( function() {
-						data.bot.deleteMessage({
-							channelID: chan,
-							messageID: data.messageID
-						});
-					}, 100);
-
-					say("🕑 You cannot delete quotes from the archives. You monster.");
+					dio.del( data.messageID, data);
+					dio.say("🕑 You cannot delete quotes from the archives. You monster.", data);
 					return false;
 				}
 			});
@@ -140,13 +114,7 @@ function getQuote(text, quotes, bot) {
 	let results = [],
 		rt = 0,
 		s = '',
-		rand = false,
-		say = function(msg) {
-			bot.sendMessage({
-				to: bot.channelID,
-				message: msg
-			});
-		};
+		rand = false;
 
 	if (text.startsWith('!randquote')) {
 		rand = true;
@@ -163,9 +131,9 @@ function getQuote(text, quotes, bot) {
 			let thequote = snapVal[ Object.keys(snapVal)[x] ];
 
 			if ( thequote.hasOwnProperty('quote') ) {
-				say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```");
+				dio.say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```", data);
 			} else {
-				say("🕑 I picked a quote that doesn't exist. Try again next time.");
+				dio.say("🕑 I picked a quote that doesn't exist. Try again next time.", data);
 			}
 		} else {
 			for (let i=0; i<n; i++) {
@@ -181,11 +149,11 @@ function getQuote(text, quotes, bot) {
 				if (i+1 >= n || results.length === 5) {
 					//console.log('Finished search.');
 					if (results.length === 1) {
-						say(`\`\`\` ${results.join('\n\n')} \`\`\``);
+						dio.say(`\`\`\` ${results.join('\n\n')} \`\`\``, data);
 					} else if (results.length > 1 && results.length < 6) {
-						say(`First ${results.length} results: \n\`\`\` ${results.join('\n\n')} \`\`\``);
+						dio.say(`First ${results.length} results: \n\`\`\` ${results.join('\n\n')} \`\`\``, data);
 					} else {
-						say("🕑 No quotes found with that word.");
+						dio.say("🕑 No quotes found with that word.", data);
 					}
 					break;
 				}
