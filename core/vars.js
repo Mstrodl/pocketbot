@@ -28,6 +28,5 @@ module.exports = {
 	// command: [], // Array of people who last used command
 	// spammer: {}, // Object list of people banned for spam
 	// mute: false, // Mute? :P
-	// dance: '',
 	// streamer: ''
 }

@@ -85,10 +85,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 	message = message.trim()
 
 	//Split message into args
-	var args = helper.getArgs(message);
+	let args = helper.getArgs(message);
 
 	//Prepare command_data object
-	var command_data = {
+	let command_data = {
 		// Command manager
 		commandManager: globalCommandManager,
 		// Bot client object
@@ -107,6 +107,14 @@ bot.on('message', function(user, userID, channelID, message, event){
 		args: args,
 		// Reference to the Firebase DB's
 		db: fire
+	}
+
+	// Dance Detector
+	if (message.includes('o') || message.includes('0') && fromID === "149541152322879489" ) {
+		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {
+			logger.log("Dancer Detected", logger.MESSAGE_TYPE.Warn);
+			command_data.dance = event.d.id;
+		}
 	}
 
 	try {

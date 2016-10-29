@@ -52,4 +52,33 @@ let cmdBalance = new command('community', '!balance', `Links moderators to balan
 	}
 });
 
-module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha];
+let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers Hox posts`, function(data) {
+	let uRoles = data.bot.servers[x.chan].members[data.userID].roles;
+	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) return false;
+	
+	if (data.dance != "") {
+		del(msgID, data);
+		del(data.dance, data);
+
+		let weapon = '';
+		let x = Math.floor(Math.random() * (4 - 1)) + 1;
+		switch (x) {
+			case 1:
+				weapon = ":knife::astonished:";
+				break;
+			case 2:
+				weapon = ":scream::gun:";
+				break;
+			case 3:
+				weapon = ":dagger::astonished: ";
+				break;
+			case 4:
+				weapon = ":bomb: :skull: ";
+				break;
+		}
+
+		say(`${weapon}`, data);
+	}
+});
+
+module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];
