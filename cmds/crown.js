@@ -55,7 +55,7 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 				to: chan,
 				message: msg
 			});
-		};;
+		};
 
 	if (uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
 		console.log('Decrowning...');
@@ -123,3 +123,5 @@ let cmdChallenge = new command('crown', '!challenge', `This issues a challenge t
 		}, 1000*60*60*24);
 	}
 });
+
+module.exports.commands = [cmdChallenge, cmdDecrown, cmdCrown];

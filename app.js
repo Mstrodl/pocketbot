@@ -18,23 +18,46 @@ let TOKEN 	= require('./core/tokens'),
 	helper	= require('./core/helpers'),
 	vars 	= require('./core/vars');
 
-// var defaultPersona	= new persona(`Masta's Face`, './assets/avatars/masta.png');
+// Initialize Firebase Stuff
+
+var config = {
+	apiKey: TOKEN.FBKEY,
+	authDomain: "pocketbot-40684.firebaseapp.com",
+	databaseURL: "https://pocketbot-40684.firebaseio.com",
+	storageBucket: "pocketbot-40684.appspot.com",
+	messagingSenderId: "969731605928"
+};
+
+Fb.initializeApp(config);
+
+let fire = {
+	soldiers: 	Fb.database().ref("players"),
+	// emails: 	Fb.database().ref("email"),
+	// keys: 		Fb.database().ref("key"),
+	quotes: 	Fb.database().ref("quote")
+}
+
 var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png');
 let mastabot = new persona('Mastabot', './assets/avatars/mastabot.png');
 
-var globalCommandManager	= new command.CommandManager();
-var basicCmdGroup 		= new command.CommandGroup('basic', mastabot);
-var matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot);
-var mjCmdGroup 			= new command.CommandGroup('mj', mjPersona);
+var globalCommandManager	= new command.CommandManager(),
+	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
+	mjCmdGroup 			= new command.CommandGroup('mj', mjPersona);
+
+let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
+	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
+	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
+globalCommandManager.addGroup(crownCmdGroup);
+globalCommandManager.addGroup(quoteCmdGroup);
 globalCommandManager.addGroup(mjCmdGroup);
 
-//Clear the log file
+// Clear the log file
 logger.clearLogFile();
 
-//Parse the cmds dir and load any commands in there
+// Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 	if(err){
 		logger.log(err, logger.MESSAGE_TYPE.Error);
@@ -49,27 +72,6 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 		}, this);
 	}
 });
-
-// Initialize Firebase Stuff
-// ! -- Modularize it too?
-/*
-let config = {
-	apiKey: FBKEY,
-	authDomain: "ltf-alpha-keys.firebaseapp.com",
-	databaseURL: "https://ltf-alpha-keys.firebaseio.com",
-	storageBucket: "ltf-alpha-keys.appspot.com",
-	serviceAccount: "ltf.json"
- };
-
-Fb.initializeApp(config);
-
-let soldiers = Fb.database().ref("players"),
-	scrims = Fb.database().ref("battles"),
-	ranks = Fb.database().ref("ranks"),
-	emails = Fb.database().ref("email"),
-	keys = Fb.database().ref("key"),
-	quotes = Fb.database().ref("quote");
-*/
 
 //This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
@@ -87,25 +89,27 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 	//Prepare command_data object
 	var command_data = {
-		//Command manager
+		// Command manager
 		commandManager: globalCommandManager,
-		//Bot client object
+		// Bot client object
 		bot: bot,
-		//Name of user who sent the message
+		// Name of user who sent the message
 		user: user,
-		//ID of user who sent the message
+		// ID of user who sent the message
 		userID: userID,
-		//ID of channel the message was sent in
+		// ID of channel the message was sent in
 		channelID: channelID,
-		//Raw message string
+		// Raw message string
 		message: message,
 		// ID of the message sent
 		messageID: event.d.id,
-		//Array of arguments/words in the message
+		// Array of arguments/words in the message
 		args: args
+		// Reference to the Firebase DB's
+		db: fire
 	}
 
-	try{
+	try {
 		logger.log(user + ": " + message);
 		if (globalCommandManager.isTrigger(args[0])){
 			globalCommandManager.getGroup(globalCommandManager
