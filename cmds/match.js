@@ -10,7 +10,7 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID,
-		uRoles = data.bot.servers[chan].members[fromID].roles,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles,
 		isReady = uRoles.includes(x.lfg),
 		say = function(msg) {
 			data.bot.sendMessage({

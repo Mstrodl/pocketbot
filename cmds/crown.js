@@ -8,7 +8,7 @@ let logger  = require('../core/logger'),
 let cmdCrown = new command('crown', '!crown', `This will give the referenced user the Crown role`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
-		uRoles = data.bot.servers[chan].members[fromID].roles,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles,
 		say = function(msg) {
 			data.bot.sendMessage({
 				to: chan,
@@ -28,7 +28,7 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 			}, 100);
 
 			// Can't give crown to crown holder
-			if (data.bot.servers[chan].members[k].roles.includes(x.king)) {
+			if (data.bot.servers[x.chan].members[k].roles.includes(x.king)) {
 				say(`🕑 <@${k}> already has the Crown!`);
 				return false;
 			}
@@ -49,7 +49,7 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 let cmdDecrown = new command('crown', '!decrown', `This will remove the referenced user from the Crown role`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
-		uRoles = data.bot.servers[chan].members[fromID].roles,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles,
 		say = function(msg) {
 			data.bot.sendMessage({
 				to: chan,
@@ -68,7 +68,7 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 				});
 			}, 100);
 
-			if (!data.bot.servers[chan].members[k].roles.includes(x.king)) {
+			if (!data.bot.servers[x.chan].members[k].roles.includes(x.king)) {
 				say(`🕑 <@${k}> is just a peasant it seems.`);
 				return false;
 			}
@@ -91,7 +91,7 @@ let cmdChallenge = new command('crown', '!challenge', `This issues a challenge t
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID,
-		uRoles = data.bot.servers[chan].members[fromID].roles,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles,
 		say = function(msg) {
 			data.bot.sendMessage({
 				to: chan,
@@ -109,7 +109,7 @@ let cmdChallenge = new command('crown', '!challenge', `This issues a challenge t
 	if (challengers.includes(from)) {
 		say(`🕑 <@${fromID}>, you already challenged for the Crown in the past 24 hours.`)
 	} else {
-		if (data.bot.servers[chan].members[fromID].roles.includes(king)) {
+		if (data.bot.servers[x.chan].members[fromID].roles.includes(king)) {
 			say(`🕑 You can't challenge yourself, silly.`);
 			return false;
 		}

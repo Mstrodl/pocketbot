@@ -74,7 +74,7 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID,
-		uRoles = data.bot.servers[chan].members[fromID].roles,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles,
 		quotes = data.db.quotes,
 		say = function(msg) {
 			data.bot.sendMessage({

@@ -4,10 +4,8 @@
 let chat 	= require('discord.io'),
 	path 	= require('path'),
 	Fb 		= require("firebase"),
-	shot 	= require("webshot"), // ! -- what is this for?
 	fs 		= require('fs'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
-	wc 		= require('node-wolfram'),
 	steam 	= require('steam-webapi');
 
 // Modules
@@ -46,12 +44,14 @@ var globalCommandManager	= new command.CommandManager(),
 
 let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
-	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot);
+	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot),
+	communityCmdGroup 	= new command.CommandGroup('community', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
 globalCommandManager.addGroup(crownCmdGroup);
 globalCommandManager.addGroup(quoteCmdGroup);
+globalCommandManager.addGroup(communityCmdGroup);
 globalCommandManager.addGroup(mjCmdGroup);
 
 // Clear the log file
@@ -104,7 +104,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		// ID of the message sent
 		messageID: event.d.id,
 		// Array of arguments/words in the message
-		args: args
+		args: args,
 		// Reference to the Firebase DB's
 		db: fire
 	}

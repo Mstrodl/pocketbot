@@ -17,13 +17,13 @@ module.exports = {
 	history: '196362695367196672',
 	playground: '172429393501749248',
 	// ! - Maybe this can be automated to read from the directory instead...
-	// emotes: [
-	// 	':rekt:', ':yomama:', ':facefeel:',
-	// 	':nerfit:', ':trust:', ':fixit:', ':lol:',
-	// 	":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
-	// 	":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
-	// 	":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
-	// ],
+	emotes: [
+		':rekt:', ':yomama:', ':facefeel:',
+		':nerfit:', ':trust:', ':fixit:', ':lol:',
+		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
+		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
+		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
+	]
 	// ! -- Move these 3 into the command stuff
 	// command: [], // Array of people who last used command
 	// spammer: {}, // Object list of people banned for spam
