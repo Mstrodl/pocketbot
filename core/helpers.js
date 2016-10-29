@@ -32,40 +32,33 @@ module.exports.getUser = function(txt) {
 }
 
 //Message argument parser
-module.exports.getArgs = function(message)
-{
-    //Split the input by spaces
-    var word_array = message.split(" ");
-    var args_array = [];
-    var temp_arg = "";
+module.exports.getArgs = function(message) {
+	//Split the input by spaces
+	var word_array = message.split(" ");
+	var args_array = [];
+	var temp_arg = "";
 
-    for(var key = 0; key < word_array.length; key++)
-    {
-        //If an element start with quotes, it's the start of a string'
-        if(word_array[key][0] == "\"" || word_array[key][0] == "\'")
-        {
-            var found_end = false;
+	for(var key = 0; key < word_array.length; key++) {
+		//If an element start with quotes, it's the start of a string'
+		if(word_array[key][0] == "\"" || word_array[key][0] == "\'") {
+			var found_end = false;
 
-            //Search for the end of the string and also inceremnt the key counter
-            for(var j = key; j < word_array.length && !found_end; j++, key++)
-            {
-                //Add the word to the argument
-                temp_arg += word_array[j] + " ";
+			//Search for the end of the string and also inceremnt the key counter
+			for(var j = key; j < word_array.length && !found_end; j++, key++) {
+				//Add the word to the argument
+				temp_arg += word_array[j] + " ";
 
-                //If there's another quote at the end, we've reached the end of the argument
-                if(word_array[j][word_array[j].length - 1] == "\"" || word_array[j][word_array[j].length - 1] == "\'")
-                {
-                    found_end = true;
-                }
-            }
-            //Add the final argument to the argument array
-            args_array.push(temp_arg.substring(1, temp_arg.length-2));
-        }
-        else
-        {
-            args_array.push(word_array[key]);
-        }
-    }
+				//If there's another quote at the end, we've reached the end of the argument
+				if(word_array[j][word_array[j].length - 1] == "\"" || word_array[j][word_array[j].length - 1] == "\'") {
+					found_end = true;
+				}
+			}
+			//Add the final argument to the argument array
+			args_array.push(temp_arg.substring(1, temp_arg.length-2));
+		} else {
+			args_array.push(word_array[key]);
+		}
+	}
 
-    return args_array;
+	return args_array;
 }

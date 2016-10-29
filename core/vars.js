@@ -24,8 +24,6 @@ module.exports = {
 	// 	":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
 	// 	":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
 	// ],
-	// ! -- We'll see how this junk works
-	// challengers: [], // for King battles
 	// ! -- Move these 3 into the command stuff
 	// command: [], // Array of people who last used command
 	// spammer: {}, // Object list of people banned for spam
