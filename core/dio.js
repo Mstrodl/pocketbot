@@ -5,11 +5,12 @@
  ---------------------------------------- */
 var exports = module.exports = {};
 
-exports.botSay = function(t,c=chan) {
-	bot.sendMessage({ to:c, message: t });
+exports.bot = '';
+exports.say = function(bot=exports.bot,msg,c=chan) {
+	bot.sendMessage({ to:c, message: msg });
 }
 
-exports.botSend = function(t,user,c=chan) {
+exports.sendImage = function(bot=exports.bot,t,user,c=chan) {
 	let emoji = t.replace(/:/g, "");
 	let m = (user) ? '`@'+user+':`': null;
 	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz')) {
@@ -31,19 +32,19 @@ exports.botSend = function(t,user,c=chan) {
 	}
 }
 
-exports.botDel = function(m,c=chan,t=0) {
+exports.del = function(bot=exports.bot,msg,c=chan,t=0) {
 	setTimeout( function() {
 		bot.deleteMessage({
 			channelID: c,
-			messageID: m
+			messageID: msg
 		});
 	}, t);
 }
 
-exports.botEdit = function(m,t,c=chan) {
+exports.edit = function(bot=exports.bot,msg,t,c=chan) {
 	bot.editMessage({
 		channelID: c,
-		messageID: m,
+		messageID: msg,
 		message: t
 	});
 }

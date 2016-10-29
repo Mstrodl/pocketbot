@@ -1,34 +1,35 @@
-const fs = require('fs');
+let fs = require('fs');
 
-const book = '176530812576071680',
-	mastabot = '171782210800582656',
-	stealth = "98419293514919936",
-	rules = '195960200237285386',
-	noob = '195983997413752832',
-	member = '99502270579740672',
-	king = '213077157038129154',
-	lfg = '238808560106995712',
-	history = '196362695367196672',
-	playground = '172429393501749248';
-
-let players = [], // Whoever is ready
-	users = [], // I forgot
-	challengers = [], // for King battles
-	rdyPpl = players.length,
-	conn = 0, // Connection status
-	command = [], // Array of people who last used command
-	spammer = {}, // Object list of people banned for spam
-	mute = false, // Mute? :P
-	dance = '',
-	streamer = '',
-	// wolf = new wc(WOLFID),
-	bookDelete = false,
+module.exports = {
+	chan: "99240110486192128", // PWG Server/Main Channel ID
+	// book: '176530812576071680',
+	// mastabot: '171782210800582656',
+	stealth: "98419293514919936",
+	// Roles
+	noob: '195983997413752832',
+	member: '99502270579740672',
+	king: '213077157038129154', // Crown
+	lfg: '238808560106995712', // Looking for game
+	mod: '99565011696910336',
+	admin: '103552189221326848',
+	// Channels
+	rules: '195960200237285386',
+	history: '196362695367196672',
+	playground: '172429393501749248',
 	// ! - Maybe this can be automated to read from the directory instead...
-	emotes = [
-		':rekt:', ':yomama:', ':facefeel:',
-		':nerfit:', ':trust:', ':fixit:', ':lol:',
-		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
-		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
-		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
-	],
-	u = JSON.parse(fs.readFileSync('assets/units.json', 'utf8'));
+	// emotes: [
+	// 	':rekt:', ':yomama:', ':facefeel:',
+	// 	':nerfit:', ':trust:', ':fixit:', ':lol:',
+	// 	":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
+	// 	":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
+	// 	":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
+	// ],
+	// ! -- We'll see how this junk works
+	// challengers: [], // for King battles
+	// ! -- Move these 3 into the command stuff
+	// command: [], // Array of people who last used command
+	// spammer: {}, // Object list of people banned for spam
+	// mute: false, // Mute? :P
+	// dance: '',
+	// streamer: ''
+}

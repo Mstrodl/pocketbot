@@ -18,15 +18,18 @@ let TOKEN 	= require('./core/tokens'),
 	helper	= require('./core/helpers'),
 	vars 	= require('./core/vars');
 
-var defaultPersona	= new persona('Masta\'s Face', './assets/avatars/masta.png');
-var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png')
+// var defaultPersona	= new persona(`Masta's Face`, './assets/avatars/masta.png');
+var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png');
+let mastabot = new persona('Mastabot', './assets/avatars/mastabot.png');
 
 var globalCommandManager	= new command.CommandManager();
-var basicCommandGroup 		= new command.CommandGroup('basic', defaultPersona);
-var mjCommandGroup 			= new command.CommandGroup('mj', mjPersona);
+var basicCmdGroup 		= new command.CommandGroup('basic', mastabot);
+var matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot);
+var mjCmdGroup 			= new command.CommandGroup('mj', mjPersona);
 
-globalCommandManager.addGroup(basicCommandGroup);
-globalCommandManager.addGroup(mjCommandGroup);
+globalCommandManager.addGroup(basicCmdGroup);
+globalCommandManager.addGroup(matchCmdGroup);
+globalCommandManager.addGroup(mjCmdGroup);
 
 //Clear the log file
 logger.clearLogFile();
@@ -69,10 +72,10 @@ let soldiers = Fb.database().ref("players"),
 */
 
 //This stays a var. You change it back to let, we fight
-var bot = new chat.Client({ token: "TOKERINOPLS", autorun: true });
+var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
 bot.on('ready', function(event) {
-    logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
+	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 });
 
 bot.on('message', function(user, userID, channelID, message, event){
@@ -96,17 +99,26 @@ bot.on('message', function(user, userID, channelID, message, event){
 		channelID: channelID,
 		//Raw message string
 		message: message,
+		// ID of the message sent
+		messageID: event.d.id,
 		//Array of arguments/words in the message
 		args: args
 	}
 
 	try{
 		logger.log(user + ": " + message);
-		if(globalCommandManager.isTrigger(args[0])){
-			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data, function(){globalCommandManager.call(command_data, args[0]);});
+		if (globalCommandManager.isTrigger(args[0])){
+			globalCommandManager.getGroup(globalCommandManager
+								.getCommand(args[0]).groupName)
+								.personality.set(command_data, function(){
+									globalCommandManager.call(command_data, args[0]);
+								});
 		}
-	}catch(e){
-		bot.sendMessage({to: channelID, message: "An error occured inside the '" + args[0] + "' command code"});
+	} catch(e) {
+		bot.sendMessage({
+			to: channelID,
+			message: `An error occured inside the '${args[0]}' command code`
+		});
 		logger.log(e.message, logger.MESSAGE_TYPE.Error);
 	}
 });
