@@ -19,7 +19,7 @@ let TOKEN 	= require('./core/tokens'),
 // Initialize Firebase Stuff
 
 var config = {
-	apiKey: TOKEN.FBKEY,
+	apiKey: TOKEN.FBKEY2,
 	authDomain: "pocketbot-40684.firebaseapp.com",
 	databaseURL: "https://pocketbot-40684.firebaseio.com",
 	storageBucket: "pocketbot-40684.appspot.com",
@@ -45,13 +45,15 @@ var globalCommandManager	= new command.CommandManager(),
 let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot),
-	communityCmdGroup 	= new command.CommandGroup('community', mastabot);
+	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
+	keyCmdGroup 		= new command.CommandGroup('key', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
 globalCommandManager.addGroup(crownCmdGroup);
 globalCommandManager.addGroup(quoteCmdGroup);
 globalCommandManager.addGroup(communityCmdGroup);
+globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(mjCmdGroup);
 
 // Clear the log file
@@ -115,6 +117,12 @@ bot.on('message', function(user, userID, channelID, message, event){
 			logger.log("Dancer Detected", logger.MESSAGE_TYPE.Warn);
 			command_data.dance = event.d.id;
 		}
+	}
+
+	// If from Mastabot, check for timed message otherwise ignore
+	if (userID === vars.pocketbot) {
+		if (txt.includes("🕑")) helper.countdownMessage(event.d.id,message,channelID,5);
+		return false;
 	}
 
 	try {

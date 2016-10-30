@@ -2,6 +2,7 @@
 	These are simple helper functions to do
 	some quick task/calculation
  ---------------------------------------- */
+ let dio = require('../core/dio');
 // ! -- Feel free to improve any of these functions
 
 // Count function
@@ -22,7 +23,7 @@ module.exports.popCommand = function() {
 	},4000);
 }
 
-// Get player ID
+// Gets player ID out of any string
 module.exports.getUser = function(txt) {
 	if (txt.match(/\b\d{10,}\b/g)) {
 		return txt.match(/\b\d{10,}\b/g)[0];
@@ -31,7 +32,42 @@ module.exports.getUser = function(txt) {
 	}
 }
 
-//Message argument parser
+// Countdown message
+// m = message ID
+// t = message text
+// c = channelID
+// n = steps?
+module.exports.countdownMessage = function(m,t,c,n) {
+	if (n > 0) {
+		console.log('Counting Down', n, m);
+		setTimeout(function() {
+			if (t.includes("🕗")) { // 8 to 10
+				dio.edit(m,0,t.replace("🕗","🕙"),c);
+				countdownMessage(m,t.replace("🕗","🕙"),c,n-1);
+			}
+			else if (t.includes("🕕")) { // 6 to 8
+				dio.edit(m,0,t.replace("🕕","🕗"),c);
+				countdownMessage(m,t.replace("🕕","🕗"),c,n-1);
+			}
+			else if (t.includes("🕓")) { // 4 to 6
+				dio.edit(m,0,t.replace("🕓","🕕"),c);
+				countdownMessage(m,t.replace("🕓","🕕"),c,n-1);
+			}
+			else if (t.includes("🕑")) { // 2 to 4
+				dio.edit(m,0,t.replace("🕑","🕓"),c);
+				countdownMessage(m,t.replace("🕑","🕓"),c,n-1);
+			} else { //1 0 to 12
+				dio.edit(m,0,t.replace("🕙","💥"),c);
+				countdownMessage(m,t.replace("🕙","💥"),c,0);
+			}
+		}, 2000);
+	} else {
+		console.log('Deleting.');
+		dio.del(m,c,1000);
+	}
+}
+
+// Message argument parser
 module.exports.getArgs = function(message) {
 	//Split the input by spaces
 	var word_array = message.split(" ");

@@ -3,7 +3,7 @@ let fs = require('fs');
 module.exports = {
 	chan: "99240110486192128", // PWG Server/Main Channel ID
 	// book: '176530812576071680',
-	// mastabot: '171782210800582656',
+	pocketbot: '171782210800582656',
 	stealth: "98419293514919936",
 	// Roles
 	noob: '195983997413752832',
