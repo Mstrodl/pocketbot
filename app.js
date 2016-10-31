@@ -18,7 +18,7 @@ let TOKEN 	= require('./core/tokens'),
 
 // Initialize Firebase Stuff
 
-var config = {
+let config = {
 	apiKey: TOKEN.FBKEY2,
 	authDomain: "pocketbot-40684.firebaseapp.com",
 	databaseURL: "https://pocketbot-40684.firebaseio.com",
@@ -30,8 +30,6 @@ Fb.initializeApp(config);
 
 let fire = {
 	soldiers: 	Fb.database().ref("players"),
-	// emails: 	Fb.database().ref("email"),
-	// keys: 		Fb.database().ref("key"),
 	quotes: 	Fb.database().ref("quote")
 }
 
@@ -112,7 +110,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	// Dance Detector
-	if (message.includes('o') || message.includes('0') && fromID === "149541152322879489" ) {
+	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {
 		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {
 			logger.log("Dancer Detected", logger.MESSAGE_TYPE.Warn);
 			command_data.dance = event.d.id;
@@ -121,7 +119,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 	// If from Mastabot, check for timed message otherwise ignore
 	if (userID === vars.pocketbot) {
-		if (txt.includes("🕑")) helper.countdownMessage(event.d.id,message,channelID,5);
+		if (message.includes("🕑")) helper.countdownMessage(event.d.id,message,channelID,5,bot);
 		return false;
 	}
 

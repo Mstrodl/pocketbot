@@ -55,10 +55,11 @@ let cmdBalance = new command('community', '!balance', `Links moderators to balan
 let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers Hox posts`, function(data) {
 	let uRoles = data.bot.servers[x.chan].members[data.userID].roles;
 	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) return false;
-	
+
 	if (data.dance != "") {
-		del(msgID, data);
-		del(data.dance, data);
+		console.log(data.dance);
+		dio.del(data.messageID, data);
+		dio.del(data.dance, data);
 
 		let weapon = '';
 		let x = Math.floor(Math.random() * (4 - 1)) + 1;
@@ -77,7 +78,7 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 				break;
 		}
 
-		say(`${weapon}`, data);
+		dio.say(`${weapon}`, data);
 	}
 });
 

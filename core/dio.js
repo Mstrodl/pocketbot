@@ -43,8 +43,8 @@ exports.del = function(msg,data,chan=false,t=100) {
 	}, t);
 }
 
-exports.edit = function(msgID,data,text,chan=false) {
-	let c = (chan) ? chan : data.channelID;
+exports.edit = function(msgID,bot,text,chan=false) {
+	let c = (chan) ? chan : bot.channelID;
 	bot.editMessage({
 		channelID: c,
 		messageID: msgID,

@@ -37,33 +37,34 @@ module.exports.getUser = function(txt) {
 // t = message text
 // c = channelID
 // n = steps?
-module.exports.countdownMessage = function(m,t,c,n) {
+// b - Bot
+module.exports.countdownMessage = function(m,t,c,n,b) {
 	if (n > 0) {
 		console.log('Counting Down', n, m);
 		setTimeout(function() {
 			if (t.includes("🕗")) { // 8 to 10
-				dio.edit(m,0,t.replace("🕗","🕙"),c);
-				countdownMessage(m,t.replace("🕗","🕙"),c,n-1);
+				dio.edit(m,b,t.replace("🕗","🕙"),c);
+				module.exports.countdownMessage(m,t.replace("🕗","🕙"),c,n-1,b);
 			}
 			else if (t.includes("🕕")) { // 6 to 8
-				dio.edit(m,0,t.replace("🕕","🕗"),c);
-				countdownMessage(m,t.replace("🕕","🕗"),c,n-1);
+				dio.edit(m,b,t.replace("🕕","🕗"),c);
+				module.exports.countdownMessage(m,t.replace("🕕","🕗"),c,n-1,b);
 			}
 			else if (t.includes("🕓")) { // 4 to 6
-				dio.edit(m,0,t.replace("🕓","🕕"),c);
-				countdownMessage(m,t.replace("🕓","🕕"),c,n-1);
+				dio.edit(m,b,t.replace("🕓","🕕"),c);
+				module.exports.countdownMessage(m,t.replace("🕓","🕕"),c,n-1,b);
 			}
 			else if (t.includes("🕑")) { // 2 to 4
-				dio.edit(m,0,t.replace("🕑","🕓"),c);
-				countdownMessage(m,t.replace("🕑","🕓"),c,n-1);
+				dio.edit(m,b,t.replace("🕑","🕓"),c);
+				module.exports.countdownMessage(m,t.replace("🕑","🕓"),c,n-1,b);
 			} else { //1 0 to 12
-				dio.edit(m,0,t.replace("🕙","💥"),c);
-				countdownMessage(m,t.replace("🕙","💥"),c,0);
+				dio.edit(m,b,t.replace("🕙","💥"),c);
+				module.exports.countdownMessage(m,t.replace("🕙","💥"),c,0,b);
 			}
 		}, 2000);
 	} else {
 		console.log('Deleting.');
-		dio.del(m,c,1000);
+		dio.del(m,{bot: b},c,1000);
 	}
 }
 
