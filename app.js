@@ -8,11 +8,12 @@ let chat 	= require('discord.io'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
 	steam 	= require('steam-webapi');
 
-// Modules
+// Core Modules
 let TOKEN 	= require('./core/tokens'),
 	command = require('./core/command'),
 	logger 	= require('./core/logger'),
 	persona = require('./core/personality'),
+	status 	= require('./core/presence'),
 	helper	= require('./core/helpers'),
 	vars 	= require('./core/vars');
 
@@ -78,6 +79,25 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
+});
+
+bot.on("presence", function(user, userID, status, game, event) {
+	let statusData = {
+		// Bot client object
+		bot: bot,
+		// Name of user who sent the message
+		user: user,
+		// ID of user who sent the message
+		userID: userID,
+		// Raw message string
+		state: status,
+		// Name of game being player OR stream title
+		game: game
+		// Raw event
+		//e: event
+	}
+
+	status.onChange(statusData);
 });
 
 bot.on('message', function(user, userID, channelID, message, event){
