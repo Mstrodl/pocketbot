@@ -40,6 +40,20 @@ let cmdKey = new command('key', '!key', `Adds a vote to key a member/instakey by
 	let lucky = help.getUser(data.message);
 	let memsnap = data.bot.servers[x.chan].members;
 
+	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) {
+		dio.del(data.messageID, data);
+		let v = [
+			"🕑 Nice try sneaky pants.",
+			"🕑 Nope.",
+			"🕑 You are neither an admin, nor mod, be gone, peasant.`",
+			"🕑 I'll just ignore that..."
+		];
+
+		let n = Math.floor( Math.random()*4 );
+		dio.say(v[n], data);
+		return false;
+	}
+
 	// Check @user
 	if (!memsnap[lucky]) {
 		dio.del(data.messageID, data);
@@ -62,23 +76,9 @@ Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
 	keys.orderByKey().limitToLast(1).once("value", function(snapshot) {
 		let k = snapshot.key;
 		let kk = snapshot.val();
-		console.log(`${from} voted!`);
-		console.log(memsnap[lucky]);
+		logger.log(`${from} voted!`, logger.MESSAGE_TYPE.Info);
+		logger.log(memsnap[lucky], logger.MESSAGE_TYPE.Info);
 		//console.log(k,kk,lucky);
-
-		if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) {
-			dio.del(data.messageID, data);
-			let v = [
-				"🕑 Nice try sneaky pants.",
-				"🕑 Nope.",
-				"🕑 You are neither an admin, nor mod, be gone, peasant.`",
-				"🕑 I'll just ignore that..."
-			];
-
-			let n = Math.floor( Math.random()*4 );
-			dio.say(v[n], data);
-			return false;
-		}
 
 		// Break if no keys left
 		if (!kk) {
@@ -100,26 +100,26 @@ Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
 				voter[fromID] = true;
 
 				if (!x) {
-					console.log("user hasn't received vote before, adding 1 now.");
+					logger.log("user hasn't received vote before, adding 1 now.", logger.MESSAGE_TYPE.Info);
 					newplayer.set( memsnap[lucky] ); // Set once if doesn't exist
 					newplayer.child('vote').update(voter);
 					votes = 1;
 				} else {
 					// Check for double vote
-					console.log("Checking votes");
+					logger.log("Checking votes", logger.MESSAGE_TYPE.Info);
 
 					if ( x.hasOwnProperty('vote') ) { // If votes even exist
-						console.log("Checking double vote");
+						logger.log("Checking double vote", logger.MESSAGE_TYPE.Info);
 						if (x.vote.hasOwnProperty(fromID) ) {
 							dio.say('🕑 You already voted for them.',fromID)
 							return false;
 						} else {
-							console.log('Has vote and not double');
+							logger.log('Has vote and not double', logger.MESSAGE_TYPE.OK);
 							newplayer.child('vote').update(voter);
 							votes = Object.keys( snap.val()[lucky].vote ).length+1
 						}
 					} else {
-						console.log('Doesnt have votes, adding');
+						logger.log('Doesnt have votes, adding', logger.MESSAGE_TYPE.OK);
 						newplayer.child('vote').update(voter);
 						votes = 1;
 					}
@@ -147,8 +147,6 @@ Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
 			giveKey(lucky,kk[code].key);
 			logger.log(`${from} has given a key.`, logger.MESSAGE_TYPE.OK)
 		}
-
-		console.log('toot')
 	}, function(err) {
 		logger.log(err, logger.MESSAGE_TYPE.Error);
 	});

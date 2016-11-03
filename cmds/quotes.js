@@ -1,4 +1,9 @@
-let logger  = require('../core/logger'),
+/* ----------------------------------------
+	This file controls all quote
+	based commands from Mastabot
+ ---------------------------------------- */
+
+ let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x 		= require('../core/vars'),
 	dio		= require('../core/dio');
@@ -110,10 +115,11 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 
 // Since both randquote and getquote have to grab the whole
 // quote object, they'll use this function to deduplicate some code
-function getQuote(text, quotes, bot) {
+function getQuote(quotes, bot) {
 	let results = [],
 		rt = 0,
 		s = '',
+		text = bot.message,
 		rand = false;
 
 	if (text.startsWith('!randquote')) {
@@ -163,11 +169,11 @@ function getQuote(text, quotes, bot) {
 }
 
 let cmdGetQuote = new command('quote', '!getquote', `Searches a string within the quotes and returns the first 5 results found`, function(data) {
-	getQuote(data.bot.message, data.db.quotes, data.bot);
+	getQuote(data.db.quotes, data.bot);
 });
 
 let cmdRandQuote = new command('quote', '!randquote', `Brings up a random quote`, function(data) {
-	getQuote(data.bot.message, data.db.quotes, data.bot);
+	getQuote(data.db.quotes, data.bot);
 });
 
 module.exports.commands = [cmdAddQuote, cmdDelQuote, cmdGetQuote, cmdRandQuote, cmdQuote];

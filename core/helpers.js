@@ -40,7 +40,7 @@ module.exports.getUser = function(txt) {
 // b - Bot
 module.exports.countdownMessage = function(m,t,c,n,b) {
 	if (n > 0) {
-		console.log('Counting Down', n, m);
+		//console.log('Counting Down', n, m);
 		setTimeout(function() {
 			if (t.includes("🕗")) { // 8 to 10
 				dio.edit(m,b,t.replace("🕗","🕙"),c);
@@ -63,7 +63,7 @@ module.exports.countdownMessage = function(m,t,c,n,b) {
 			}
 		}, 2000);
 	} else {
-		console.log('Deleting.');
+		//console.log('Deleting.');
 		dio.del(m,{bot: b},c,1000);
 	}
 }
