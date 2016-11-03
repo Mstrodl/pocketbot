@@ -16,7 +16,7 @@ let cmdControls = new command('community', '!controls', `Display game controls`,
 });
 
 let cmdBugs = new command('community', '!bugs', `Link to the Pocketwatch bug tracker`, function(data) {
-	dio.say(":beetle: Report bugs here: #troubleshooting",data);
+	dio.say(":beetle: Report bugs here: <#134810918113509376>",data);
 });
 
 let cmdWiki = new command('community', '!wiki', `Link to Freakspot's TnT Wiki`, function(data) {
