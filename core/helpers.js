@@ -99,3 +99,13 @@ module.exports.getArgs = function(message) {
 
 	return args_array;
 }
+
+//Find the ID of a user given the client and the username
+module.exports.getIDFromName = function(client, name){
+    for(var key in client.users){
+        if(client.users[key].username == name){
+            return key;
+        }
+    }
+    return null;
+}
