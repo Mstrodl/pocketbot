@@ -8,14 +8,14 @@ var cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
     });
 });
 
-var cmd_ding = new command('mj', '!ding', 'Test command #2', function(data){
+var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "Dong"
     });
 });
 
-var cmd_help = new command('mj', '!help', 'Help command', function(data){
+var cmd_help = new command('ryionbot', '!help', 'Help command', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : data.commandManager.getHelp()
