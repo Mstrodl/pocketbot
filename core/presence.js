@@ -61,7 +61,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 	// A member starts a stream
 	if (game != null && game.type === 1) {
-		if (streamer === fromID || !bot.servers[x.chan].members[fromID].roles.includes(x.member)) return false;
+		if (!status.bot.servers[x.chan].members[fromID].roles.includes(x.member)) return false;
 
 		dio.say(`:movie_camera: <@${fromID}> is streaming! \n ${game.name} @ <${game.url}>!`, status);
 		// ! -- want to figure out a way to add a timer so

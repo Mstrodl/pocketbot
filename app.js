@@ -38,6 +38,10 @@ if ( !TOKEN.FBKEY2() ) {
 		soldiers: 	Fb.database().ref("players"),
 		quotes: 	Fb.database().ref("quote")
 	}
+
+	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
+} else {
+	logger.log('Public Firebase not initialized. :(', logger.MESSAGE_TYPE.Error);
 }
 
 
