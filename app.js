@@ -11,25 +11,30 @@ let chat 	= require('discord.io'),
 	steam 	= require('steam-webapi');
 
 // Modules
-let TOKEN 	= require('./core/tokens'),
-	command = require('./core/command'),
-	logger 	= require('./core/logger'),
-	persona = require('./core/personality'),
-	helper	= require('./core/helpers'),
-	vars 	= require('./core/vars');
+let TOKEN 		= require('./core/tokens'),
+	command 	= require('./core/command'),
+	logger 		= require('./core/logger'),
+	persona 	= require('./core/personality'),
+	userdata 	= require('./core/userdata'),
+	helper		= require('./core/helpers'),
+	vars 		= require('./core/vars');
 
 var defaultPersona	= new persona('Masta\'s Face', './assets/avatars/masta.png');
-var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png')
+var ryionbotPersona = new persona('RyionBot', './assets/avatars/mj.png');
 
-var globalCommandManager	= new command.CommandManager();
-var basicCommandGroup 		= new command.CommandGroup('basic', defaultPersona);
-var mjCommandGroup 			= new command.CommandGroup('mj', mjPersona);
+var globalCommandManager			= new command.CommandManager();
+var basicCommandGroup 				= new command.CommandGroup('basic', defaultPersona);
+var ryionbotCommandGroup 			= new command.CommandGroup('ryionbot', ryionbotPersona);
 
 globalCommandManager.addGroup(basicCommandGroup);
-globalCommandManager.addGroup(mjCommandGroup);
+globalCommandManager.addGroup(ryionbotCommandGroup);
 
 //Clear the log file
 logger.clearLogFile();
+
+//Ready the user data
+userdata = new userdata();
+userdata.loadFromFile('./data/users.json');
 
 //Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
@@ -69,7 +74,7 @@ let soldiers = Fb.database().ref("players"),
 */
 
 //This stays a var. You change it back to let, we fight
-var bot = new chat.Client({ token: "TOKERINOPLS", autorun: true });
+var bot = new chat.Client({ token: "MjEwNDc1MjQ2NDQ3MzYyMDQ5.Cs6_oA.Qk3IAlwM52yjrxvr8WUjlrDddsI", autorun: true });
 
 bot.on('ready', function(event) {
     logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
@@ -84,6 +89,8 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 	//Prepare command_data object
 	var command_data = {
+		//User data created by bots
+		userdata: userdata,
 		//Command manager
 		commandManager: globalCommandManager,
 		//Bot client object
@@ -94,6 +101,8 @@ bot.on('message', function(user, userID, channelID, message, event){
 		userID: userID,
 		//ID of channel the message was sent in
 		channelID: channelID,
+		//ID of the server(guild)
+		serverID: bot.channels[channelID].guild_id,
 		//Raw message string
 		message: message,
 		//Array of arguments/words in the message
@@ -105,6 +114,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		if(globalCommandManager.isTrigger(args[0])){
 			globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName).personality.set(command_data, function(){globalCommandManager.call(command_data, args[0]);});
 		}
+		userdata.saveToFile('./data/users.json');
 	}catch(e){
 		bot.sendMessage({to: channelID, message: "An error occured inside the '" + args[0] + "' command code"});
 		logger.log(e.message, logger.MESSAGE_TYPE.Error);
