@@ -1,4 +1,8 @@
-const chan = "99240110486192128", // PWG Server/Channel ID?
-	TOKEN = process.env.TOKEN,
-	WOLFID = process.env.WOLFID,
-	FBKEY = process.env.FBKEY;
+module.exports = {
+	TOKEN: process.env.TOKEN,
+	WOLFID: process.env.WOLFID,
+	FBKEY: process.env.FBKEY,
+	FBPKEY: process.env.FBPKEY.replace(/\\n/g, '\n'),
+	FBPKEYID: process.env.FBPKEYID,
+	FBKEY2: process.env.FBKEY2,
+}
