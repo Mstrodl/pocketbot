@@ -3,6 +3,7 @@
 	to the onboarding process of giving keys
 	to new users via vote/admin powers.
  ---------------------------------------- */
+require('dotenv').config()
 
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
@@ -16,6 +17,7 @@ let logger  = require('../core/logger'),
 if (!TOKEN.FBPKEYID()) {
 	cmdKey = new command('key', '!key', `Adds a vote to key a member/instakey by dev`, function(data) {
 		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		logger.log(TOKEN.FBPKEYID(), logger.MESSAGE_TYPE.Warn);
 	});
 } else {
 	// =================
@@ -91,7 +93,7 @@ if (!TOKEN.FBPKEYID()) {
 			let k = snapshot.key;
 			let kk = snapshot.val();
 			logger.log(`${from} voted!`, logger.MESSAGE_TYPE.Info);
-			logger.log(memsnap[lucky], logger.MESSAGE_TYPE.Info);
+			logger.log(memsnap[lucky].username, logger.MESSAGE_TYPE.Info);
 			//console.log(k,kk,lucky);
 
 			// Break if no keys left
@@ -112,6 +114,7 @@ if (!TOKEN.FBPKEYID()) {
 					let x = snap.val()[lucky];
 					let voter = {};
 					voter[fromID] = true;
+					//console.log(newplayer, x, voter);
 
 					if (!x) {
 						logger.log("user hasn't received vote before, adding 1 now.", logger.MESSAGE_TYPE.Info);
@@ -149,6 +152,8 @@ if (!TOKEN.FBPKEYID()) {
 							giveKey(lucky,kk[code].key,true);
 						}
 					}
+				}, function(err) {
+					logger.log(err, logger.MESSAGE_TYPE.Error);
 				});
 
 				return false;
