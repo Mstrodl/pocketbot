@@ -23,20 +23,23 @@ let TOKEN 		= require('./core/tokens'),
 // Initialize Firebase Stuff
 
 let config = {
-	apiKey: TOKEN.FBKEY2,
+	apiKey: TOKEN.FBKEY2(),
 	authDomain: "pocketbot-40684.firebaseapp.com",
 	databaseURL: "https://pocketbot-40684.firebaseio.com",
 	storageBucket: "pocketbot-40684.appspot.com",
 	messagingSenderId: "969731605928"
 };
 
-Fb.initializeApp(config);
+let fire = false;
+if ( !TOKEN.FBKEY2() ) {
+	Fb.initializeApp(config);
 
-
-let fire = {
-	soldiers: 	Fb.database().ref("players"),
-	quotes: 	Fb.database().ref("quote")
+	fire = {
+		soldiers: 	Fb.database().ref("players"),
+		quotes: 	Fb.database().ref("quote")
+	}
 }
+
 
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');

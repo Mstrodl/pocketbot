@@ -1,8 +1,24 @@
 module.exports = {
 	TOKEN: process.env.TOKEN,
 	WOLFID: process.env.WOLFID,
-	FBKEY: process.env.FBKEY,
-	FBPKEY: process.env.FBPKEY.replace(/\\n/g, '\n'),
-	FBPKEYID: process.env.FBPKEYID,
-	FBKEY2: process.env.FBKEY2,
+	FBKEY: function() {
+		if (process.env.hasOwnProperty('FBKEY')) {
+			return process.env.FBKEY;
+		} else { return false; }
+	},
+	FBPKEY: function() {
+		if (process.env.hasOwnProperty('FBPKEY')) {
+			return process.env.FBPKEY.replace(/\\n/g, '\n');
+		} else { return false; }
+	},
+	FBPKEYID: function() {
+		if (process.env.hasOwnProperty('FBPKEYID')) {
+			return process.env.FBPKEYID;
+		} else { return false; }
+	},
+	FBKEY2: function() {
+		if (process.env.hasOwnProperty('FBKEY2')) {
+			return process.env.FBKEY2;
+		} else { return false; }
+	}
 }

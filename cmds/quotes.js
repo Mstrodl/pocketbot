@@ -9,6 +9,12 @@
 	dio		= require('../core/dio');
 
 let cmdQuote = new command('quote', '!quote', `Specify a quote number to bring it up`, function(data) {
+	// Make sure we're getting Firebase
+	if (!data.db.quotes) {
+		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		return false;
+	}
+
 	let quotes = data.db.quotes,
 		n = parseInt( data.args[1] );
 
@@ -39,6 +45,12 @@ let cmdQuote = new command('quote', '!quote', `Specify a quote number to bring i
 });
 
 let cmdAddQuote = new command('quote', '!addquote', `Adds everything quoted into the database`, function(data) {
+	// Make sure we're getting Firebase
+	if (!data.db.quotes) {
+		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		return false;
+	}
+
 	let quotes = data.db.quotes,
 	// Find the last quote by ID
 		qid = null,
@@ -68,6 +80,12 @@ let cmdAddQuote = new command('quote', '!addquote', `Adds everything quoted into
 });
 
 let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, function(data) {
+	// Make sure we're getting Firebase
+	if (!data.db.quotes) {
+		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		return false;
+	}
+
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID,
@@ -169,11 +187,19 @@ function getQuote(quotes, bot) {
 }
 
 let cmdGetQuote = new command('quote', '!getquote', `Searches a string within the quotes and returns the first 5 results found`, function(data) {
-	getQuote(data.db.quotes, data.bot);
+	// Make sure we're getting Firebase
+	if (!data.db.quotes) {
+		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		return false;
+	} else { getQuote(data.db.quotes, data.bot); }
 });
 
 let cmdRandQuote = new command('quote', '!randquote', `Brings up a random quote`, function(data) {
-	getQuote(data.db.quotes, data.bot);
+	// Make sure we're getting Firebase
+	if (!data.db.quotes) {
+		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
+		return false;
+	} else { getQuote(data.db.quotes, data.bot); }
 });
 
 module.exports.commands = [cmdAddQuote, cmdDelQuote, cmdGetQuote, cmdRandQuote, cmdQuote];
