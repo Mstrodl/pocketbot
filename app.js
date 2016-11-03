@@ -8,14 +8,16 @@ let chat 	= require('discord.io'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
 	steam 	= require('steam-webapi');
 
-// Core Modules
-let TOKEN 	= require('./core/tokens'),
-	command = require('./core/command'),
-	logger 	= require('./core/logger'),
-	persona = require('./core/personality'),
+
+// Modules
+let TOKEN 		= require('./core/tokens'),
+	command 	= require('./core/command'),
+	logger 		= require('./core/logger'),
+	persona 	= require('./core/personality'),
+	userdata 	= require('./core/userdata'),
 	status 	= require('./core/presence'),
-	helper	= require('./core/helpers'),
-	vars 	= require('./core/vars');
+	helper		= require('./core/helpers'),
+	vars 		= require('./core/vars');
 
 // Initialize Firebase Stuff
 
@@ -29,17 +31,18 @@ let config = {
 
 Fb.initializeApp(config);
 
+
 let fire = {
 	soldiers: 	Fb.database().ref("players"),
 	quotes: 	Fb.database().ref("quote")
 }
 
-var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png');
+var ryionbotPersona = new persona('RyionBot', './assets/avatars/mj.png');
 let mastabot = new persona('Mastabot', './assets/avatars/mastabot.png');
 
 var globalCommandManager	= new command.CommandManager(),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
-	mjCmdGroup 			= new command.CommandGroup('mj', mjPersona);
+	ryionbotCmdGroup 			= new command.CommandGroup('ryionbot', mjPersona);
 
 let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
@@ -55,12 +58,16 @@ globalCommandManager.addGroup(quoteCmdGroup);
 globalCommandManager.addGroup(communityCmdGroup);
 globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(adminCmdGroup);
-globalCommandManager.addGroup(mjCmdGroup);
+globalCommandManager.addGroup(ryionbotCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
 
-// Parse the cmds dir and load any commands in there
+//Ready the user data
+userdata = new userdata();
+userdata.loadFromFile('./data/users.json');
+
+//Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 	if(err){
 		logger.log(err, logger.MESSAGE_TYPE.Error);
@@ -110,8 +117,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 	let args = helper.getArgs(message);
 
 	//Prepare command_data object
-	let command_data = {
-		// Command manager
+	var command_data = {
+		//User data created by bots
+		userdata: userdata,
+		//Command manager
 		commandManager: globalCommandManager,
 		// Bot client object
 		bot: bot,
@@ -121,7 +130,9 @@ bot.on('message', function(user, userID, channelID, message, event){
 		userID: userID,
 		// ID of channel the message was sent in
 		channelID: channelID,
-		// Raw message string
+		//ID of the server(guild)
+		serverID: bot.channels[channelID].guild_id,
+		//Raw message string
 		message: message,
 		// ID of the message sent
 		messageID: event.d.id,
@@ -154,6 +165,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 									globalCommandManager.call(command_data, args[0]);
 								});
 		}
+		userdata.saveToFile('./data/users.json');
 	} catch(e) {
 		bot.sendMessage({
 			to: channelID,
