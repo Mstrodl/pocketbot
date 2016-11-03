@@ -32,8 +32,8 @@ let cmdEmotes = new command('community', '!emotes', `Lists the available emotes`
 });
 
 let cmdStream = new command('community', '!stream', `Links to the Pocketwatch stream with time till next broadcast`, function(data) {
-	dio.del(data.messageID,data);
 	wolf.query("time till Friday 5pm EST", function(err, result) {
+		dio.del(data.messageID,data);
 		let time = result.queryresult.pod[1].subpod[0].plaintext[0];
 		dio.say(`Check us out on Twitch @ http://www.twitch.tv/Pocketwatch (Fridays @ 5pm EST) \n The next stream will be in \`${time}\``,data);
 		return false;
@@ -101,4 +101,4 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 // 	}
 // });
 
-module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer, cmdEmoji];
+module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];
