@@ -82,4 +82,22 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 	}
 });
 
-module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];
+let cmdEmoji = new command('community', ':', `Replaces text with an emoji`, function(data) {
+	let text = data.message;
+
+	switch(text) {
+		case ":yourmother:":
+			text = ':yomama:'
+			break;
+		case ":patch17:":
+			text = ':schatzmeteor:'
+			break;
+	}
+
+	if (x.emotes.includes(text)) {
+		dio.del(data.messageID,data.channelID);
+		dio.sendImage('emoji/'+text,data.user,data.channelID);
+	}
+});
+
+module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer, cmdEmoji];

@@ -45,7 +45,8 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
-	keyCmdGroup 		= new command.CommandGroup('key', mastabot);
+	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
+	adminCmdGroup 		= new command.CommandGroup('admin', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
@@ -53,6 +54,7 @@ globalCommandManager.addGroup(crownCmdGroup);
 globalCommandManager.addGroup(quoteCmdGroup);
 globalCommandManager.addGroup(communityCmdGroup);
 globalCommandManager.addGroup(keyCmdGroup);
+globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(mjCmdGroup);
 
 // Clear the log file
