@@ -1,3 +1,5 @@
+var logger = require('./logger');
+
 /* ----------------------------------------
 	These are simplified versions of the
 	larger discord.io functions, just so
@@ -15,7 +17,7 @@ exports.sendImage = function(t,user,data,chan=false) {
 	let emoji = t.replace(/:/g, "");
 	let m = (user) ? '`@'+user+':`': null;
 	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz')) {
-		console.log('Uploading '+emoji+'.gif');
+		logger.log('Uploading '+emoji+'.gif', logger.MESSAGE_TYPE.OK);
 		data.bot.uploadFile({
 			to: c,
 			file: emoji + '.gif',
@@ -23,7 +25,7 @@ exports.sendImage = function(t,user,data,chan=false) {
 			message: m
 		});
 	} else {
-		console.log('Uploading '+emoji+'.png');
+		logger.log('Uploading '+emoji+'.png', logger.MESSAGE_TYPE.OK);
 		data.bot.uploadFile({
 			to: c,
 			file: emoji + '.png',

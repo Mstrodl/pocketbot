@@ -185,7 +185,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 	try {
 		logger.log(`[${bot.servers[vars.chan].channels[channelID].name}] ${user}: ${message}`);
-		if (globalCommandManager.isTrigger(args[0])){
+		if (message && globalCommandManager.isTrigger(args[0])){
 			globalCommandManager.getGroup(globalCommandManager
 								.getCommand(args[0]).groupName)
 								.personality.set(command_data, function(){
@@ -194,10 +194,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 		}
 		userdata.saveToFile('./data/users.json');
 	} catch(e) {
-		// bot.sendMessage({
-		// 	to: channelID,
-		// 	message: `An error occured inside the \`${args[0]}\` command code`
-		// });
+		bot.sendMessage({
+			to: channelID,
+			message: `An error occured inside the \`${args[0]}\` command code`
+		});
 		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error);
 	}
 });
