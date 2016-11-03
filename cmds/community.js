@@ -57,7 +57,7 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) return false;
 
 	if (data.dance != "") {
-		console.log(data.dance);
+		logger.log(data.dance, logger.MESSAGE_TYPE.Info);
 		dio.del(data.messageID, data);
 		dio.del(data.dance, data);
 
@@ -82,22 +82,23 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 	}
 });
 
-let cmdEmoji = new command('community', ':', `Replaces text with an emoji`, function(data) {
-	let text = data.message;
-
-	switch(text) {
-		case ":yourmother:":
-			text = ':yomama:'
-			break;
-		case ":patch17:":
-			text = ':schatzmeteor:'
-			break;
-	}
-
-	if (x.emotes.includes(text)) {
-		dio.del(data.messageID,data.channelID);
-		dio.sendImage('emoji/'+text,data.user,data.channelID);
-	}
-});
+// ! -- Gotta adjust command structure for this one?
+// let cmdEmoji = new command('community', ':', `Replaces text with an emoji`, function(data) {
+// 	let text = data.message;
+//
+// 	switch(text) {
+// 		case ":yourmother:":
+// 			text = ':yomama:'
+// 			break;
+// 		case ":patch17:":
+// 			text = ':schatzmeteor:'
+// 			break;
+// 	}
+//
+// 	if (x.emotes.includes(text)) {
+// 		dio.del(data.messageID,data.channelID);
+// 		dio.sendImage('emoji/'+text,data.user,data.channelID);
+// 	}
+// });
 
 module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer, cmdEmoji];

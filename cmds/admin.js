@@ -1,6 +1,7 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	dio		= require('../core/dio'),
+	helpers		= require('../core/helpers'),
 	x 		= require('../core/vars');
 
 let cmdSay = new command('admin', '!say', `Allows Masta to speak as Mastabot`, function(data) {
@@ -9,7 +10,7 @@ let cmdSay = new command('admin', '!say', `Allows Masta to speak as Mastabot`, f
 	}
 });
 
-let cmdNewBuild = new command('admin', 'new build live',``, function(data) {
+let cmdNewBuild = new command('admin', 'new build live',`Admin trigger to automatically bring up verification link`, function(data) {
 	let uRoles = data.bot.servers[x.chan].members[data.userID].roles;
 	if (uRoles.includes(x.admin)) {
 		let v = [
@@ -24,8 +25,8 @@ let cmdNewBuild = new command('admin', 'new build live',``, function(data) {
 	}
 });
 
-let cmdCheck = new command('admin','!check',``,function(data) {
-	let u = getUser(data.message),
+let cmdCheck = new command('admin','!check',`Gets data about the user being checked`,function(data) {
+	let u = helpers.getUser(data.message),
 		user = data.bot.servers[x.chan].members[u],
 		uRoles = data.bot.servers[x.chan].members[data.userID].roles;
 
@@ -36,13 +37,14 @@ let cmdCheck = new command('admin','!check',``,function(data) {
 		return false;
 	} else {
 		dio.del(data.messageID,data);
-		let online = (user.status === "online") ? ":large_blue_circle:" : ':white_circle:';
-		let user = user.username;
-		let nick = (user.nick != undefined) ? `\n aka ${user.nick}` : '';
-		let disc = user.discriminator;
+		let online = (user.status === "online") ? ":large_blue_circle:" : ':white_circle:',
+			user = user.username,
+			nick = (user.nick != undefined) ? `\n aka ${user.nick}` : '',
+			disc = user.discriminator;
 
-		let d = new Date(user['joined_at']);
-		let join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`
+		let d = new Date(user['joined_at']),
+			join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`;
+
 		botSay(`${online} **${user} #${disc}** ${nick}
 	**ID:** ${user.id}
 	**Joined:** ${join}`, fromID);
