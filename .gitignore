@@ -46,3 +46,6 @@ yay2.js
 !.elasticbeanstalk/*.cfg.yml
 
 !.elasticbeanstalk/*.global.yml
+
+#VS Code fluff
+.vscode
