@@ -83,7 +83,7 @@ bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 });
 
-bot.on("presence", function(user, userID, status, game, event) {
+bot.on("presence", function(user, userID, state, game, event) {
 	let statusData = {
 		// Bot client object
 		bot: bot,
@@ -92,7 +92,7 @@ bot.on("presence", function(user, userID, status, game, event) {
 		// ID of user who sent the message
 		userID: userID,
 		// Raw message string
-		state: status,
+		state: state,
 		// Name of game being player OR stream title
 		game: game
 		// Raw event

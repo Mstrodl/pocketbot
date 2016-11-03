@@ -24,7 +24,7 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 			}
 
 			data.bot.addToRole({
-				serverID: chan,
+				serverID: x.chan,
 				userID: k,
 				roleID: x.king
 			}, function(err,resp) {
@@ -53,7 +53,7 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 			}
 			// Remove from king
 			bot.removeFromRole({
-				serverID: chan,
+				serverID: x.chan,
 				userID: k,
 				roleID: x.king
 			}, function(err,resp) {

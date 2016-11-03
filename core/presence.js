@@ -5,9 +5,9 @@
  ---------------------------------------- */
 var exports = module.exports = {};
 
-let logger  = require('./core/logger'),
-	dio		= require('./core/dio'),
-	x 		= require('./core/vars');
+let logger  = require('./logger'),
+	dio		= require('./dio'),
+	x 		= require('./vars');
 
 exports.onChange = function(status) {
 	let from = status.user,
@@ -17,9 +17,19 @@ exports.onChange = function(status) {
 	// Someone goes offline
 	if (status.state === "offline") {
 		// Check if they are on ready list
-		if (players.includes(`${fromID}`)) {
-			dio.say(`Removing ${from} from ready list due to disconnect.`, data);
-			console.log(`${from} has been removed`);
+		if (status.bot.servers[x.chan].members[fromID].roles.includes(x.lfg)) {
+			status.bot.removeFromRole({
+				serverID: x.chan,
+				userID: fromID,
+				roleID: x.lfg
+			}, function(err, resp) {
+				if (err) {
+					logger.log(resp, logger.MESSAGE_TYPE.Error);
+					return false;
+				}
+
+				dio.say(`Removing ${from} from ready list due to disconnect.`, status.data);
+			});
 		}
 	}
 

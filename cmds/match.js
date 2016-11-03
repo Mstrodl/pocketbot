@@ -24,16 +24,15 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 	// Check if player is already ready
 	if (!isReady) {
 		data.bot.addToRole({
-			serverID: chan,
+			serverID: x.chan,
 			userID: fromID,
 			roleID: x.lfg
 		}, function(err,resp) {
 			if (err) {
-				logger.log(resp, logger.MESSAGE_TYPE.Error);
+				logger.log(err + ' / ' + resp, logger.MESSAGE_TYPE.Error);
 				return false;
 			}
 
-			console.log(from+" is ready");
 			if (players.length === 0) {
 				dio.say(`:ok_hand: Awesome ${from}. I'll ping you when someone wants to play.`, data);
 			} else if (players.length === 1) {
@@ -64,7 +63,7 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 
 	if (players.includes(fromID)) {
 		data.bot.removeFromRole({
-			serverID: chan,
+			serverID: x.chan,
 			userID: fromID,
 			roleID: x.lfg
 		}, function(err, resp) {
