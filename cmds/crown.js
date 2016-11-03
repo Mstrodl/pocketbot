@@ -12,7 +12,7 @@ let cmdCrown = new command('crown', '!crown', `This will give the referenced use
 		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
 	if (uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
-		console.log('Crowning...');
+		logger.log('Crowning...', logger.MESSAGE_TYPE.OK);
 		let k = data.args[1];
 		if (k != undefined) {
 			dio.del(data.messageID, data);
@@ -42,7 +42,7 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
 	if (uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
-		console.log('Decrowning...');
+		logger.log('Decrowning...', logger.MESSAGE_TYPE.OK);
 		let k = data.args[1];
 		if (k != undefined) {
 			dio.del(data.messageID, data);
@@ -57,7 +57,8 @@ let cmdDecrown = new command('crown', '!decrown', `This will remove the referenc
 				userID: k,
 				roleID: x.king
 			}, function(err,resp) {
-				console.log(err,resp);
+				logger.log("Error: " + err, logger.MESSAGE_TYPE.Error);
+				logger.log("Response: " + resp, logger.MESSAGE_TYPE.Warn);
 				dio.say(`The <@&${x.king}> has been taken!`, data);
 			});
 		} else {
