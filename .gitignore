@@ -1,9 +1,9 @@
-Mastabot.7z
 # Logs
 logs
 *.log
 log.txt
 npm-debug.log*
+.env
 
 # Runtime data
 pids
