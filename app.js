@@ -34,8 +34,8 @@ let fire = {
 	quotes: 	Fb.database().ref("quote")
 }
 
-var mjPersona = new persona('MJ Bot', './assets/avatars/mj.png');
-let mastabot = new persona('Mastabot', './assets/avatars/mastabot.png');
+var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
+let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 
 var globalCommandManager	= new command.CommandManager(),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
@@ -139,6 +139,25 @@ bot.on('message', function(user, userID, channelID, message, event){
 		}
 	}
 
+	// ===================================
+	// ! -- TEMPORARY EMOTE INTERCEPT
+	// ===================================
+	if (message.startsWith(':')) {
+		switch(message) {
+			case ":yourmother:":
+				message = ':yomama:'
+				break;
+			case ":patch17:":
+				message = ':schatzmeteor:'
+				break;
+		}
+
+		if (x.emotes.includes(message)) {
+			dio.del(messageID,channelID);
+			dio.sendImage('emoji/'+message,user,channelID);
+		}
+	}
+
 	// If from Mastabot, check for timed message otherwise ignore
 	if (userID === vars.pocketbot) {
 		if (message.includes("🕑")) helper.countdownMessage(event.d.id,message,channelID,5,bot);
@@ -146,7 +165,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	try {
-		logger.log(user + ": " + message);
+		logger.log(`[${bot.servers[x.chan].channels[channelID].name}] ${user}: ${message}`);
 		if (globalCommandManager.isTrigger(args[0])){
 			globalCommandManager.getGroup(globalCommandManager
 								.getCommand(args[0]).groupName)
@@ -155,10 +174,10 @@ bot.on('message', function(user, userID, channelID, message, event){
 								});
 		}
 	} catch(e) {
-		bot.sendMessage({
-			to: channelID,
-			message: `An error occured inside the '${args[0]}' command code`
-		});
-		logger.log(e.message, logger.MESSAGE_TYPE.Error);
+		// bot.sendMessage({
+		// 	to: channelID,
+		// 	message: `An error occured inside the \`${args[0]}\` command code`
+		// });
+		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error);
 	}
 });
