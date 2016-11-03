@@ -8,29 +8,55 @@ let logger  = require('../core/logger'),
 // =================
 // Firebase for keys
 // =================
+let Fb = require("firebase");
 let config = {
-	apiKey: FBKEY,
+	apiKey: TOKEN.FBKEY,
 	authDomain: "ltf-alpha-keys.firebaseapp.com",
 	databaseURL: "https://ltf-alpha-keys.firebaseio.com",
 	storageBucket: "ltf-alpha-keys.appspot.com",
-	messagingSenderId: "255743574934"
+	serviceAccount: {
+		"type": "service_account",
+		"project_id": "ltf-alpha-keys",
+		"private_key_id": TOKEN.FBPKEYID,
+		"private_key": TOKEN.FBPKEY,
+		"client_email": "mastabot@ltf-alpha-keys.iam.gserviceaccount.com",
+		"client_id": "108053915015859625755",
+		"auth_uri": "https://accounts.google.com/o/oauth2/auth",
+		"token_uri": "https://accounts.google.com/o/oauth2/token",
+		"auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+		"client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/mastabot%40ltf-alpha-keys.iam.gserviceaccount.com"
+	}
 };
 
-Fb.initializeApp(config);
-let keys = Fb.database().ref("key");
+let keyFire = Fb.initializeApp(config, "keydb");
+let keys = keyFire.database().ref("key");
 // =================
 
 let cmdKey = new command('key', '!key', `Adds a vote to key a member/instakey by dev`, function(data) {
 	let uRoles = data.bot.servers[x.chan].members[data.userID].roles,
 		fromID = data.userID,
 		from = data.user;
-	//if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) return false;
 
 	let lucky = help.getUser(data.message);
 	let memsnap = data.bot.servers[x.chan].members;
-	console.log(`${from} is attempting to key userID: ${lucky}.\n
-Server user: ${data.bot.servers[x.chan].members[lucky]} \n
-Memsnap: ${memsnap[lucky]}`);
+
+	// Check @user
+	if (!memsnap[lucky]) {
+		dio.del(data.messageID, data);
+		dio.say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?", data);
+		return false;
+	}
+
+	// Already key'd?
+	if ( memsnap[lucky].roles.includes(x.member) ) {
+		dio.del(data.messageID, data);
+		dio.say("🕑 This user is a member and should have a :key: already!", data);
+		return false;
+	}
+
+	logger.log(`${from} is attempting to key userID: ${lucky}.\n
+Server user: ${data.bot.servers[x.chan].members[lucky].username} \n
+Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
 
 	// Grab last key in the list
 	keys.orderByKey().limitToLast(1).once("value", function(snapshot) {
@@ -58,20 +84,7 @@ Memsnap: ${memsnap[lucky]}`);
 		if (!kk) {
 			dio.del(data.messageID, data);
 			dio.say(`🕑 Welp. This is awkward <@${fromID}>. We need to refill the key list. Sorry <@${lucky}>, please standby!`, data);
-			return false;
-		}
-
-		// Check @user
-		if (!memsnap[lucky]) {
-			dio.del(data.messageID, data);
-			dio.say("🕑 Hmm, that user doesn't exist. Did you @ them correctly?", data);
-			return false;
-		}
-
-		// Already key'd?
-		if ( memsnap[lucky].roles.includes(member) ) {
-			dio.del(data.messageID, data);
-			dio.say("🕑 This user is a member and should have a :key: already!", data);
+			logger.log('Keys need to be refilled?', logger.MESSAGE_TYPE.Error)
 			return false;
 		}
 
@@ -132,7 +145,12 @@ Memsnap: ${memsnap[lucky]}`);
 			// Removes key from Firebase
 			keys.child(code).set({});
 			giveKey(lucky,kk[code].key);
+			logger.log(`${from} has given a key.`, logger.MESSAGE_TYPE.OK)
 		}
+
+		console.log('toot')
+	}, function(err) {
+		logger.log(err, logger.MESSAGE_TYPE.Error);
 	});
 });
 

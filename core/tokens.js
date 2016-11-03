@@ -2,5 +2,7 @@ module.exports = {
 	TOKEN: process.env.TOKEN,
 	WOLFID: process.env.WOLFID,
 	FBKEY: process.env.FBKEY,
-	FBKEY2: process.env.FBKEY2
+	FBPKEY: process.env.FBPKEY.replace(/\\n/g, '\n'),
+	FBPKEYID: process.env.FBPKEYID,
+	FBKEY2: process.env.FBKEY2,
 }
