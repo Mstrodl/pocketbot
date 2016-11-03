@@ -101,4 +101,4 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 // 	}
 // });
 
-module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer, cmdEmoji];
+module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];

@@ -15,9 +15,10 @@ let TOKEN 		= require('./core/tokens'),
 	logger 		= require('./core/logger'),
 	persona 	= require('./core/personality'),
 	userdata 	= require('./core/userdata'),
-	status 	= require('./core/presence'),
+	status 		= require('./core/presence'),
 	helper		= require('./core/helpers'),
-	vars 		= require('./core/vars');
+	vars 		= require('./core/vars'),
+	dio 		= require('./core/dio');
 
 // Initialize Firebase Stuff
 
@@ -131,7 +132,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		// ID of channel the message was sent in
 		channelID: channelID,
 		// ID of the server(guild)
-		serverID: x.chan,
+		serverID: vars.chan,
 		// ! -- bot.channels[channelID].guild_id Isn't correct
 		//Raw message string
 		message: message,
@@ -165,8 +166,8 @@ bot.on('message', function(user, userID, channelID, message, event){
 				break;
 		}
 
-		if (x.emotes.includes(msg)) {
-			dio.del(messageID,channelID);
+		if (vars.emotes.includes(msg)) {
+			dio.del(event.d.id,{bot:bot});
 			dio.sendImage('emoji/'+msg,user,{bot: bot},channelID);
 		}
 
@@ -180,7 +181,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	try {
-		logger.log(`[${bot.servers[x.chan].channels[channelID].name}] ${user}: ${message}`);
+		logger.log(`[${bot.servers[vars.chan].channels[channelID].name}] ${user}: ${message}`);
 		if (globalCommandManager.isTrigger(args[0])){
 			globalCommandManager.getGroup(globalCommandManager
 								.getCommand(args[0]).groupName)
