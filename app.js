@@ -155,19 +155,22 @@ bot.on('message', function(user, userID, channelID, message, event){
 	// ! -- TEMPORARY EMOTE INTERCEPT
 	// ===================================
 	if (message.startsWith(':')) {
-		switch(message) {
+		let msg = message;
+		switch(msg) {
 			case ":yourmother:":
-				message = ':yomama:'
+				msg = ':yomama:'
 				break;
 			case ":patch17:":
-				message = ':schatzmeteor:'
+				msg = ':schatzmeteor:'
 				break;
 		}
 
-		if (x.emotes.includes(message)) {
+		if (x.emotes.includes(msg)) {
 			dio.del(messageID,channelID);
-			dio.sendImage('emoji/'+message,user,channelID);
+			dio.sendImage('emoji/'+msg,user,{bot: bot},channelID);
 		}
+
+		return false;
 	}
 
 	// If from Mastabot, check for timed message otherwise ignore
