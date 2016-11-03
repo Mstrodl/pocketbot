@@ -28,7 +28,7 @@ exports.onChange = function(status) {
 					return false;
 				}
 
-				dio.say(`Removing ${from} from ready list due to disconnect.`, status.data);
+				dio.say(`Removing ${from} from ready list due to disconnect.`, status);
 			});
 		}
 	}
@@ -45,7 +45,7 @@ exports.onChange = function(status) {
 			];
 
 			let n = Math.floor( Math.random()*4 );
-			dio.say(v[n]);
+			dio.say(v[n], status);
 			status.bot.addToRole({
 				serverID: x.chan,
 				userID: fromID,
@@ -55,7 +55,7 @@ exports.onChange = function(status) {
 			dio.say(`Glad you found the Pocketwatch community, we hope you enjoy your stay. :) \n
 Please checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha. \n
 The developers hang out in the chat all the time, so feel free to say hi, ask questions, and tune in to our streams on Fridays @ 5PM EST! \n
-For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,data,fromID);
+For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
 		}
 	}
 
@@ -63,7 +63,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 	if (game != null && game.type === 1) {
 		if (streamer === fromID || !bot.servers[x.chan].members[fromID].roles.includes(x.member)) return false;
 
-		dio.say(`:movie_camera: <@${fromID}> is streaming! \n ${game.name} @ <${game.url}>!`, data);
+		dio.say(`:movie_camera: <@${fromID}> is streaming! \n ${game.name} @ <${game.url}>!`, status);
 		// ! -- want to figure out a way to add a timer so
 		// people don't spam up channel on accident
 		// streamer = fromID;
