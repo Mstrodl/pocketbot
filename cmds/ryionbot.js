@@ -9,17 +9,19 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
             to      : data.channelID,
             message : "A single username is needed for `!whois <username>`"
         });
+        return;
     }
 
-    //var targetID = helpers.getIDFromName(data.bot, args[1]);
-    var targetID = data.userID;
+    var targetID = helpers.getIDFromName(data.bot, data.args[1]);
+    //var targetID = data.userID;
 
     //Check if the user exists
-    if(!data.bot.users[targetID]){
+    if(!targetID || !data.bot.users[targetID]){
         data.bot.sendMessage({
             to      : data.channelID,
             message : "User '" + data.args[1] + "' does not exist"
         });
+        return;
     }
 
     //Check if the user has a description set
@@ -28,6 +30,7 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
             to      : data.channelID,
             message : "No user description found for '" + data.args[1] + "'!"
         });
+        return;
     }
 
     data.bot.sendMessage({
@@ -43,6 +46,7 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
             to      : data.channelID,
             message : "Wrong number of arguments. Syntax is `!iam \"description\"`"
         });
+        return;
     }
 
     if(!data.userdata.users[data.userID]){
