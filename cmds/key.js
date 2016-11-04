@@ -13,6 +13,39 @@ let logger  = require('../core/logger'),
 	x 		= require('../core/vars'),
 	cmdKey	= null;
 
+function giveKey(data,lucky,key,mod=false) {
+	logger.log(`Commence key giving to <@${lucky}>`, logger.MESSAGE_TYPE.Info);
+
+	let whodidthat = (mod) ? "the Moderators' vote" : 'one of the Devs';
+	// Direct message
+	dio.say(`Hey <@${lucky}>, looks like you've been bestowed a key by ${whodidthat}! :key: \n
+	Your Tooth and Tail steam key is: \`${key}\`! We hope you enjoy. :smile: Click here to activate it on steam: steam://open/activateproduct \n
+	Please make sure to give us feedback in chat! You can mark yourself with \`!ready\`
+	to let fellow players know you're up for a game in the #community channel.`,data,lucky);
+
+	logger.log(`<@${lucky}> received ${key}`, logger.MESSAGE_TYPE.OK);
+
+	// Completion message
+	dio.say(`:tada: <@${lucky}> has now joined the alpha. :tada:`,data,x.chan);
+	//regPlayer(lucky,"");
+
+	// Remove from new
+	data.bot.removeFromRole({
+		serverID: x.chan,
+		userID: lucky,
+		roleID: x.noob
+	}, function(err,resp) {
+		if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
+
+		// Add to members
+		data.bot.addToRole({
+			serverID: x.chan,
+			userID: lucky,
+			roleID: x.member
+		});
+	});
+}
+
 // If there is no FB token (localhost), ABORT!
 if (!TOKEN.FBPKEYID()) {
 	cmdKey = new command('key', '!key', `Adds a vote to key a member/instakey by dev`, function(data) {
@@ -110,13 +143,13 @@ if (!TOKEN.FBPKEYID()) {
 				// Register player and add vote
 				data.db.soldiers.once("value", function(snap) {
 					dio.del(data.messageID, data);
-					let newplayer = soldiers.child(lucky);
-					let x = snap.val()[lucky];
+					let newplayer = data.db.soldiers.child(lucky);
+					let l = snap.val()[lucky];
 					let voter = {};
 					voter[fromID] = true;
 					//console.log(newplayer, x, voter);
 
-					if (!x) {
+					if (!l) {
 						logger.log("user hasn't received vote before, adding 1 now.", logger.MESSAGE_TYPE.Info);
 						newplayer.set( memsnap[lucky] ); // Set once if doesn't exist
 						newplayer.child('vote').update(voter);
@@ -125,10 +158,10 @@ if (!TOKEN.FBPKEYID()) {
 						// Check for double vote
 						logger.log("Checking votes", logger.MESSAGE_TYPE.Info);
 
-						if ( x.hasOwnProperty('vote') ) { // If votes even exist
+						if ( l.hasOwnProperty('vote') ) { // If votes even exist
 							logger.log("Checking double vote", logger.MESSAGE_TYPE.Info);
-							if (x.vote.hasOwnProperty(fromID) ) {
-								dio.say('🕑 You already voted for them.',fromID)
+							if (l.vote.hasOwnProperty(fromID) ) {
+								dio.say('🕑 You already voted for them.',data,fromID)
 								return false;
 							} else {
 								logger.log('Has vote and not double', logger.MESSAGE_TYPE.OK);
@@ -142,14 +175,14 @@ if (!TOKEN.FBPKEYID()) {
 						}
 					}
 
-					dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}, ${votes} of 4!`, x.history)
+					dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}, ${votes} of 4!`, data, x.history)
 					if (votes === 4)  {
-						dio.say(`:tada: <@${lucky}> has been voted to receive a key.`, x.history);
+						dio.say(`:tada: <@${lucky}> has been voted to receive a key.`, data, x.history);
 						newplayer.set( memsnap[lucky] );
 						for (let code in kk) {
 							// Removes key from Firebase
 							keys.child(code).set({});
-							giveKey(lucky,kk[code].key,true);
+							giveKey(data,lucky,kk[code].key,true);
 						}
 					}
 				}, function(err) {
@@ -163,7 +196,7 @@ if (!TOKEN.FBPKEYID()) {
 			for (let code in kk) {
 				// Removes key from Firebase
 				keys.child(code).set({});
-				giveKey(lucky,kk[code].key);
+				giveKey(data,lucky,kk[code].key);
 				logger.log(`${from} has given a key.`, logger.MESSAGE_TYPE.OK)
 			}
 		}, function(err) {
