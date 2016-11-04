@@ -1,10 +1,7 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x		= require('../core/vars'),
-	dio 	= require('../core/dio'),
-	// Smaller, local array so I don't have to iterate through
-	// every online user's role everytime...
-	players = [];
+	dio 	= require('../core/dio');
 
 let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looking for a Game"`, function(data) {
 	//regPlayer(fromID,'');
@@ -33,14 +30,7 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 				return false;
 			}
 
-			if (players.length === 0) {
-				dio.say(`:ok_hand: Awesome ${from}. I'll ping you when someone wants to play.`, data);
-			} else if (players.length === 1) {
-				dio.say(`Sweet. Hey <@${players[0]}>, <@${fromID}> wants to play. FIGHT! :crossed_swords:  Click to launch TnT: http://www.toothandtailgame.com/play`, data);
-			} else {
-				dio.say(`:ok_hand: Nice <@${fromID}>. There are a few people <@&${x.lfg}>, let's see who will play you...`, data);
-			}
-			players.push(fromID);
+			dio.say(`:ok_hand: Nice <@${fromID}>. There are a few people <@&${x.lfg}>. Get ready to FIGHT! :crossed_swords:  Click to launch TnT: http://www.toothandtailgame.com/play`, data);
 		});
 	} else {
 		let v = [
@@ -61,7 +51,7 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 		from = data.user,
 		fromID = data.userID;
 
-	if (players.includes(fromID)) {
+	if (data.bot.servers[x.chan].members[fromID].roles.includes(x.lfg)) {
 		data.bot.removeFromRole({
 			serverID: x.chan,
 			userID: fromID,
@@ -73,9 +63,6 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 			}
 
 			dio.say(`🕑 Okee dokes ${from}. Unmarking you from the list. :+1:`, data);
-
-			let rem = players.indexOf(fromID);
-			if (rem != -1) players.splice(rem, 1);
 		});
 	} else {
 		dio.say(`🕑 Uh, you were never ready to begin with ${from}, but thanks for letting us know.`, data);
