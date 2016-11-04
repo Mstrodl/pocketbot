@@ -5,13 +5,6 @@
  let dio = require('../core/dio');
 // ! -- Feel free to improve any of these functions
 
-// Debug function
-module.exports.isDebug = function() {
-	if ((process.argv[2] == "--debug") || (process.argv[2] == "--d")) {
-		return true;
-	}
-}
-
 // Count function
 module.exports.getCount = function(arr, val) {
 	let i, j, count = 0;
