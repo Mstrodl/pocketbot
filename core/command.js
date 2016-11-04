@@ -109,7 +109,9 @@ CommandManager.prototype.getHelp = function(trigger){
         var s = "";
         for(var group in this.groups){
             for(var cmd in this.groups[group].commands){
-                s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';
+                if (this.groups[group].commands[cmd].groupName != 'admin') {
+                    s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';
+                }
             }
         }
         return s;
