@@ -31,7 +31,7 @@ let config = {
 };
 
 let fire = false;
-if ( !TOKEN.FBKEY2() ) {
+if ( TOKEN.FBKEY2() != false ) {
 	Fb.initializeApp(config);
 
 	fire = {

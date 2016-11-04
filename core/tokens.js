@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 module.exports = {
 	TOKEN: process.env.TOKEN,
 	WOLFID: process.env.WOLFID,
