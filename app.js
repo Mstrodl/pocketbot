@@ -98,7 +98,11 @@ bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 });
 
-bot.on("presence", function(user, userID, state, game, event) {
+bot.on('disconnect', function(err, errcode) {
+	logger.log(`${err} (Error: ${errcode})`, logger.MESSAGE_TYPE.Error);
+});
+
+bot.on('presence', function(user, userID, state, game, event) {
 	let statusData = {
 		// Bot client object
 		bot: bot,
