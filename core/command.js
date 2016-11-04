@@ -1,9 +1,11 @@
 var logger = require('./logger');
 var personality = require('./personality');
+var helpers = require('./helpers');
 
 //Command Manager, holds all the groups in one object
 //groups    : object - key: group name, value: group object
-function CommandManager(){
+function CommandManager(debugSymbol){
+    this.debugSymbol = debugSymbol;
     this.groups = {};
 }
 
@@ -89,7 +91,16 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     for(var group_name in this.groups){
         for(var command_trigger in this.groups[group_name].commands){
             if(trigger == command_trigger){
-                this.groups[group_name].call(trigger, data);
+                //Check if command has debug symbol and if bot is running in debug mode
+                if(helpers.isDebug()){
+                    if(trigger[0] == this.debugSymbol){
+                        this.groups[group_name].call(trigger, data);
+                    }
+                }else{
+                    if(trigger[0] != this.debugSymbol){
+                        this.groups[group_name].call(trigger, data);
+                    }
+                }
             }
         }
     }
