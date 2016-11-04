@@ -28,7 +28,7 @@ exports.onChange = function(status) {
 					return false;
 				}
 
-				dio.say(`Removing ${from} from ready list due to disconnect.`, status);
+				dio.say(`Removing ${from} from ready list due to disconnect.`, status, x.chan);
 			});
 		}
 	}
@@ -45,7 +45,7 @@ exports.onChange = function(status) {
 			];
 
 			let n = Math.floor( Math.random()*4 );
-			dio.say(v[n], status);
+			dio.say(v[n], status, x.chan);
 			status.bot.addToRole({
 				serverID: x.chan,
 				userID: fromID,
