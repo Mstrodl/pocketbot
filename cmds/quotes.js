@@ -133,11 +133,10 @@ let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, fun
 
 // Since both randquote and getquote have to grab the whole
 // quote object, they'll use this function to deduplicate some code
-function getQuote(quotes, bot) {
+function getQuote(quotes, text, bot) {
 	let results = [],
 		rt = 0,
 		s = '',
-		text = bot.message,
 		rand = false;
 
 	if (text.startsWith('!randquote')) {
@@ -155,9 +154,9 @@ function getQuote(quotes, bot) {
 			let thequote = snapVal[ Object.keys(snapVal)[x] ];
 
 			if ( thequote.hasOwnProperty('quote') ) {
-				dio.say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```", data);
+				dio.say("#"+thequote.id+" - _Quoted by: "+thequote.user+"_ ```"+thequote.quote+"```", bot);
 			} else {
-				dio.say("🕑 I picked a quote that doesn't exist. Try again next time.", data);
+				dio.say("🕑 I picked a quote that doesn't exist. Try again next time.", bot);
 			}
 		} else {
 			for (let i=0; i<n; i++) {
@@ -173,11 +172,11 @@ function getQuote(quotes, bot) {
 				if (i+1 >= n || results.length === 5) {
 					//console.log('Finished search.');
 					if (results.length === 1) {
-						dio.say(`\`\`\` ${results.join('\n\n')} \`\`\``, data);
+						dio.say(`\`\`\` ${results.join('\n\n')} \`\`\``, bot);
 					} else if (results.length > 1 && results.length < 6) {
-						dio.say(`First ${results.length} results: \n\`\`\` ${results.join('\n\n')} \`\`\``, data);
+						dio.say(`First ${results.length} results: \n\`\`\` ${results.join('\n\n')} \`\`\``, bot);
 					} else {
-						dio.say("🕑 No quotes found with that word.", data);
+						dio.say("🕑 No quotes found with that word.", bot);
 					}
 					break;
 				}
@@ -191,7 +190,9 @@ let cmdGetQuote = new command('quote', '!getquote', `Searches a string within th
 	if (!data.db.quotes) {
 		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
 		return false;
-	} else { getQuote(data.db.quotes, data.bot); }
+	} else {
+        console.log(data.bot.message);
+        getQuote(data.db.quotes, data.message, data); }
 });
 
 let cmdRandQuote = new command('quote', '!randquote', `Brings up a random quote`, function(data) {
@@ -199,7 +200,8 @@ let cmdRandQuote = new command('quote', '!randquote', `Brings up a random quote`
 	if (!data.db.quotes) {
 		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
 		return false;
-	} else { getQuote(data.db.quotes, data.bot); }
+	} else {
+        getQuote(data.db.quotes, data.message, data); }
 });
 
 module.exports.commands = [cmdAddQuote, cmdDelQuote, cmdGetQuote, cmdRandQuote, cmdQuote];
