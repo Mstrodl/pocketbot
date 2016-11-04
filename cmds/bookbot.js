@@ -1,7 +1,7 @@
 var logger  = require('../core/logger');
 var command = require('../core/command').Command;
 
-var cmd_ping = new command('bookbot', '?patch', 'See the most recent changes to the game.', function(data){
+var cmd_ping = new command('bookbot', '!patch', 'See the most recent changes to the game.', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : ""+
@@ -24,7 +24,7 @@ var cmd_ping = new command('bookbot', '?patch', 'See the most recent changes to 
     });
 });
 
-var cmd_ding = new command('bookbot', '?newspaper', 'Read the most recent issue of the Weekly Warren.', function(data){
+var cmd_ding = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren.', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes. \n\n"+
@@ -39,7 +39,7 @@ var cmd_ding = new command('bookbot', '?newspaper', 'Read the most recent issue 
     });
 });
 
-var cmd_help = new command('bookbot', '?troubleshoot', 'problem with getting the game started?', function(data){
+var cmd_help = new command('bookbot', '!troubleshoot', 'problem with getting the game started?', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "If your game is acting weird, here's a few things you can try to remedy that.:\n"+
