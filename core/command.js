@@ -97,9 +97,10 @@ CommandManager.prototype.call = function(data, trigger, group=null){
 }
 
 //Gets the help text for either one or all commands
-CommandManager.prototype.getHelp = function(trigger=null){
+CommandManager.prototype.getHelp = function(trigger){
+    logger.log(trigger, logger.MESSAGE_TYPE.Warn);
     if(trigger != null){
-        var cmd = this.getCommand(trigger);
+        var cmd = this.getCommand("!" + trigger); // ! -- !help help OR !help !help?
         if(cmd != null){
             return '**' + trigger + '** - `' + cmd.description + '`';
         }

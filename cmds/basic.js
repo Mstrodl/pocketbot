@@ -8,7 +8,6 @@ var cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
 	});
 });
 
-
 var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
@@ -17,11 +16,11 @@ var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data
 });
 
 var cmd_help = new command('ryionbot', '!help', 'Help command', function(data){
+    let k = (data.args[1]) ? data.args[1] : null;
     data.bot.sendMessage({
         to      : data.channelID,
-        message : data.commandManager.getHelp()
+        message : data.commandManager.getHelp(k) // passes the given trigger
     });
-
 });
 
 module.exports.commands = [cmd_ping, cmd_ding, cmd_help];
