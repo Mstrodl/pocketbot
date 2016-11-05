@@ -59,7 +59,8 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot),
-	bookbotCmdGroup		= new command.CommandGroup('bookbot', mastabot);
+	bookbotCmdGroup		= new command.CommandGroup('bookbot', mastabot),
+	streamsCmdGroup		= new command.CommandGroup('streams', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
@@ -70,6 +71,7 @@ globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(ryionbotCmdGroup);
 globalCommandManager.addGroup(bookbotCmdGroup);
+globalCommandManager.addGroup(streamsCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
