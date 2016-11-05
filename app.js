@@ -95,23 +95,14 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
 bot.on('ready', function(event) {
-	console.log('DEBUG: Ready OK');
-	return false;
-
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 });
 
 bot.on('disconnect', function(err, errcode) {
-	console.log(`DEBUG: Disconnect - ${err} (Error: ${errcode})`);
-	return false;
-
 	logger.log(`${err} (Error: ${errcode})`, logger.MESSAGE_TYPE.Error);
 });
 
 bot.on('presence', function(user, userID, state, game, event) {
-	console.log(`DEBUG: Presence - ${user}`);
-	return false;
-
 	let statusData = {
 		// Bot client object
 		bot: bot,
@@ -131,9 +122,6 @@ bot.on('presence', function(user, userID, state, game, event) {
 });
 
 bot.on('message', function(user, userID, channelID, message, event){
-	console.log(`DEBUG: ${user}:`);
-	return false;
-
 	//Remove whitespace
 	message = message.trim()
 
@@ -171,7 +159,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {
 		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {
 			console.log("Dancer Detected");
-			//logger.log("Dancer Detected", logger.MESSAGE_TYPE.Warn);
+			logger.log("Dancer Detected", logger.MESSAGE_TYPE.Warn);
 			command_data.dance = event.d.id;
 		}
 	}
