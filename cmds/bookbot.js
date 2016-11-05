@@ -1,7 +1,7 @@
-var logger  = require('../core/logger');
-var command = require('../core/command').Command;
+let logger  = require('../core/logger'),
+	command = require('../core/command').Command;
 
-var cmd_ping = new command('bookbot', '!patch', 'See the most recent changes to the game.', function(data){
+let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game.', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : ""+
@@ -18,13 +18,13 @@ var cmd_ping = new command('bookbot', '!patch', 'See the most recent changes to 
 		""+
 		""+
 		""+
-		
+		// I love this.
 		"Most recent Documented Changes (8/8/16):\n"+
 		"<http://blog.pocketwatchgames.com/post/150743867811/tooth-and-tail-patch-notes-pre-alpha-19>\n"
     });
 });
 
-var cmd_ding = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren.', function(data){
+let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren.', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes. \n\n"+
@@ -39,7 +39,7 @@ var cmd_ding = new command('bookbot', '!newspaper', 'Read the most recent issue 
     });
 });
 
-var cmd_help = new command('bookbot', '!troubleshoot', 'problem with getting the game started?', function(data){
+let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Any problem with getting the game started?', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "If your game is acting weird, here's a few things you can try to remedy that.:\n"+
@@ -51,4 +51,4 @@ var cmd_help = new command('bookbot', '!troubleshoot', 'problem with getting the
 });
 
 
-module.exports.commands = [cmd_ping, cmd_ding, cmd_help];
+module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot];
