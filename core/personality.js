@@ -30,7 +30,7 @@ Personality.prototype.set = function(command_data, callback){
 		throw new Error('Cannot set client personality due to empty avatar buffer');
 	}
 
-	command_data.bot.editNickname({ serverID: command_data.bot.channels[command_data.channelID].guild_id,
+	command_data.bot.editNickname({ serverID: command_data.serverID,
 									userID  : command_data.bot.id,
 									nick	: this.name},
 									function(err, res){
