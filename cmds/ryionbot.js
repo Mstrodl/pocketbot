@@ -1,6 +1,7 @@
 var logger  = require('../core/logger');
 var command = require('../core/command').Command;
 var helpers = require('../core/helpers');
+var dio     = require('../core/dio');
 
 var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self written short description', function(data){
     //Check if the a username was given
@@ -60,4 +61,33 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
     });
 });
 
-module.exports.commands = [cmd_whois, cmd_iam];
+var cmd_roll = new command('ryionbot', '!roll', 'Returns a random number within a given range(default range is [1, 6])', function(data){
+
+    //If no range given, default to [1, 6]
+    if(!data.args[1] || !data.args[2])
+    {
+        data.args[1] = 1;
+        data.args[2] = 6;
+    }
+
+    var a = parseInt(data.args[1], 10);
+    var b = parseInt(data.args[2], 10);
+
+    //Check if a and b are number
+    if(isNaN(a) || isNaN(b))
+    {
+        dio.say("Those are not number enough for me!", data);
+        return;
+    }
+
+    if(b < a)
+    {
+        var aux = a;
+        a = b;
+        b = aux;
+    }
+
+    dio.say(Math.round(Math.random() * (b - a) + a).toString(), data);
+});
+
+module.exports.commands = [cmd_whois, cmd_iam, cmd_roll];
