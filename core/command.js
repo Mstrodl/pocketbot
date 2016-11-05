@@ -212,7 +212,7 @@ function Command(groupName, trigger, description="", action){
 Command.prototype.call = function(command_data){
     try{
         var cmdResult = this.action(command_data);
-        logger.log(this.groupName +': ' + cmdResult, logger.MESSAGE_TYPE.OK);
+        logger.log(this.groupName +': ' + (cmdResult ? cmdResult : '<no return value>'), logger.MESSAGE_TYPE.OK);
         return cmdResult;
     }catch(e){
         logger.log(this.groupName + ' - ' + this.trigger + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error);
