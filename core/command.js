@@ -36,7 +36,7 @@ CommandManager.prototype.getCommand = function(trigger, group=null){
     if(group == null){
         //If no group is given, search in all groups
         for(var key in this.groups){
-            var cmd = this.groups[key].getCommand(trigger);
+            var cmd = this.groups[key].getCommand((trigger[0] == this.debugSymbol ? trigger.substring(1, trigger.length) : trigger));
 
             if(cmd != null){
                 return cmd;
@@ -68,6 +68,10 @@ CommandManager.prototype.isTrigger = function(trigger){
         throw new Error("Bad argument");
     }
 
+    if(trigger[0] == this.debugSymbol){
+        trigger = trigger.substring(1, trigger.length);
+    }
+
     for(var group_name in this.groups){
         for(var command_trigger in this.groups[group_name].commands){
             if(trigger == command_trigger){
@@ -88,19 +92,25 @@ CommandManager.prototype.call = function(data, trigger, group=null){
         throw new Error("No trigger for call");
     }
 
+    //Check for debug symbol
+    var hasDebugSymbol = (trigger[0] == this.debugSymbol);
+    trigger = (trigger[0] == this.debugSymbol ? trigger.substring(1, trigger.length) : trigger);
+
     for(var group_name in this.groups){
         for(var command_trigger in this.groups[group_name].commands){
             if(trigger == command_trigger){
                 //Check if command has debug symbol and if bot is running in debug mode
                 if(helpers.isDebug()){
-                    if(trigger[0] == this.debugSymbol){
+                    if(hasDebugSymbol){
                         this.groups[group_name].call(trigger, data);
                     }
                 }else{
-                    if(trigger[0] != this.debugSymbol){
+                    if(!hasDebugSymbol){
                         this.groups[group_name].call(trigger, data);
                     }
                 }
+                //We found the trigger, no point in keeping searching
+                return;
             }
         }
     }
