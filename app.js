@@ -47,6 +47,7 @@ if ( TOKEN.FBKEY2() != false ) {
 
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
+let bookbot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 
 var globalCommandManager	= new command.CommandManager(),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
@@ -57,7 +58,8 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
-	adminCmdGroup 		= new command.CommandGroup('admin', mastabot);
+	adminCmdGroup 		= new command.CommandGroup('admin', mastabot),
+	bookbotCmdGroup		= new command.CommandGroup('bookbot', mastabot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
@@ -67,6 +69,7 @@ globalCommandManager.addGroup(communityCmdGroup);
 globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(ryionbotCmdGroup);
+globalCommandManager.addGroup(bookbotCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
