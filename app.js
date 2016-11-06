@@ -92,7 +92,7 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 });
 
 //This stays a var. You change it back to let, we fight
-var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
+let bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
