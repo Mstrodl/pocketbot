@@ -41,7 +41,7 @@ if ( TOKEN.FBKEY2() != false ) {
 
 	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
 } else {
-	logger.log('Public Firebase not initialized. :(', logger.MESSAGE_TYPE.Error);
+	logger.log('Public Firebase not initialized.', logger.MESSAGE_TYPE.Warn);
 }
 
 
