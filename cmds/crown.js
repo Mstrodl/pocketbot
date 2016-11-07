@@ -78,12 +78,12 @@ let cmdChallenge = new command('crown', '!challenge', `This issues a challenge t
 	if (challengers.includes(from)) {
 		dio.say(`🕑 <@${fromID}>, you already challenged for the Crown in the past 24 hours.`, data);
 	} else {
-		if (data.bot.servers[x.chan].members[fromID].roles.includes(king)) {
+		if (data.bot.servers[x.chan].members[fromID].roles.includes(x.king)) {
 			dio.say(`🕑 You can't challenge yourself, silly.`, data);
 			return false;
 		}
 
-		dio.say(`:crossed_swords: <@${fromID}> has challenged for the <@&${king}>`, data);
+		dio.say(`:crossed_swords: <@${fromID}> has challenged for the <@&${x.king}>`, data);
 		challengers.push(from);
 		// 24h timer - doesn't seem to work right
 		setTimeout(function(){
