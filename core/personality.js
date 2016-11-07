@@ -50,4 +50,15 @@ Personality.prototype.set = function(command_data, callback){
 	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 }
 
+
+
+Personality.prototype.setAvatar = function(avatar_path){
+	if(!avatar_path){
+		throw new Error('Empty avatar face given when creating personality');
+	}
+
+	this.avatar_path = avatar_path;
+	this.avatar_buffer = fs.readFileSync(avatar_path, 'base64');
+}
+
 module.exports = Personality;
