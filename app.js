@@ -41,7 +41,7 @@ if ( TOKEN.FBKEY2() != false ) {
 
 	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
 } else {
-	logger.log('Public Firebase not initialized. :(', logger.MESSAGE_TYPE.Error);
+	logger.log('Public Firebase not initialized.', logger.MESSAGE_TYPE.Warn);
 }
 
 
@@ -194,13 +194,17 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	try {
-		logger.log(`[${bot.servers[vars.chan].channels[channelID].name}] ${user}: ${message}`);
+		logger.log(`${user}: ${message}`);
 		if (message && globalCommandManager.isTrigger(args[0])){
-			globalCommandManager.getGroup(globalCommandManager
-								.getCommand(args[0]).groupName)
-								.personality.set(command_data, function(){
-									globalCommandManager.call(command_data, args[0]);
-								});
+			var cmdGroup = globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName);
+			if(globalCommandManager.activePersona != cmdGroup.personality){
+				cmdGroup.personality.set(command_data, function(){
+					globalCommandManager.call(command_data, args[0]);
+				});
+				globalCommandManager.activePersona = cmdGroup.personality;
+			}else{
+				globalCommandManager.call(command_data, args[0]);
+			}
 		}
 		userdata.saveToFile('./data/users.json');
 	} catch(e) {
