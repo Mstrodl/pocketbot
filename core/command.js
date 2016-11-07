@@ -6,6 +6,7 @@ var helpers = require('./helpers');
 //groups    : object - key: group name, value: group object
 function CommandManager(debugSymbol){
     this.debugSymbol = debugSymbol;
+    this.activePersona = null;
     this.groups = {};
 }
 
