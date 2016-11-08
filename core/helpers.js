@@ -2,7 +2,8 @@
 	These are simple helper functions to do
 	some quick task/calculation
  ---------------------------------------- */
- let dio = require('../core/dio');
+ let dio = require('../core/dio'),
+	 x		= require('../core/vars');
 // ! -- Feel free to improve any of these functions
 
 // Debug function
@@ -115,4 +116,13 @@ module.exports.getIDFromName = function(client, name){
         }
     }
     return null;
+}
+
+//Checks if the current channel is x.playground
+module.exports.isBPG = function(chan) {
+	if (chan != x.playground) {
+		return false;
+	} else {
+		return true;
+	}
 }
