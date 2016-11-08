@@ -59,8 +59,8 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot),
-	bookbotCmdGroup		= new command.CommandGroup('bookbot', mastabot),
-	streamsCmdGroup		= new command.CommandGroup('streams', mastabot);
+	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot),
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
@@ -71,7 +71,7 @@ globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(ryionbotCmdGroup);
 globalCommandManager.addGroup(bookbotCmdGroup);
-globalCommandManager.addGroup(streamsCmdGroup);
+globalCommandManager.addGroup(lmsCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
@@ -107,6 +107,7 @@ bot.on('ready', function(event) {
 });
 
 bot.on('disconnect', function(err, errcode) {
+	console.log(err, errcode);
 	logger.log(`${err} (Error: ${errcode})`, logger.MESSAGE_TYPE.Error);
 });
 
