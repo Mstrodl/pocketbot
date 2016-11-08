@@ -182,7 +182,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		}
 
 		if (vars.emotes.includes(msg)) {
-			dio.del(event.d.id,{bot:bot});
+			dio.del(event.d.id, command_data );
 			console.log('Animated emote detected...');
 			dio.sendImage('emoji/'+msg,user,{bot: bot},channelID);
 		}
@@ -197,7 +197,8 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	try {
-		logger.log(`${user}: ${message}`);
+		if (channelID != vars.modchan) logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+
 		if (message && globalCommandManager.isTrigger(args[0])){
 			var cmdGroup = globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName);
 			if(globalCommandManager.activePersona != cmdGroup.personality){

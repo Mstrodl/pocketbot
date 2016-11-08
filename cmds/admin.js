@@ -36,18 +36,18 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 		dio.say(`🕑 Dont recognize member: \`${u}\``, data)
 		return false;
 	} else {
-		dio.del(data.messageID,data);
-		let online = (user.status === "online") ? ":large_blue_circle:" : ':white_circle:',
-			user = user.username,
+		dio.del(data.messageID, data);
+		let uname = user.username,
+			online = (user.status === "online") ? ":large_blue_circle:" : ':white_circle:',
 			nick = (user.nick != undefined) ? `\n aka ${user.nick}` : '',
 			disc = user.discriminator;
 
 		let d = new Date(user['joined_at']),
 			join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`;
 
-		botSay(`${online} **${user} #${disc}** ${nick}
+		dio.say(`${online} **${uname} #${disc}** ${nick}
 	**ID:** ${user.id}
-	**Joined:** ${join}`, fromID);
+	**Joined:** ${join}`, data, data.userID);
 	}
 });
 
