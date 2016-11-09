@@ -64,4 +64,4 @@ let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot.', func
 	dio.say("Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.", data);
 });
 	
-module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc];
+module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc, cmd_bookbot];
