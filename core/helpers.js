@@ -24,11 +24,11 @@ module.exports.getCount = function(arr, val) {
 }
 
 // Command timer
-module.exports.popCommand = function() {
-	if (command.length>0)  command.shift();
+module.exports.popCommand = function(arr) {
+	if (arr.length>0)  arr.shift();
 	//console.log(command);
 	setTimeout( function() {
-		popCommand();
+		module.exports.popCommand(arr);
 	},4000);
 }
 

@@ -1,6 +1,8 @@
 "use strict"
 
-// Get the libs
+// ===================================
+// Libraries
+// ===================================
 let chat 	= require('discord.io'),
 	path 	= require('path'),
 	Fb 		= require("firebase"),
@@ -8,8 +10,9 @@ let chat 	= require('discord.io'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
 	steam 	= require('steam-webapi');
 
-
+// ===================================
 // Modules
+// ===================================
 let TOKEN 		= require('./core/tokens'),
 	command 	= require('./core/command'),
 	logger 		= require('./core/logger'),
@@ -20,14 +23,15 @@ let TOKEN 		= require('./core/tokens'),
 	vars 		= require('./core/vars'),
 	dio 		= require('./core/dio');
 
+// ===================================
 // Initialize Firebase Stuff
-
+// ===================================
 let config = {
 	apiKey: TOKEN.FBKEY2(),
-	authDomain: "pocketbot-40684.firebaseapp.com",
-	databaseURL: "https://pocketbot-40684.firebaseio.com",
-	storageBucket: "pocketbot-40684.appspot.com",
-	messagingSenderId: "969731605928"
+	authDomain: 		"pocketbot-40684.firebaseapp.com",
+	databaseURL: 		"https://pocketbot-40684.firebaseio.com",
+	storageBucket: 		"pocketbot-40684.appspot.com",
+	messagingSenderId: 	"969731605928"
 };
 
 let fire = false;
@@ -44,7 +48,9 @@ if ( TOKEN.FBKEY2() != false ) {
 	logger.log('Public Firebase not initialized.', logger.MESSAGE_TYPE.Warn);
 }
 
-
+// ====================
+// Bot Personas
+// ====================
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
@@ -76,11 +82,11 @@ globalCommandManager.addGroup(lmsCmdGroup);
 // Clear the log file
 logger.clearLogFile();
 
-//Ready the user data
+// Ready the user data
 userdata = new userdata();
 userdata.loadFromFile('./data/users.json');
 
-//Parse the cmds dir and load any commands in there
+// Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 	if(err){
 		logger.log(err, logger.MESSAGE_TYPE.Error);
@@ -91,19 +97,24 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 		let _cmds = require(path.join(__dirname, 'cmds', path.parse(files[i]).name)).commands;
 
 		_cmds.forEach(function(element) {
-			globalCommandManager.addCommand(element);
+			globalCmdManager.addCommand(element);
 		}, this);
 	}
 });
 
-//This stays a var. You change it back to let, we fight
+// This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
-//May as well
+// May as well
 bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
+
+// ===================================
+// Bot Events
+// ===================================
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
+	helper.popCommand(vars.spamCheck);
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -142,7 +153,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		//User data created by bots
 		userdata: userdata,
 		//Command manager
-		commandManager: globalCommandManager,
+		commandManager: globalCmdManager,
 		// Bot client object
 		bot: bot,
 		// Name of user who sent the message
@@ -209,15 +220,42 @@ bot.on('message', function(user, userID, channelID, message, event){
 			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
 		}
 
-		if (message && globalCommandManager.isTrigger(args[0])){
-			var cmdGroup = globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName);
-			if(globalCommandManager.activePersona != cmdGroup.personality){
+		if (message && globalCmdManager.isTrigger(args[0])){
+			let cmdGroup = globalCmdManager.getGroup(globalCmdManager.getCommand(args[0]).groupName);
+			// ===================================
+			// SPAM Control
+			// ===================================
+			vars.spamCheck.push(userID);
+			let c = getCount(command,userID); // Check how many commands user has called recently
+			if (c===3) {
+				let v = [
+					`Take it easy on the command spam <@${userID}> or you'll be in big trouble.`,
+					`<@${userID}> simmer down, OR ELSE.`,
+					`<@${userID}> take a chill pill or I'll make you.`,
+					`Calm down <@${userID}>, too much spam and you're in for it.`
+					],
+					n = Math.floor( Math.random()*4 );
+
+				dio.say(v[n], command_data);
+			} else if (c>2) {
+				dio.say(`<@${userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, command_data);
+				vars.spammer[userID] = true;
+
+				setTimeout( function() {
+					delete vars.spammer[userID];
+				},120000);
+			}
+
+			if ( vars.spammer.hasOwnProperty(userID) ) return false;
+
+			// Personality Check
+			if (globalCmdManager.activePersona != cmdGroup.personality) {
 				cmdGroup.personality.set(command_data, function(){
-					globalCommandManager.call(command_data, args[0]);
+					globalCmdManager.call(command_data, args[0]);
 				});
-				globalCommandManager.activePersona = cmdGroup.personality;
-			}else{
-				globalCommandManager.call(command_data, args[0]);
+				globalCmdManager.activePersona = cmdGroup.personality;
+			} else {
+				globalCmdManager.call(command_data, args[0]);
 			}
 		}
 		userdata.saveToFile('./data/users.json');
