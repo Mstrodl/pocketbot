@@ -51,4 +51,35 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 	}
 });
 
-module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck];
+// works, albeit throwing errors. Only available to people with the pocketranger group. USE WITH CAUTION!!!
+let cmdNoobify = new command('basic', '!noobify', `This will remove the member role.`, function(data) {
+	let chan = data.channelID,
+		fromID = data.userID,
+		uRoles = data.bot.servers[x.chan].members[fromID].roles;
+
+	if (uRoles.includes('245142907097579520')) {
+		let k = data.args[1].slice(2, -1);
+		if (k != undefined) {
+			data.bot.removeFromRole({
+				serverID: x.chan,
+				userID: k,
+				roleID: x.member
+			}, function(err,resp) {
+				logger.log("Error: " + err, logger.MESSAGE_TYPE.Error);
+				logger.log("Response: " + resp, logger.MESSAGE_TYPE.Warn);
+			});
+
+            setTimeout(function() {
+                data.bot.addToRole({
+                    serverID: x.chan,
+                    userID: k,
+                    roleID: x.noob
+                }, function(err, resp) {
+                    if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
+                });
+            }, 500);
+		}
+	}
+});
+
+module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck, cmdNoobify];
