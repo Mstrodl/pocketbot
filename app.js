@@ -47,7 +47,7 @@ if ( TOKEN.FBKEY2() != false ) {
 
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
-let bookbot = new persona('Pocketbot', './assets/avatars/mastabot.png');
+let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
 
 var globalCommandManager	= new command.CommandManager(),
 	basicCmdGroup			= new command.CommandGroup('basic', mastabot),
