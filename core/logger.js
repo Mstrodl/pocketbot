@@ -16,7 +16,7 @@ module.exports.clearLogFile = function(){
 	fs.writeFileSync(logFile, "");
 }
 
-module.exports.log = function(msg, type=0){
+module.exports.log = function(msg, type=0, err=null){
 	var final_msg = "";
 
 	switch(type){
@@ -29,7 +29,11 @@ module.exports.log = function(msg, type=0){
 			break;
 		}
 		case MESSAGE_TYPE.Error:{
-			final_msg = chalk.red('[ERROR] ' + msg);
+			//final_msg = chalk.red('[ERROR] ' + msg);
+			if(err){
+				//final_msg += '\n' + err.stack;
+				final_msg = chalk.red('[ERROR] ' + err.stack);
+			}
 			break;
 		}
 		case MESSAGE_TYPE.Info:
