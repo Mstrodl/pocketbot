@@ -36,14 +36,18 @@ function giveKey(data,lucky,key,mod=false) {
 		roleID: x.noob
 	}, function(err,resp) {
 		if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
+	});
 
-		// Add to members
+	// Add to members
+	setTimeout(function() {
 		data.bot.addToRole({
 			serverID: x.chan,
 			userID: lucky,
 			roleID: x.member
+		}, function(err, resp) {
+			if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
 		});
-	});
+	}, 500);
 }
 
 // If there is no FB token (localhost), ABORT!
