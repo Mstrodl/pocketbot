@@ -119,6 +119,29 @@ module.exports.getIDFromName = function(client, name){
     return null;
 }
 
+//Double ended queue
+function dequeue(elem){
+    this.items = elem;
+}
+
+dequeue.prototype.push = function(items){
+    this.items.unshift(items);
+}
+
+dequeue.prototype.pop = function(){
+    return this.items.shift();
+}
+
+dequeue.prototype.pushBack = function(items){
+    this.items.push(items);
+}
+
+dequeue.prototype.popBack = function(){
+    return this.items.pop();
+}
+
+module.exports.dequeue = dequeue;
+
 //Checks if the current channel is x.playground
 module.exports.isBPG = function(chan) {
 	if (chan.channelID != x.playground) {
