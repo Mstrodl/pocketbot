@@ -22,5 +22,7 @@
     "jsonfile": "^2.4.0",
     "moment": "^2.16.0",
     "steam-webapi": "^0.6.5"
+    "node-opus": "^0.1.11"
+    "ytdl-core": "^0.7.9",
   }
 }
