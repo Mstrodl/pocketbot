@@ -196,8 +196,12 @@ bot.on('message', function(user, userID, channelID, message, event){
 		return false;
 	}
 
-	try {
-		if (channelID != vars.modchan) logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+	try {		
+		if (channelID != vars.modchan && !(channelID in bot.directMessages)) {
+			logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+		} else {
+			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
+		}
 
 		if (message && globalCommandManager.isTrigger(args[0])){
 			var cmdGroup = globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName);
