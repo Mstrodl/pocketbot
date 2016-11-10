@@ -203,7 +203,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		}
 		*/
 		
-		if (channelID != vars.modchan && channelID != '206167023120547840') logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+		if (channelID != vars.modchan && channelID != vars.dmchan) logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
 
 		if (message && globalCommandManager.isTrigger(args[0])){
 			var cmdGroup = globalCommandManager.getGroup(globalCommandManager.getCommand(args[0]).groupName);

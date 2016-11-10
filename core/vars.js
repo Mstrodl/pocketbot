@@ -17,6 +17,7 @@ module.exports = {
 	history: '196362695367196672',
 	playground: '172429393501749248',
 	modchan: '180446374704316417',
+	dmchan: '206167023120547840',
 	// ! - Maybe this can be automated to read from the directory instead...
 	emotes: [
 		':rekt:', ':yomama:', ':facefeel:',
