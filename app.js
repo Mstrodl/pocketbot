@@ -61,9 +61,8 @@ var globalCommandManager	= new command.CommandManager('d'),
 	ryionbotCmdGroup		= new command.CommandGroup('ryionbot', mjPersona);
 =======
 var globalCmdManager	= new command.CommandManager('d'),
-	basicCmdGroup 			= new command.CommandGroup('basic', mastabot),
-	ryionbotCmdGroup 		= new command.CommandGroup('ryionbot', mjPersona);
->>>>>>> Spam Control
+	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
+	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona);
 
 let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
@@ -131,7 +130,7 @@ bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
-	helper.popCommand(vars.spamCheck);
+	helper.popCommand( globalCmdManager.cList );
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -239,63 +238,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 
 		if (message && globalCmdManager.isTrigger(args[0])){
 			let cmdGroup = globalCmdManager.getGroup(globalCmdManager.getCommand(args[0]).groupName);
-			// ===================================
-			// SPAM Control
-			// ===================================
-			vars.spamCheck.push(userID);
-			let c = getCount(command,userID); // Check how many commands user has called recently
-			if (c===3) {
-				let v = [
-					`Take it easy on the command spam <@${userID}> or you'll be in big trouble.`,
-					`<@${userID}> simmer down, OR ELSE.`,
-					`<@${userID}> take a chill pill or I'll make you.`,
-					`Calm down <@${userID}>, too much spam and you're in for it.`
-					],
-					n = Math.floor( Math.random()*4 );
 
-				dio.say(v[n], command_data);
-			} else if (c>2) {
-				dio.say(`<@${userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, command_data);
-				vars.spammer[userID] = true;
-
-				setTimeout( function() {
-					delete vars.spammer[userID];
-				},120000);
-			}
-
-			if ( vars.spammer.hasOwnProperty(userID) ) return false;
-
-<<<<<<< develop
-=======
-		if (message && globalCmdManager.isTrigger(args[0])){
-			let cmdGroup = globalCmdManager.getGroup(globalCmdManager.getCommand(args[0]).groupName);
-			// ===================================
-			// SPAM Control
-			// ===================================
-			vars.spamCheck.push(userID);
-			let c = getCount(command,userID); // Check how many commands user has called recently
-			if (c===3) {
-				let v = [
-					`Take it easy on the command spam <@${userID}> or you'll be in big trouble.`,
-					`<@${userID}> simmer down, OR ELSE.`,
-					`<@${userID}> take a chill pill or I'll make you.`,
-					`Calm down <@${userID}>, too much spam and you're in for it.`
-					],
-					n = Math.floor( Math.random()*4 );
-
-				dio.say(v[n], command_data);
-			} else if (c>2) {
-				dio.say(`<@${userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, command_data);
-				vars.spammer[userID] = true;
-
-				setTimeout( function() {
-					delete vars.spammer[userID];
-				},120000);
-			}
-
-			if ( vars.spammer.hasOwnProperty(userID) ) return false;
-
->>>>>>> Spam Control
 			// Personality Check
 			if (globalCmdManager.activePersona != cmdGroup.personality) {
 				cmdGroup.personality.set(command_data, function(){
