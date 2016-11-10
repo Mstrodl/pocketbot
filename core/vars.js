@@ -28,9 +28,7 @@ module.exports = {
 		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
 		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
 		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
-	],
-	spamCheck = [],
-	spammer = {}
+	]
 	// ! -- Move these 3 into the command stuff
 	// spammer: {}, // Object list of people banned for spam
 	// mute: false, // Mute? :P
