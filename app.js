@@ -47,17 +47,20 @@ if ( TOKEN.FBKEY2() != false ) {
 
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
+let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
 
 var globalCommandManager	= new command.CommandManager('d'),
-	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
-	ryionbotCmdGroup 			= new command.CommandGroup('ryionbot', mjPersona);
+	basicCmdGroup			= new command.CommandGroup('basic', mastabot),
+	ryionbotCmdGroup		= new command.CommandGroup('ryionbot', mjPersona);
 
 let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
-	adminCmdGroup 		= new command.CommandGroup('admin', mastabot);
+	adminCmdGroup 		= new command.CommandGroup('admin', mastabot),
+	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot),
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbot);
 
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
@@ -67,6 +70,8 @@ globalCommandManager.addGroup(communityCmdGroup);
 globalCommandManager.addGroup(keyCmdGroup);
 globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(ryionbotCmdGroup);
+globalCommandManager.addGroup(bookbotCmdGroup);
+globalCommandManager.addGroup(lmsCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
@@ -102,6 +107,7 @@ bot.on('ready', function(event) {
 });
 
 bot.on('disconnect', function(err, errcode) {
+	console.log(err, errcode);
 	logger.log(`${err} (Error: ${errcode})`, logger.MESSAGE_TYPE.Error);
 });
 
