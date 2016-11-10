@@ -49,7 +49,7 @@ var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
 
-var globalCommandManager	= new command.CommandManager(),
+var globalCommandManager	= new command.CommandManager('d'),
 	basicCmdGroup			= new command.CommandGroup('basic', mastabot),
 	ryionbotCmdGroup		= new command.CommandGroup('ryionbot', mjPersona);
 
