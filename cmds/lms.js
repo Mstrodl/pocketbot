@@ -127,19 +127,19 @@ let cmd_start = new command('bookbot', '!start', "Start playing **'Last Man Stan
 
 let cmd_load = new command('bookbot', '!load', "hans", function(data){
     if (gameInProgress) {
-        if (data.channelID == x.pocketbot) {
-			if(message.author != playerList[playerTurn]) {
-				bot.sendMessage(message, "Please wait until your turn.");
+        if (data.channelID in data.bot.directMessages) {
+			if(data.user != playerList[playerTurn]) {
+				dio.say("Please wait until your turn.", data);
 			}
 			
 			else {
 				avoidList[playerTurn] = false;
-				var chamberInt = parseInt(input.substring(5));
+				var chamberInt = parseInt(data.args[1]);
 				if ( chamberInt < 0 || chamberInt > 4 || isNaN(chamberInt)) {
-					bot.sendMessage(message, "That is not a valid chamber location. Valid bullet chambers are: 0, 1, 2, 3, and 4");
+					dio.say("That is not a valid chamber location. Valid bullet chambers are: 0, 1, 2, 3, and 4", data);
 				}
 				else if (bulletList[playerTurn][chamberInt] === 1) {
-					bot.sendMessage(message, "Bullet already loaded into this chamber, please select another.");
+					dio.say("Bullet already loaded into this chamber, please select another.", data);
 				} else {
 					var bulletConfig = "__Current Bullet configuration__: \n"+
 					"```Chamber: 0-1-2-3-4\n"+
@@ -165,7 +165,7 @@ let cmd_load = new command('bookbot', '!load', "hans", function(data){
 					
 					chamberList[playerTurn] = Math.floor(Math.random() * 5); //spin the chamber
 					playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-					dio.say(playerList[playerTurn] + ": It is now your turn.", data);
+					dio.say(`<@${playerList[playerTurn]}> It is now your turn.`, data, x.playground);
 				}
 			}			
 		}
@@ -174,8 +174,8 @@ let cmd_load = new command('bookbot', '!load', "hans", function(data){
 
 let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 	if (gameInProgress) {
-		if (data.channelID == x.pocketbot) {
-			if(message.author != playerList[playerTurn]) {
+		if (data.channelID in data.bot.directMessages) {
+			if(data.user != playerList[playerTurn]) {
 				dio.say("Please wait until your turn.", data);
 			} else {
 				if (avoidCount[playerTurn] === 0) {
@@ -185,7 +185,7 @@ let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 					avoidList[playerTurn] = true; //make sure he avoids until next turn
 					dio.say("Avoid confirmed.", data);
 					playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-					dio.say(playerList[playerTurn] + ": It is now your turn.", data);
+					dio.say("<@" + playerList[playerTurn] + ">" + ": It is now your turn.", data, x.playground);
 				}
 			}
 		}
@@ -194,14 +194,14 @@ let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 
 let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 	if (isBPG) {
-		var target = parseInt(input.substring(8));
+		var target = parseInt(data.args[1]);
 		if ( target < 0 || target >= playerList.length || isNaN(target)) {
 			dio.say("That is not a valid target. Check to see who your targets are with '!players'.", data);
 		} else {
-			if (strayBullets != 0 && message.author === avoider) { //someone who avoided is attacking 
+			if (strayBullets != 0 && data.user === avoider) { //someone who avoided is attacking 
 				if (playerList[target] === attacker) {
 					dio.say("You cannot redirect the bullets to your attacker. Choose someone else.", data);
-				} else if (playerList[target] === message.author) {
+				} else if (playerList[target] === data.user) {
 					dio.say("You try, but you're just not fast enough to run into the bullets you just dodged, maybe if you try again?", data);
 				} else if (avoidList[target] === true) { //avoided
 					attacker = avoider;
@@ -245,12 +245,12 @@ let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 
 					if (playerList.length != 0) {
 						playerTurn = (playerTurn + 1) % playerList.length;
-						dio.say(atkMessage + playerList[playerTurn] + ": it is now your turn.", data);
+						dio.say(atkMessage + "<@" + playerList[playerTurn] + ">" + ": it is now your turn.", data);
 					}
 				}				
 			} else { //regular attack
 
-				if(message.author != playerList[playerTurn]) { //not the player's turn
+				if(data.user != playerList[playerTurn]) { //not the player's turn
 					dio.say("Please wait until your turn.", data);
 				} else {
 					avoidList[playerTurn] = false;
@@ -272,7 +272,7 @@ let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 					
 					if ( atkSuccess === 0) { //no shots fired
 						playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-						dio.say("*click!*\nThe attack failed.\n"+playerList[playerTurn] + ": It is now your turn.", data);
+						dio.say("*click!*\nThe attack failed.\n" + "<" + playerList[playerTurn] + ">" + ": It is now your turn.", data, x.playground);
 					} else {
 						atkMessage += atkSuccess + " shots were fired ";
 
@@ -287,7 +287,7 @@ let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 								dio.say(atkMessage + "\n"+avoider + ", Please select the unfortunate fellow who got shot on your behalf with the '!attack #' command.", data);
 							} else {
 								playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-								dio.say(atkMessage + "\n"+playerList[playerTurn] + ": It is now your turn.", data);
+								dio.say(atkMessage + "\n" + "<@" + playerList[playerTurn] + ">" + ": It is now your turn.", data, x.playground);
 							}
 						} else { //not avoided
 							lifeList[target] -= atkSuccess;
@@ -325,7 +325,7 @@ let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 							
 							if (playerList.length != 0) {
 								playerTurn = (playerTurn + 1) % playerList.length;
-								dio.say(atkMessage +"\n"+ playerList[playerTurn] + ": it is now your turn.", data);
+								dio.say(atkMessage + "\n" + "<@" + playerList[playerTurn] + ">" + ": it is now your turn.", data, x.playground);
 							}
 						}
 					}
