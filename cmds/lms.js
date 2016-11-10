@@ -21,7 +21,7 @@ var gameInProgress = false;
 
 // This used to be ?rules
 let cmd_lms = new command('bookbot', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){
-    if (!isBPG) {
+    if (!isBPG(data)) {
         dio.say("Last Man Standing (and all relevant commands) can only be done in the <#172429393501749248>", data);
     } else {
 	dio.say("__Last Man Standing Rules__\n"+
@@ -37,16 +37,21 @@ let cmd_lms = new command('bookbot', '!lms', "Find out more about Glyde's miniga
 					
 					"**If you choose to load or avoid, DM bookbot so you can keep your decision a secret. Attack commands are done in the #botplayground.**", data);
     }
+
+	return "Execution successful.";
 });
 
 let cmd_game = new command('bookbot', '!game', "Play some **'Last Man Standing'**", function(data){
-    if (isBPG) {
+    if (isBPG(data)) {
 	    dio.say("Game mode: Last Man Standing\nIf you would like to join, type in **'!join'**. \nFor rules, type in **'!rules'**. \nTo see who's currently playing or looking to play, type in **'!players'**", data);
+		return "Execution successful.";
     }
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 let cmd_join = new command('bookbot', '!join', "Join **'Last Man Standing'**", function(data){
-    if (isBPG) {
+    if (isBPG(data)) {
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
@@ -65,12 +70,16 @@ let cmd_join = new command('bookbot', '!join', "Join **'Last Man Standing'**", f
                 dio.say("You have successfully joined the game.", data);
             }
         }
+
+		return "Execution successful.";
     }
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 // fix this
 let cmd_leave = new command('bookbot', '!leave', "Leave **'Last Man Standing'**", function(data){
-	if (isBPG) {
+	if (isBPG(data)) {
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
@@ -83,11 +92,15 @@ let cmd_leave = new command('bookbot', '!leave', "Leave **'Last Man Standing'**"
             }
             dio.say("Deciding to stay alive today I see, wise.", data);
         }
+
+		return "Execution successful.";
     }
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 let cmd_players = new command('bookbot', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
-    if (isBPG) {
+    if (isBPG(data)) {
         let playerMessage = "**__Current Players__**\n";
 
         if(gameInProgress) {
@@ -99,26 +112,36 @@ let cmd_players = new command('bookbot', '!players', "Show all current players f
         } else {
             dio.say("There's no game in progress right now.", data);
         }
+
+		return "Execution successful.";
     }
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 let cmd_start = new command('bookbot', '!start', "Start playing **'Last Man Standing'**.", function(data) {
-    if (!gameInProgress) {
-        if (playerList.length > 1) {
-            for (let i = 0; i <playerList.length ; i++) {
-                bulletList.push([1,0,0,0,0,0]);
-                chamberList.push(Math.floor(Math.random() * 5));
-                avoidCount.push(3);
-                avoidList.push(false);
-                lifeList.push(5);
-            }
-            gameInProgress = true;
-            playerTurn = Math.floor(Math.random() * (playerList.length));
-            dio.say(`Well well well... looks like this saloon ain't big enough for the ${playerList.length} of ya. Well then, let's just see who'll be the Last Man Standing.\n\n <@${playerList[playerTurn]}>, You are to start.`, data);
-        } else {
-            dio.say("There is not enough people to start the game. We're going to need at least 3 people.", data);
-        }
-    }
+	if (isBPG(data)) {
+		if (!gameInProgress) {
+			if (playerList.length > 1) {
+				for (let i = 0; i <playerList.length ; i++) {
+					bulletList.push([1,0,0,0,0,0]);
+					chamberList.push(Math.floor(Math.random() * 5));
+					avoidCount.push(3);
+					avoidList.push(false);
+					lifeList.push(5);
+				}
+				gameInProgress = true;
+				playerTurn = Math.floor(Math.random() * (playerList.length));
+				dio.say(`Well well well... looks like this saloon ain't big enough for the ${playerList.length} of ya. Well then, let's just see who'll be the Last Man Standing.\n\n <@${playerList[playerTurn]}>, You are to start.`, data);
+			} else {
+				dio.say("There is not enough people to start the game. We're going to need at least 3 people.", data);
+			}
+		}
+
+		return "Execution successful.";
+	}
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 let cmd_load = new command('bookbot', '!load', "hans", function(data){
@@ -163,15 +186,21 @@ let cmd_load = new command('bookbot', '!load', "hans", function(data){
 					playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
 					dio.say(`<@${playerList[playerTurn]}> It is now your turn.`, data, x.playground);
 				}
-			}			
+			}
+
+			return "Execution successful.";
 		}
+
+		return "Execution not successful: Incorrect channel.";
     }
+
+	return "Execution not successful: No game in progress.";
 });
 
 let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {
-			if(data.userID != playerList[playerTurn]) {
+			if (data.userID != playerList[playerTurn]) {
 				dio.say("Please wait until your turn.", data);
 			} else {
 				if (avoidCount[playerTurn] === 0) {
@@ -184,12 +213,18 @@ let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 					dio.say(`<@${playerList[playerTurn]}>: It is now your turn.`, data, x.playground);
 				}
 			}
+
+			return "Execution successful.";
 		}
+
+		return "Execution not successful: Incorrect channel.";
 	}
+
+	return "Execution not successful: No game in progress.";
 });
 
 let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
-	if (isBPG) {
+	if (isBPG(data)) {
 		var target = parseInt(data.args[1]);
 		if ( target < 0 || target >= playerList.length || isNaN(target)) {
 			dio.say("That is not a valid target. Check to see who your targets are with '!players'.", data);
@@ -328,7 +363,11 @@ let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
 				}
 			}	
 		}
+
+		return "Execution successful.";
 	}
+
+	return "Execution not successful: Incorrect channel.";
 });
 
 module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_load, cmd_avoid, cmd_attack];

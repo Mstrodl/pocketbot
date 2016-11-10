@@ -121,7 +121,7 @@ module.exports.getIDFromName = function(client, name){
 
 //Checks if the current channel is x.playground
 module.exports.isBPG = function(chan) {
-	if (chan != x.playground) {
+	if (chan.channelID != x.playground) {
 		return false;
 	} else {
 		return true;
