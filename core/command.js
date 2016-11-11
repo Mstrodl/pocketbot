@@ -98,7 +98,7 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     // ===================================
     // SPAM Control
     // ===================================
-    this.cList.push(userID);
+    this.cList.push(data.userID);
     let c = getCount(cList,data.userID); // Check how many commands user has called recently
     if (c===3) {
         let v = [
