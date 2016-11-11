@@ -215,7 +215,9 @@ bot.on('message', function(user, userID, channelID, message, event){
 	}
 
 	try {
-		if (channelID != vars.modchan && !(channelID in bot.directMessages)) {
+		if (channelID === vars.modchan) {
+			// Stop spying on us Freakspot.
+		} else if (!(channelID in bot.directMessages)) {
 			logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
 		} else {
 			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
