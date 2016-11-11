@@ -20,7 +20,7 @@ var attacker;
 var gameInProgress = false;
 
 // This used to be ?rules
-let cmd_lms = new command('bookbot', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){
+let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){
     if (!isBPG(data)) {
         dio.say("Last Man Standing (and all relevant commands) can only be done in the <#172429393501749248>", data);
     } else {
@@ -41,7 +41,7 @@ let cmd_lms = new command('bookbot', '!lms', "Find out more about Glyde's miniga
 	return "Execution successful.";
 });
 
-let cmd_game = new command('bookbot', '!game', "Play some **'Last Man Standing'**", function(data){
+let cmd_game = new command('lms', '!game', "Play some **'Last Man Standing'**", function(data){
     if (isBPG(data)) {
 	    dio.say("Game mode: Last Man Standing\nIf you would like to join, type in **'!join'**. \nFor rules, type in **'!rules'**. \nTo see who's currently playing or looking to play, type in **'!players'**", data);
 		return "Execution successful.";
@@ -50,7 +50,7 @@ let cmd_game = new command('bookbot', '!game', "Play some **'Last Man Standing'*
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_join = new command('bookbot', '!join', "Join **'Last Man Standing'**", function(data){
+let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", function(data){
     if (isBPG(data)) {
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
@@ -78,7 +78,7 @@ let cmd_join = new command('bookbot', '!join', "Join **'Last Man Standing'**", f
 });
 
 // fix this
-let cmd_leave = new command('bookbot', '!leave', "Leave **'Last Man Standing'**", function(data){
+let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", function(data){
 	if (isBPG(data)) {
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
@@ -99,7 +99,7 @@ let cmd_leave = new command('bookbot', '!leave', "Leave **'Last Man Standing'**"
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_players = new command('bookbot', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
+let cmd_players = new command('lms', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
     if (isBPG(data)) {
         let playerMessage = "**__Current Players__**\n";
 
@@ -119,7 +119,7 @@ let cmd_players = new command('bookbot', '!players', "Show all current players f
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_start = new command('bookbot', '!start', "Start playing **'Last Man Standing'**.", function(data) {
+let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing'**.", function(data) {
 	if (isBPG(data)) {
 		if (!gameInProgress) {
 			if (playerList.length > 1) {
@@ -144,7 +144,7 @@ let cmd_start = new command('bookbot', '!start', "Start playing **'Last Man Stan
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_load = new command('bookbot', '!load', "hans", function(data){
+let cmd_load = new command('lms', '!load', "hans", function(data){
     if (gameInProgress) {
         if (data.channelID in data.bot.directMessages) {
 			if(data.userID != playerList[playerTurn]) {
@@ -197,7 +197,7 @@ let cmd_load = new command('bookbot', '!load', "hans", function(data){
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
+let cmd_avoid = new command('lms', '!avoid', "hans", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {
 			if (data.userID != playerList[playerTurn]) {
@@ -223,7 +223,7 @@ let cmd_avoid = new command('bookbot', '!avoid', "hans", function(data){
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_attack = new command('bookbot', '!attack', "hans", function(data){
+let cmd_attack = new command('lms', '!attack', "hans", function(data){
 	if (isBPG(data)) {
 		var target = parseInt(data.args[1]);
 		if ( target < 0 || target >= playerList.length || isNaN(target)) {
