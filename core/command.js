@@ -154,16 +154,18 @@ CommandManager.prototype.getHelp = function(trigger){
         if(g != null){ 
             // loop over group[trigger]
             var s = "";
-            let cmds = this.getCommand(trigger);
-            console.log(cmds);
+            for(let cmd in g){
+                console.log(g.commands);
+            }
+
             /*
-            for(var cmd in this.groups[group].commands){ 
-                if (this.groups[group].commands[cmd].groupName != 'admin') { 
-                    s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n'; 
-                } 
+            for(var cmd in this.groups[group].commands){  
+                if (this.groups[group].commands[cmd].groupName != 'admin') {  
+                    s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';  
+                }  
             }
             */
-            return "heh";
+            return s;
         }else{
             return "That group does not exist!";
         }
