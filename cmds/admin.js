@@ -1,13 +1,11 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	dio		= require('../core/dio'),
-	helpers		= require('../core/helpers'),
+	helpers	= require('../core/helpers'),
 	x 		= require('../core/vars');
 
 let cmdSay = new command('admin', '!say', `Allows Masta to speak as Mastabot`, function(data) {
-	if (data.userID === x.stealth) {
-		dio.say(data.message.replace('!say ',''), data);
-	}
+	if (data.userID === x.stealth) dio.say(data.message.replace('!say ',''), data);
 });
 
 let cmdNewBuild = new command('admin', 'new build live',`Admin trigger to automatically bring up verification link`, function(data) {
@@ -57,7 +55,7 @@ let cmdNoobify = new command('basic', '!noobify', `This will remove the member r
 		fromID = data.userID,
 		uRoles = data.bot.servers[x.chan].members[fromID].roles;
 
-	if (uRoles.includes('245142907097579520')) {
+	if (uRoles.includes(x.ranger) || uRoles.includes(x.mod) || uRoles.includes(x.admin)) {
 		let k = data.args[1].slice(2, -1);
 		if (k != undefined) {
 			data.bot.removeFromRole({
@@ -69,15 +67,15 @@ let cmdNoobify = new command('basic', '!noobify', `This will remove the member r
 				logger.log("Response: " + resp, logger.MESSAGE_TYPE.Warn);
 			});
 
-            setTimeout(function() {
-                data.bot.addToRole({
-                    serverID: x.chan,
-                    userID: k,
-                    roleID: x.noob
-                }, function(err, resp) {
-                    if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
-                });
-            }, 500);
+			setTimeout(function() {
+				data.bot.addToRole({
+					serverID: x.chan,
+					userID: k,
+					roleID: x.noob
+				}, function(err, resp) {
+					if (err) logger.log(`${err} / ${resp}`, logger.MESSAGE_TYPE.Error);
+				});
+			}, 500);
 		}
 	}
 });

@@ -8,6 +8,8 @@ function CommandManager(debugSymbol){
     this.debugSymbol = debugSymbol;
     this.activePersona = null;
     this.groups = {};
+    this.spammers = {};
+    this.cList = [];
 }
 
 //Add/overwrites a given group in the CommandManager
@@ -88,10 +90,36 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     if(!data){
         throw new Error("No data passed to command");
     }
-    
+
     if(!trigger){
         throw new Error("No trigger for call");
     }
+
+    // ===================================
+    // SPAM Control
+    // ===================================
+    this.cList.push(userID);
+    let c = getCount(cList,data.userID); // Check how many commands user has called recently
+    if (c===3) {
+        let v = [
+            `Take it easy on the command spam <@${data.userID}> or you'll be in big trouble.`,
+            `<@${data.userID}> simmer down, OR ELSE.`,
+            `<@${data.userID}> take a chill pill or I'll make you.`,
+            `Calm down <@${data.userID}>, too much spam and you're in for it.`
+            ],
+            n = Math.floor( Math.random()*4 );
+
+        dio.say(v[n], data);
+    } else if (c>2) {
+        dio.say(`<@${data.userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, data);
+        this.spammers[data.userID] = true;
+
+        setTimeout( function() {
+            delete this.spammers[data.userID];
+        },120000);
+    }
+
+    if ( vars.spammer.hasOwnProperty(data.userID) ) return false;
 
     //Check for debug symbol
     var hasDebugSymbol = (trigger[0] == this.debugSymbol);
@@ -219,7 +247,7 @@ Command.prototype.call = function(command_data){
         logger.log(this.groupName + ' - ' + this.trigger + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error, e);
         return -1;
     }
-    
+
 }
 
 module.exports.CommandManager   = CommandManager;
