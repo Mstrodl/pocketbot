@@ -150,20 +150,21 @@ CommandManager.prototype.call = function(data, trigger, group=null){
 //Gets the help text for either one or all commands
 CommandManager.prototype.getHelp = function(trigger){
     if(trigger != null){
-        var cmd = this.getCommand("!" + trigger); // ! -- !help help OR !help !help?
-        if(cmd != null){
-            return '**' + trigger + '** - `' + cmd.description + '`';
-        }else{
-            return "That command does not exist!";
-        }
-    }else{
-        var s = "";
-        for(var group in this.groups){
-            for(var cmd in this.groups[group].commands){
-                if (this.groups[group].commands[cmd].groupName != 'admin') {
-                    s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';
-                }
+        let g = this.getGroup(trigger);
+        if(g != null){ 
+            var s = "";
+            for(let cmd in g.commands){
+                s += `**${g.commands[cmd].trigger}** - ${g.commands[cmd].description}\n`;
             }
+            return s;
+        }else{
+            return "That group does not exist!";
+        }
+        
+    }else{
+        let s = "To find out more about a specific set of commands, type !help <group>.\n\n";
+        for(let group in this.groups){
+            s += `**${group}** - Your description goes here!\n`;
         }
         return s;
     }
