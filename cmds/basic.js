@@ -21,10 +21,12 @@ var cmd_help = new command('ryionbot', '!help', 'Help command', function(data){
         to      : data.userID,
         message : data.commandManager.getHelp(k) // passes the given trigger
     });
-	data.bot.sendMessage({
-        to      : data.channelID,
-        message : `I have messaged you the full list of commands, <@${data.userID}> :thumbsup:`
-    });
+    if (!(data.channelID in data.bot.directMessages)) {
+        data.bot.sendMessage({
+            to      : data.channelID,
+            message : `I have messaged you the full list of commands, <@${data.userID}> :thumbsup:`
+        });
+    }
 });
 
 module.exports.commands = [cmd_ping, cmd_ding, cmd_help];
