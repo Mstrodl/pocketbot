@@ -55,11 +55,6 @@ var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
 
-<<<<<<< develop
-var globalCommandManager	= new command.CommandManager('d'),
-	basicCmdGroup			= new command.CommandGroup('basic', mastabot),
-	ryionbotCmdGroup		= new command.CommandGroup('ryionbot', mjPersona);
-=======
 var globalCmdManager	= new command.CommandManager('d'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
 	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona);
@@ -73,7 +68,7 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot),
 	lmsCmdGroup			= new command.CommandGroup('lms', bookbot);
 
-<<<<<<< develop
+
 globalCommandManager.addGroup(basicCmdGroup);
 globalCommandManager.addGroup(matchCmdGroup);
 globalCommandManager.addGroup(crownCmdGroup);
@@ -84,16 +79,6 @@ globalCommandManager.addGroup(adminCmdGroup);
 globalCommandManager.addGroup(ryionbotCmdGroup);
 globalCommandManager.addGroup(bookbotCmdGroup);
 globalCommandManager.addGroup(lmsCmdGroup);
-=======
-globalCmdManager.addGroup(basicCmdGroup);
-globalCmdManager.addGroup(matchCmdGroup);
-globalCmdManager.addGroup(crownCmdGroup);
-globalCmdManager.addGroup(quoteCmdGroup);
-globalCmdManager.addGroup(communityCmdGroup);
-globalCmdManager.addGroup(keyCmdGroup);
-globalCmdManager.addGroup(adminCmdGroup);
-globalCmdManager.addGroup(ryionbotCmdGroup);
->>>>>>> Spam Control
 
 // Clear the log file
 logger.clearLogFile();
@@ -229,7 +214,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		return false;
 	}
 
-	try {		
+	try {
 		if (channelID != vars.modchan && !(channelID in bot.directMessages)) {
 			logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
 		} else {
