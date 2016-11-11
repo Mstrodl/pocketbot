@@ -50,7 +50,7 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 });
 
 // works, albeit throwing errors. Only available to people with the pocketranger group. USE WITH CAUTION!!!
-let cmdNoobify = new command('basic', '!noobify', `This will remove the member role.`, function(data) {
+let cmdNoobify = new command('admin', '!noobify', `This will remove the member role.`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
 		uRoles = data.bot.servers[x.chan].members[fromID].roles;
