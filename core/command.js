@@ -1,6 +1,7 @@
-var logger = require('./logger');
-var personality = require('./personality');
-var helpers = require('./helpers');
+var logger      = require('./logger'),
+    personality = require('./personality'),
+    helpers     = require('./helpers'),
+    dio         = require('./dio');
 
 //Command Manager, holds all the groups in one object
 //groups    : object - key: group name, value: group object
@@ -99,7 +100,7 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     // SPAM Control
     // ===================================
     this.cList.push(data.userID);
-    let c = getCount(cList,data.userID); // Check how many commands user has called recently
+    let c = helpers.getCount(this.cList,data.userID); // Check how many commands user has called recently
     if (c===3) {
         let v = [
             `Take it easy on the command spam <@${data.userID}> or you'll be in big trouble.`,
@@ -119,7 +120,7 @@ CommandManager.prototype.call = function(data, trigger, group=null){
         },120000);
     }
 
-    if ( vars.spammer.hasOwnProperty(data.userID) ) return false;
+    if ( this.spammers.hasOwnProperty(data.userID) ) return false;
 
     //Check for debug symbol
     var hasDebugSymbol = (trigger[0] == this.debugSymbol);
