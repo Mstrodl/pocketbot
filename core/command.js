@@ -152,19 +152,10 @@ CommandManager.prototype.getHelp = function(trigger){
     if(trigger != null){
         let g = this.getGroup(trigger);
         if(g != null){ 
-            // loop over group[trigger]
             var s = "";
-            for(let cmd in g){
-                console.log(g.commands);
+            for(let cmd in g.commands){
+                s += `**${g.commands[cmd].trigger}** - ${g.commands[cmd].description}\n`;
             }
-
-            /*
-            for(var cmd in this.groups[group].commands){  
-                if (this.groups[group].commands[cmd].groupName != 'admin') {  
-                    s += '**' + this.groups[group].commands[cmd].trigger + '** - `' + this.groups[group].commands[cmd].description + '`\n';  
-                }  
-            }
-            */
             return s;
         }else{
             return "That group does not exist!";
