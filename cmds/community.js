@@ -32,12 +32,12 @@ let cmdEmotes = new command('community', '!emotes', `Lists the available emotes`
 
 let cmdStream = new command('community', '!stream', `Links to the Pocketwatch stream with time till next broadcast`, function(data) {
 		dio.del(data.messageID,data);
-		const day = 5;
+		const day = 5; // Friday
 		let time;
-		if (moment().isoWeekday() < dayINeed || moment().isoWeekday() > dayINeed) {
+		if (moment().isoWeekday() < day || moment().isoWeekday() > day) {
 			// If today is less than day needed -> "in x days"
-			time = moment( moment().add(1, 'weeks').isoWeekday(dayINeed).startOf('hour').hour(17) ).fromNow();
-		} else if (moment().isoWeekday() === dayINeed) {
+			time = moment( moment().add(1, 'weeks').isoWeekday(day).startOf('hour').hour(17) ).fromNow();
+		} else if (moment().isoWeekday() === day) {
 			// If today is friday -> "in x hours, y minutes"
 			time = moment( moment().startOf('hour').hour(17) ).fromNow();
 		}
