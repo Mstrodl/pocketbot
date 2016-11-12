@@ -53,7 +53,7 @@ Personality.prototype.set = function(command_data, callback){
 
 
 
-Personality.prototype.setAvatar = function(avatar_path, command_data=null){
+Personality.prototype.setAvatar = function(avatar_path, command_data=null, callback=null){
 	if(!avatar_path){
 		throw new Error('Empty avatar face given when creating personality');
 	}
@@ -65,6 +65,10 @@ Personality.prototype.setAvatar = function(avatar_path, command_data=null){
 		command_data.bot.editUserInfo({avatar  : this.avatar_buffer}, function(err, res){
 			if (err) {
 				logger.log(err, logger.MESSAGE_TYPE.Error);
+			}else{
+				if(callback){
+					callback(command_data);
+				}
 			}
 		});
 	}
