@@ -395,4 +395,4 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 	return "Execution not successful: Incorrect channel.";
 });
 
-module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_load, cmd_avoid, cmd_attack];
+module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_reset, cmd_load, cmd_avoid, cmd_attack];
