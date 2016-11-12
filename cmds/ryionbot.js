@@ -90,4 +90,8 @@ var cmd_roll = new command('ryionbot', '!roll', 'Returns a random number within 
     dio.say(Math.round(Math.random() * (b - a) + a).toString(), data);
 });
 
-module.exports.commands = [cmd_whois, cmd_iam, cmd_roll];
+var cmd_cointoss = new command('ryionbot', '!coin', 'Tosses a coin, result is Heads or Tails', function(data){
+    dio.say(((Math.round(Math.random() * 300)) % 2 ? "Heads" : "Tails"), data);
+});
+
+module.exports.commands = [cmd_whois, cmd_iam, cmd_roll, cmd_cointoss];

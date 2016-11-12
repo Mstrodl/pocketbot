@@ -243,14 +243,14 @@ CommandGroup.prototype.getHelp = function(filter, lookupTarget){
         throw new Error("Missing parameter(s)");
     }
 
-    var s = "**" + this.name + "**\n" + (this.description ? this.description : "<no description set>") + "\n\n";
+    var s = "**" + this.name + "** - " + this.personality.emote + "\n" + (this.description ? this.description : "<no description set>") + "\n\n";
 
     switch(lookupTarget){
         case('command'):{
             var found = false;
             for(var k in this.commands){
                 if(k == filter){
-                    s = "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\n";
+                    s = "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\nBrought to you by " + this.personality.emote;
                     found = true;
                 }
             }
