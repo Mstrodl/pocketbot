@@ -4,12 +4,9 @@ let logger  = require('../core/logger'),
 	x		= require('../core/vars'),
 	command = require('../core/command').Command;
 
-var gameMode = 0;
 var playerList = [];
-var yes = [];
-var no = [];
-var bulletList = []; //contain's players bullet placements
-var chamberList = []; //contain's where the trigger is located.
+var bulletList = []; //contains players bullet placements
+var chamberList = []; //contains where the trigger is located.
 var avoidCount = []; //keeps track of number of avoids used
 var avoidList = [];//whether avoid has been used.
 var lifeList = []; //player's lives
@@ -157,7 +154,6 @@ let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", f
 			strayBullets = 0;
 			avoider = null;
 			gameInProgress = false;
-			gameMode = 0;
 			dio.say("Deciding to stay alive today I see, wise.", data);
 
 			return "Execution successful.";
@@ -295,7 +291,6 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							strayBullets = 0;
 							avoider = null;				//reset game
 							gameInProgress = false;
-							gameMode = 0;
 						}	
 					}
 
@@ -374,7 +369,6 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 									strayBullets = 0;
 									avoider = null;				//reset game
 									gameInProgress = false;
-									gameMode = 0;
 								}
 								
 							}
