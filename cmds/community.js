@@ -1,8 +1,7 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
-	wc 		= require('node-wolfram'),
+	moment 	= require('moment'),
 	TOKEN 	= require('../core/tokens'),
-	wolf 	= new wc(TOKEN.WOLFID),
 	dio		= require('../core/dio'),
 	x 		= require('../core/vars');
 
@@ -32,12 +31,19 @@ let cmdEmotes = new command('community', '!emotes', `Lists the available emotes`
 });
 
 let cmdStream = new command('community', '!stream', `Links to the Pocketwatch stream with time till next broadcast`, function(data) {
-	wolf.query("time till Friday 5pm EST", function(err, result) {
 		dio.del(data.messageID,data);
-		let time = result.queryresult.pod[1].subpod[0].plaintext[0];
-		dio.say(`Check us out on Twitch @ http://www.twitch.tv/Pocketwatch (Fridays @ 5pm EST) \n The next stream will be in \`${time}\``,data);
+		const day = 5; // Friday
+		let time;
+		if (moment().isoWeekday() < day || moment().isoWeekday() > day) {
+			// If today is less than day needed -> "in x days"
+			time = moment( moment().add(1, 'weeks').isoWeekday(day).startOf('hour').hour(17) ).fromNow();
+		} else if (moment().isoWeekday() === day) {
+			// If today is friday -> "in x hours, y minutes"
+			time = moment( moment().startOf('hour').hour(17) ).fromNow();
+		}
+
+		dio.say(`Check us out on Twitch @ http://www.twitch.tv/Pocketwatch (Fridays @ 5pm EST) \n The next stream will be \`${time}\``,data);
 		return false;
-	});
 });
 
 let cmdBalance = new command('community', '!balance', `Links moderators to balance sheet`, function(data) {

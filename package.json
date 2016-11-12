@@ -20,8 +20,7 @@
     "firebase": "^3.0.2",
     "gm": "^1.22.0",
     "jsonfile": "^2.4.0",
-    "node-wolfram": "0.0.1",
-    "steam-webapi": "^0.6.5",
-    "webshot": "^0.18.0"
+    "moment": "^2.16.0",
+    "steam-webapi": "^0.6.5"
   }
 }
