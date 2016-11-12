@@ -139,9 +139,7 @@ bot.on('presence', function(user, userID, state, game, event) {
 		//e: event
 	}
 
-	//status.onChange(statusData);
-
-	logger.log("User '" + user + "' is now '" + state + "'");
+	status.onChange(statusData);
 });
 
 bot.on('message', function(user, userID, channelID, message, event){
