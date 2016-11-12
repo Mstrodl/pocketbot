@@ -27,9 +27,7 @@ Personality.prototype.set = function(command_data, callback){
 									userID  : command_data.bot.id,
 									nick	: this.name},
 									function(err, res){
-										if(err){
-											logger.log(err, logger.MESSAGE_TYPE.Error);
-										}
+										if(err) logger.log(err, logger.MESSAGE_TYPE.Error);
 	});
 
 	command_data.bot.editUserInfo({avatar  : this.avatar_buffer}, function(err, res){
@@ -54,9 +52,7 @@ Personality.prototype.setAvatar = function(avatar_path, command_data=null, callb
 			if (err) {
 				logger.log(err, logger.MESSAGE_TYPE.Error);
 			}else{
-				if(callback){
-					callback(command_data);
-				}
+				if(callback) callback(command_data);
 			}
 		});
 	}
@@ -65,6 +61,7 @@ Personality.prototype.setAvatar = function(avatar_path, command_data=null, callb
 Personality.prototype.setNick = function(nick, command_data=null, callback=null){
 	if(!nick) throw new Error('Invalid nickname given');
 
+	this.name = nick;
 	if(command_data){
 		command_data.bot.editNickname({
 			serverID: command_data.serverID,
@@ -75,9 +72,8 @@ Personality.prototype.setNick = function(nick, command_data=null, callback=null)
 			if (err) {
 				logger.log(err, logger.MESSAGE_TYPE.Error);
 			}else{
-				if(callback){
-					callback(command_data);
-				}
+
+				if(callback) callback(command_data);
 			}
 		});
 	}
