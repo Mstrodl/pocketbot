@@ -176,9 +176,9 @@ CommandManager.prototype.getHelp = function(filter, lookupTarget){
         }
         case('all'):
         default:{
-            var s = "";
+            var s = "Type in **!help <groupname>** to get the commands for a certain group listed below:\n";
             for(var gk in this.groups){
-                s += this.groups[gk].getHelp(filter, 'group');
+                s += "**" + gk + "** - " + (this.groups[gk].description ? this.groups[gk].description : "<no description>") + "\n";
             }
             return s;
         }
@@ -243,7 +243,7 @@ CommandGroup.prototype.getHelp = function(filter, lookupTarget){
         throw new Error("Missing parameter(s)");
     }
 
-    var s = "**" + this.name + "**\n" + this.description + "\n\n";
+    var s = "**" + this.name + "**\n" + (this.description ? this.description : "<no description set>") + "\n\n";
 
     switch(lookupTarget){
         case('command'):{
