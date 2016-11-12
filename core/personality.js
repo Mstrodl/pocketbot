@@ -44,9 +44,7 @@ Personality.prototype.set = function(command_data, callback){
 
 
 Personality.prototype.setAvatar = function(avatar_path, command_data=null, callback=null){
-	if(!avatar_path){
-		throw new Error('Empty avatar face given when creating personality');
-	}
+	if(!avatar_path) throw new Error('Empty avatar face given when creating personality');
 
 	this.avatar_path = avatar_path;
 	this.avatar_buffer = fs.readFileSync(avatar_path, 'base64');
@@ -64,12 +62,23 @@ Personality.prototype.setAvatar = function(avatar_path, command_data=null, callb
 	}
 }
 
-Personality.prototype.setNick = function(nick, command_data=null){
+Personality.prototype.setNick = function(nick, command_data=null, callback=null){
 	if(!nick) throw new Error('Invalid nickname given');
 
 	if(command_data){
-		command_data.bot.editUserInfo({name: nick}, function(err, res){
-			if (err) logger.log(err, logger.MESSAGE_TYPE.Error);
+		command_data.bot.editNickname({
+			serverID: command_data.serverID,
+			userID  : command_data.bot.id,
+			nick: nick
+		}, function(err, res){
+			console.log(err, res);
+			if (err) {
+				logger.log(err, logger.MESSAGE_TYPE.Error);
+			}else{
+				if(callback){
+					callback(command_data);
+				}
+			}
 		});
 	}
 }

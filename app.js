@@ -55,7 +55,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:
 	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>'),
 	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', '<:bookbot:247030934287810563>'),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', '<:bookbot:247030934287810563>'),
-	unitinfo = new persona('Unit Info', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
+	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
 
 // Manager and Groups
 let globalCmdManager	= new command.CommandManager('d'),

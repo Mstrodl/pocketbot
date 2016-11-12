@@ -76,13 +76,26 @@ let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data
 		}
 
 		// Change Avatar
-		persona.setNick(label, data);
-		persona.setAvatar(`assets/unit_${item}.png`, data);
-		dio.say(`
+		persona.setAvatar(`./assets/unit_${item}.png`, data, function() {
+			setTimeout(function(){
+				persona.setNick(label, data, function() {
+						console.log('yay');
+						dio.say(`
 ${u.units[item].name} | **${tier}**
 :crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
 Traits: ${traits.join(', ')}`, data);
+				});
+			}, 500);
+		});
+	// 	persona.setAvatarAndNick(`./assets/unit_${item}.png`, label, data, function(data) {
+	// 		console.log('yay')
+	// 		dio.say(`
+	// ${u.units[item].name} | **${tier}**
+	// :crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
+	// Traits: ${traits.join(', ')}`, data);
+	// 	});
 
+		return false;
 	} else if (u.filters.traits[item]) {
 		let t = u.filters.traits[item],
 			w = (t.wpn) ? ':gun:' : '',

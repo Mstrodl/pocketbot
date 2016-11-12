@@ -72,5 +72,5 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		// },6000*10);
 	}
 
-	logger.log("User '" + user + "' is now '" + state + "'");
+	logger.log("User '" + from + "' is now '" + status.state + "'");
 }
