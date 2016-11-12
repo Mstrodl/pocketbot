@@ -49,3 +49,6 @@ yay2.js
 
 #VS Code fluff
 .vscode
+
+#Prebuilt exes
+*.exe

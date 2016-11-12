@@ -107,9 +107,6 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 // This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
-// May as well
-bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
-
 // ===================================
 // Bot Events
 // ===================================
@@ -117,6 +114,8 @@ bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
+	// May as well
+	bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -140,7 +139,9 @@ bot.on('presence', function(user, userID, state, game, event) {
 		//e: event
 	}
 
-	status.onChange(statusData);
+	//status.onChange(statusData);
+
+	logger.log("User '" + user + "' is now '" + state + "'");
 });
 
 bot.on('message', function(user, userID, channelID, message, event){
@@ -243,7 +244,6 @@ bot.on('message', function(user, userID, channelID, message, event){
 			to: channelID,
 			message: `An error occured inside the \`${args[0]}\` command code`
 		});
-		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error);
 		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error, e);
 	}
 });
