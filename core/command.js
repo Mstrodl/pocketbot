@@ -148,25 +148,40 @@ CommandManager.prototype.call = function(data, trigger, group=null){
 }
 
 //Gets the help text for either one or all commands
-CommandManager.prototype.getHelp = function(trigger){
-    if(trigger != null){
-        let g = this.getGroup(trigger);
-        if(g != null){ 
+//filter        -   command trigger or group name
+//lookupTarget  -   'all' for all commands, 'group' for one group, 'command' for one command
+CommandManager.prototype.getHelp = function(filter, lookupTarget){
+    if(!filter || !lookupTarget){
+        throw new Error("Missing parameter(s)");
+    }
+
+    switch(lookupTarget){
+        case('command'):{
+            for(var k in this.groups){
+                var cmd = this.groups[k].getCommand(filter);
+
+                if(cmd != null){
+                    return this.groups[k].getHelp(filter, 'command');
+                }
+            }
+
+            return "<lookup failed>";
+        }
+        case('group'):{
+            if(this.groups[filter]){
+                return this.groups[filter].getHelp(filter, 'group');
+            }
+
+            return "<lookup failed>";
+        }
+        case('all'):
+        default:{
             var s = "";
-            for(let cmd in g.commands){
-                s += `**${g.commands[cmd].trigger}** - ${g.commands[cmd].description}\n`;
+            for(var gk in this.groups){
+                s += this.groups[gk].getHelp(filter, 'group');
             }
             return s;
-        }else{
-            return "That group does not exist!";
         }
-        
-    }else{
-        let s = "To find out more about a specific set of commands, type !help <group>.\n\n";
-        for(let group in this.groups){
-            s += `**${group}** - Your description goes here!\n`;
-        }
-        return s;
     }
 }
 
@@ -174,7 +189,7 @@ CommandManager.prototype.getHelp = function(trigger){
 //name          : string - the name of the Group
 //personality   : Personality object, defining which "bot" should be used
 //commands      : object - key: command trigger, value: command object
-function CommandGroup(name, personality){
+function CommandGroup(name, personality, description=""){
     if(!name){
         throw new Error("Cannot create nameless group");
     }
@@ -185,6 +200,7 @@ function CommandGroup(name, personality){
 
     this.name = name;
     this.personality = personality;
+    this.description = description;
     this.commands = {};
 }
 
@@ -217,6 +233,41 @@ CommandGroup.prototype.getCommand = function(command_trigger){
     }
 
     return cmd;
+}
+
+//Gets the help text for either one or all commands
+//filter        -   command trigger or group name
+//lookupTarget  -   'group' for the whole group, 'command' for one command
+CommandGroup.prototype.getHelp = function(filter, lookupTarget){
+    if(!filter || !lookupTarget){
+        throw new Error("Missing parameter(s)");
+    }
+
+    var s = "**" + this.name + "**\n" + this.description + "\n\n";
+
+    switch(lookupTarget){
+        case('command'):{
+            var found = false;
+            for(var k in this.commands){
+                if(k == filter){
+                    s = "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\n";
+                    found = true;
+                }
+            }
+            if(found){
+                return s;
+            }else{
+                return "<lookup failed>";
+            }
+        }
+        case('group'):
+        default:{
+            for(var k in this.commands){
+                s += "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\n";
+            }
+            return s;
+        }
+    }
 }
 
 //Looks up and calls a function by it's trigger
