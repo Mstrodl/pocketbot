@@ -162,7 +162,7 @@ let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", f
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_load = new command('lms', '!load', "hans", function(data){
+let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel.", function(data){
     if (gameInProgress) {
         if (data.channelID in data.bot.directMessages) {
 			if(data.userID != playerList[playerTurn].ID) {
@@ -215,7 +215,7 @@ let cmd_load = new command('lms', '!load', "hans", function(data){
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_avoid = new command('lms', '!avoid', "hans", function(data){
+let cmd_avoid = new command('lms', '!avoid', "If somebody shoots at you this round, avoid the attack.", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {
 			if (data.userID != playerList[playerTurn].ID) {
@@ -241,7 +241,7 @@ let cmd_avoid = new command('lms', '!avoid', "hans", function(data){
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_attack = new command('lms', '!attack', "hans", function(data){
+let cmd_attack = new command('lms', '!attack', "Attack one of your opponents.", function(data){
 	if (isBPG(data)) {
 		var target = parseInt(data.args[1]);
 		if ( target < 0 || target >= playerList.length || isNaN(target)) {
