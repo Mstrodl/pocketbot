@@ -134,7 +134,7 @@ let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing
 				playerTurn = Math.floor(Math.random() * (playerList.length));
 				dio.say(`Well well well... looks like this saloon ain't big enough for the ${playerList.length} of ya. Well then, let's just see who'll be the Last Man Standing.\n\n <@${playerList[playerTurn]}>, You are to start.`, data);
 			} else {
-				dio.say("There is not enough people to start the game. We're going to need at least 3 people.", data);
+				dio.say("There is not enough people to start the game. We're going to need at least 2 people.", data);
 			}
 		}
 
@@ -322,7 +322,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							}
 						} else { //not avoided
 							lifeList[target] -= atkSuccess;
-							atkMessage += `and hit ${playerList[target]}`;
+							atkMessage += `and hit ${playerList[target]} `;
 							
 							if (lifeList[target] < 1) { //player died.
 								atkMessage += "eliminating the player.";
