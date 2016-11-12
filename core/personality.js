@@ -5,7 +5,7 @@ var fs = require('fs');
 //name		  : string - represents the display name
 //avatar_path   : string - path to the avatar image
 //avatar_buffer : string - base64 buffer containing image data
-var Personality = function(name, avatar_path){
+var Personality = function(name, avatar_path, emote){
 	if(!name){
 		throw new Error('Empty name given when creating personality');
 	}
@@ -16,6 +16,7 @@ var Personality = function(name, avatar_path){
 
 	this.name = name;
 	this.avatar_path = avatar_path;
+	this.emote = emote ? emote : null;
 	this.avatar_buffer = fs.readFileSync(avatar_path, 'base64');
 }
 

@@ -22,6 +22,11 @@ var cmd_help = new command('ryionbot', '!help', 'Help command', function(data){
     var helpText = "";
     if(k == null){
         helpText = data.commandManager.getHelp('bork', 'all');
+        data.bot.sendMessage({
+            to      : data.userID,
+            message : helpText
+        });
+        return;
     }else if(data.commandManager.getCommand(k)){
         helpText = data.commandManager.getHelp(k, 'command');
     }else{
@@ -33,9 +38,10 @@ var cmd_help = new command('ryionbot', '!help', 'Help command', function(data){
     }
 
     data.bot.sendMessage({
-        to      : data.userID,
-        message : helpText
-    });
+            to      : data.channelID,
+            message : helpText
+        });
+        return;
 });
 
 module.exports.commands = [cmd_ping, cmd_ding, cmd_help];
