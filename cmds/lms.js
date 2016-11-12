@@ -144,6 +144,31 @@ let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing
 	return "Execution not successful: Incorrect channel.";
 });
 
+let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", function(data) {
+	if (isBPG(data)) {
+		if (gameInProgress) {
+			playerList = [];
+			bulletList = []; 
+			chamberList = []; 
+			avoidCount = []; 
+			avoidList = [];
+			lifeList = []; 
+			playerTurn = 0;
+			strayBullets = 0;
+			avoider = null;
+			gameInProgress = false;
+			gameMode = 0;
+			dio.say("Deciding to stay alive today I see, wise.", data);
+
+			return "Execution successful.";
+		}
+
+		return "Execution not successful: No game in progress.";
+	}
+
+	return "Execution not successful: Incorrect channel.";
+});
+
 let cmd_load = new command('lms', '!load', "hans", function(data){
     if (gameInProgress) {
         if (data.channelID in data.bot.directMessages) {
@@ -259,7 +284,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 						}
 						
 						if (playerList.length === 1) {
-							dio.say(atkMessage + "Congratulations, "+playerList[playerTurn] + "! You are the Last Man Standing!", data);
+							dio.say(`${atkMessage} :tada: Congratulations, <@${playerList[playerTurn]}>! You are the Last Man Standing! :tada:`, data);
 							playerList = [];
 							bulletList = []; 
 							chamberList = []; 
@@ -325,7 +350,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							atkMessage += `and hit ${playerList[target]} `;
 							
 							if (lifeList[target] < 1) { //player died.
-								atkMessage += "eliminating the player.";
+								atkMessage += `eliminating the player. :dizzy_face::gun:`;
 								playerList.splice(target, 1);
 								bulletList.splice(target, 1);
 								chamberList.splice(target, 1);
@@ -338,7 +363,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 								}	
 								
 								if (playerList.length === 1) {
-									dio.say(atkMessage + "Congratulations, "+playerList[playerTurn] + "! You are the Last Man Standing!", data);
+									dio.say(`${atkMessage} :tada: Congratulations, <@${playerList[playerTurn]}>! You are the Last Man Standing! :tada:`, data);
 									playerList = [];
 									bulletList = []; 
 									chamberList = []; 
@@ -350,7 +375,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 									avoider = null;				//reset game
 									gameInProgress = false;
 									gameMode = 0;
-								}	
+								}
 								
 							}
 							
