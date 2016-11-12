@@ -12,7 +12,7 @@ var cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
 var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
-        message : "Dong"
+        message : "Dong <:nguyen:230394513560961024>"
     });
 });
 
