@@ -99,8 +99,6 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     // ===================================
     // SPAM Control
     // ===================================
-    console.log(`New msg, current spammers: ${JSON.stringify(this.spammers)}`);
-
     if ( this.spammers.hasOwnProperty(data.userID) ) {
         logger.log('Spammers gonna spam.', logger.MESSAGE_TYPE.Warn)
         return false;
@@ -109,7 +107,6 @@ CommandManager.prototype.call = function(data, trigger, group=null){
         let c = helpers.getCount(this.cList,data.userID), // Check how many commands user has called recently
             spammers = this.spammers;
 
-        console.log(`${data.user} has ${c} commands.`);
         if (c===3) {
             let v = [
                 `Take it easy on the command spam <@${data.userID}> or you'll be in big trouble.`,
@@ -124,7 +121,6 @@ CommandManager.prototype.call = function(data, trigger, group=null){
             dio.say(`<@${data.userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, data);
             spammers[data.userID] = true;
 
-            console.log(`Adding Spammer: ${JSON.stringify(spammers)}`);
             setTimeout( function() {
                 delete spammers[data.userID];
             },120000);
