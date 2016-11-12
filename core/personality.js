@@ -53,13 +53,21 @@ Personality.prototype.set = function(command_data, callback){
 
 
 
-Personality.prototype.setAvatar = function(avatar_path){
+Personality.prototype.setAvatar = function(avatar_path, command_data=null){
 	if(!avatar_path){
 		throw new Error('Empty avatar face given when creating personality');
 	}
 
 	this.avatar_path = avatar_path;
 	this.avatar_buffer = fs.readFileSync(avatar_path, 'base64');
+
+	if(command_data){
+		command_data.bot.editUserInfo({avatar  : this.avatar_buffer}, function(err, res){
+			if (err) {
+				logger.log(err, logger.MESSAGE_TYPE.Error);
+			}
+		});
+	}
 }
 
 module.exports = Personality;
