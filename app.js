@@ -107,9 +107,6 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 // This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
-// May as well
-bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
-
 // ===================================
 // Bot Events
 // ===================================
@@ -117,6 +114,8 @@ bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
+	// May as well
+	bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -219,7 +218,7 @@ bot.on('message', function(user, userID, channelID, message, event){
 		if (channelID === vars.modchan) {
 			// Stop spying on us Freakspot.
 		} else if (!(channelID in bot.directMessages)) {
-			logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+			logger.log(`${user}: ${message}`);
 		} else {
 			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
 		}
