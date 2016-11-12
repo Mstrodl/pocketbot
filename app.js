@@ -67,7 +67,7 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot, 'Handles a
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot, 'Alpha tester onboarding commands'),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot, 'Admin/Mod only commands'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
-	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a char minigame made by Glyde');
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde');
 
 
 globalCmdManager.addGroup(basicCmdGroup);
