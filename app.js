@@ -68,7 +68,7 @@ let globalCmdManager	= new command.CommandManager('d'),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot, 'Alpha tester onboarding commands'),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot, 'Admin/Mod only commands'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
-	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde');
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
 	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command');
 
 globalCmdManager.addGroup(basicCmdGroup);

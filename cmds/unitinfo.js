@@ -1,14 +1,16 @@
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
-	x = require('../core/vars'),
-	dio = require('../core/dio'),
-	udata = require('../core/unitdata');
+	x 		= require('../core/vars'),
+	dio 	= require('../core/dio'),
+	udata 	= require('../core/unitdata'),
+	persona = require('../core/personality');
 
 let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
-		item = data.args[1],
-		u = udata.u;
+		item = (data.args[1]) ? data.args[1].toLowerCase() : '',
+		u = udata.u,
+		persona = data.commandManager.groups.unitinfo.personality;
 
 	// Aliases for unit names
 	switch (item) {
@@ -74,8 +76,8 @@ let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data
 		}
 
 		// Change Avatar
-		//persona.setNick(u.units[item].name);
-		//persona.setAvatar(`assets/unit_${item}.png`);
+		persona.setNick(label, data);
+		persona.setAvatar(`assets/unit_${item}.png`, data);
 		dio.say(`
 ${u.units[item].name} | **${tier}**
 :crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**

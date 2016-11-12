@@ -1,7 +1,7 @@
 require('dotenv').config()
 
 module.exports = {
-	TOKEN: process.env.TOKEN,
+	TOKEN: process.env.TOKENFAKE,
 	WOLFID: process.env.WOLFID,
 	FBKEY: function() {
 		if (process.env.hasOwnProperty('FBKEY')) {
