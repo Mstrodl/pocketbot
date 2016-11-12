@@ -101,11 +101,11 @@ let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", fu
 
 let cmd_players = new command('lms', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
     if (isBPG(data)) {
-        let playerMessage = "**__Current Players__**\n";
+        let playerMessage = "**__Current Players__**\n\n";
 
         if(gameInProgress) {
             for (let i = 0; i < playerList.length; i++) {
-                playerMessage += `${i}) <@${playerList[i]}> has ${lifeList[i]} HP left.\n\n`;
+                playerMessage += `${i}) <@${playerList[i]}> has ${lifeList[i]} HP left.\n`;
             }
 
             dio.say(playerMessage, data);
@@ -322,7 +322,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							}
 						} else { //not avoided
 							lifeList[target] -= atkSuccess;
-							atkMessage += "and hit " + playerList[target] + " ";
+							atkMessage += `and hit ${playerList[target]}`;
 							
 							if (lifeList[target] < 1) { //player died.
 								atkMessage += "eliminating the player.";
