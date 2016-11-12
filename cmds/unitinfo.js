@@ -85,7 +85,7 @@ ${u.units[item].name} | **${tier}**
 :crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
 Traits: ${traits.join(', ')}`, data);
 				});
-			}, 500);
+			}, 1000);
 		});
 
 		return false;
