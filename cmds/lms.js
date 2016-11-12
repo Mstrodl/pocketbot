@@ -255,7 +255,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 				} else if (avoidList[target] === true) { //avoided
 					attacker = avoider;
 					avoider = playerList[target].ID;
-					dio.say(`The ${strayBullets} stray bullets missed ${playerList[target].ID}. \n\n ${avoider}, Please select the unfortunate fellow who was behind you with the '!attack #' command.`, data);
+					dio.say(`The ${strayBullets} stray bullets missed <@${playerList[target].ID}>.\n\n <@${avoider}>, Please select the unfortunate fellow who was behind you with the '!attack #' command.`, data);
 				} else { //not avoided (stray bullet)
 					lifeList[target] -= strayBullets;
 					var atkMessage = `The stray bullets put ${strayBullets} holes into ${playerList[target].ID}...`;
@@ -263,7 +263,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 					attacker = null;
 					strayBullets = 0;
 					if (lifeList[target] < 1) { //player died
-						atkMessage += "killing him/her in the process. :dizzy_face::gun: \n\n";
+						atkMessage += `killing him/her in the process. :dizzy_face::gun: \n\n`;
 						playerList.splice(target, 1);
 						bulletList.splice(target, 1);
 						chamberList.splice(target, 1);
@@ -326,7 +326,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 
 						//check victim's avoid status
 						if (avoidList[target] === true) { //avoided
-							atkMessage += `but ${playerList[target]} was able to avoid being hit.`;
+							atkMessage += `but <@${playerList[target].ID}> was able to avoid being hit.`;
 							
 							if (playerList.length != 2) {
 								avoider = playerList[target].ID;
