@@ -244,7 +244,6 @@ bot.on('message', function(user, userID, channelID, message, event){
 			to: channelID,
 			message: `An error occured inside the \`${args[0]}\` command code`
 		});
-		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error);
 		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error, e);
 	}
 });
