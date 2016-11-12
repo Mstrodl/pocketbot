@@ -266,7 +266,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 					attacker = null;
 					strayBullets = 0;
 					if (lifeList[target] < 1) { //player died
-						atkMessage += "killing him/her in the process.\n\n";
+						atkMessage += "killing him/her in the process. :dizzy_face::gun: \n\n";
 						playerList.splice(target, 1);
 						bulletList.splice(target, 1);
 						chamberList.splice(target, 1);
@@ -345,7 +345,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							atkMessage += `and hit <@${playerList[target]}>`;
 							
 							if (lifeList[target] < 1) { //player died.
-								atkMessage += `eliminating the player. :dizzy_face::gun:`;
+								atkMessage += ` eliminating the player. :dizzy_face::gun:\n`;
 								playerList.splice(target, 1);
 								bulletList.splice(target, 1);
 								chamberList.splice(target, 1);
