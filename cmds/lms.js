@@ -52,20 +52,18 @@ let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", funct
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
-            var i = 0;
             var alreadyJoined = false;
             
-            for (i = 0; i < playerList.length; i++) {
-                if(playerList[i] === data.userID) {
+            for (let i = 0; i < playerList.length; i++) {
+                if (playerList[i].ID === data.userID) {
                     dio.say("Hold up, there's only one of you, and that one's already joined.", data);
-                    alreadyJoined = true;
+                    return "Execution not successful: User already joined.";
                 }
             }
 
-            if (!alreadyJoined) {
-                playerList.push(data.userID);
-                dio.say("You have successfully joined the game.", data);
-            }
+			let player = { name: data.user, ID: data.userID };
+			playerList.push(player);
+			dio.say("You have successfully joined the game.", data);
         }
 
 		return "Execution successful.";
@@ -80,9 +78,8 @@ let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", fu
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
-            var i = 0;
-            for (i = 0; i <playerList.length; i++) {
-                if(playerList[i] === data.userID) {
+            for (let i = 0; i <playerList.length; i++) {
+                if (playerList[i].ID === data.userID) {
                     playerList.splice(i,1);
                     break;
                 }
@@ -98,14 +95,14 @@ let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", fu
 
 let cmd_players = new command('lms', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
     if (isBPG(data)) {
-        let playerMessage = "**__Current Players__**\n\n";
+        let playerMessage = "**__Current Players__**\n\n```";
 
         if(gameInProgress) {
             for (let i = 0; i < playerList.length; i++) {
-                playerMessage += `${i}) <@${playerList[i]}> has ${lifeList[i]} HP left.\n`;
+                playerMessage += `${i}) ${playerList[i].name} has ${lifeList[i]} HP left.\n`;
             }
 
-            dio.say(playerMessage, data);
+            dio.say(playerMessage + "```", data);
         } else {
             dio.say("There's no game in progress right now.", data);
         }
@@ -129,7 +126,7 @@ let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing
 				}
 				gameInProgress = true;
 				playerTurn = Math.floor(Math.random() * (playerList.length));
-				dio.say(`Well well well... looks like this saloon ain't big enough for the ${playerList.length} of ya. Well then, let's just see who'll be the Last Man Standing.\n\n <@${playerList[playerTurn]}>, You are to start.`, data);
+				dio.say(`Well well well... looks like this saloon ain't big enough for the ${playerList.length} of ya. Well then, let's just see who'll be the Last Man Standing.\n\n <@${playerList[playerTurn].ID}>, You are to start.`, data);
 			} else {
 				dio.say("There is not enough people to start the game. We're going to need at least 2 people.", data);
 			}
@@ -168,7 +165,7 @@ let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", f
 let cmd_load = new command('lms', '!load', "hans", function(data){
     if (gameInProgress) {
         if (data.channelID in data.bot.directMessages) {
-			if(data.userID != playerList[playerTurn]) {
+			if(data.userID != playerList[playerTurn].ID) {
 				dio.say("Please wait until your turn.", data);
 			}
 			
@@ -205,7 +202,7 @@ let cmd_load = new command('lms', '!load', "hans", function(data){
 					
 					chamberList[playerTurn] = Math.floor(Math.random() * 5); //spin the chamber
 					playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-					dio.say(`<@${playerList[playerTurn]}> It is now your turn.`, data, x.playground);
+					dio.say(`<@${playerList[playerTurn].ID}> It is now your turn.`, data, x.playground);
 				}
 			}
 
@@ -221,7 +218,7 @@ let cmd_load = new command('lms', '!load', "hans", function(data){
 let cmd_avoid = new command('lms', '!avoid', "hans", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {
-			if (data.userID != playerList[playerTurn]) {
+			if (data.userID != playerList[playerTurn].ID) {
 				dio.say("Please wait until your turn.", data);
 			} else {
 				if (avoidCount[playerTurn] === 0) {
@@ -231,7 +228,7 @@ let cmd_avoid = new command('lms', '!avoid', "hans", function(data){
 					avoidList[playerTurn] = true; //make sure he avoids until next turn
 					dio.say("Avoid confirmed.", data);
 					playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-					dio.say(`<@${playerList[playerTurn]}>: It is now your turn.`, data, x.playground);
+					dio.say(`<@${playerList[playerTurn].ID}>: It is now your turn.`, data, x.playground);
 				}
 			}
 
@@ -251,17 +248,17 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 			dio.say("That is not a valid target. Check to see who your targets are with '!players'.", data);
 		} else {
 			if (strayBullets != 0 && data.userID === avoider) { //someone who avoided is attacking 
-				if (playerList[target] === attacker) {
+				if (playerList[target].ID === attacker) {
 					dio.say("You cannot redirect the bullets to your attacker. Choose someone else.", data);
-				} else if (playerList[target] === data.userID) {
+				} else if (playerList[target].ID === data.userID) {
 					dio.say("You try, but you're just not fast enough to run into the bullets you just dodged, maybe if you try again?", data);
 				} else if (avoidList[target] === true) { //avoided
 					attacker = avoider;
-					avoider = playerList[target];
-					dio.say("The " + strayBullets + " stray bullets missed "+ playerList[target] +". \n\n"+avoider + ", Please select the unfortunate fellow who was behind you with the '!attack #' command.", data);
+					avoider = playerList[target].ID;
+					dio.say(`The ${strayBullets} stray bullets missed ${playerList[target].ID}. \n\n ${avoider}, Please select the unfortunate fellow who was behind you with the '!attack #' command.`, data);
 				} else { //not avoided (stray bullet)
 					lifeList[target] -= strayBullets;
-					var atkMessage = "The stray bullets put "+ strayBullets + " holes into " + playerList[target] + "...";
+					var atkMessage = `The stray bullets put ${strayBullets} holes into ${playerList[target].ID}...`;
 					avoider = null;
 					attacker = null;
 					strayBullets = 0;
@@ -296,12 +293,12 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 
 					if (playerList.length != 0) {
 						playerTurn = (playerTurn + 1) % playerList.length;
-						dio.say(`${atkMessage} <@${playerList[playerTurn]}>: it is now your turn.`, data);
+						dio.say(`${atkMessage} <@${playerList[playerTurn].ID}>: it is now your turn.`, data);
 					}
 				}				
 			} else { //regular attack
 
-				if(data.userID != playerList[playerTurn]) { //not the player's turn
+				if(data.userID != playerList[playerTurn].ID) { //not the player's turn
 					dio.say("Please wait until your turn.", data);
 				} else {
 					avoidList[playerTurn] = false;
@@ -323,26 +320,26 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 					
 					if ( atkSuccess === 0) { //no shots fired
 						playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-						dio.say(`*click!*\nThe attack failed.\n <@${playerList[playerTurn]}>: It is now your turn.`, data);
+						dio.say(`*click!*\nThe attack failed.\n\n <@${playerList[playerTurn].ID}>: It is now your turn.`, data);
 					} else {
 						atkMessage += atkSuccess + " shots were fired ";
 
 						//check victim's avoid status
 						if (avoidList[target] === true) { //avoided
-							atkMessage += "but " + playerList[target] + " was able to avoid being hit.";
+							atkMessage += `but ${playerList[target]} was able to avoid being hit.`;
 							
 							if (playerList.length != 2) {
-								avoider = playerList[target];
-								attacker = playerList[playerTurn];
+								avoider = playerList[target].ID;
+								attacker = playerList[playerTurn].ID;
 								strayBullets = atkSuccess;
-								dio.say(atkMessage + "\n"+avoider + ", Please select the unfortunate fellow who got shot on your behalf with the '!attack #' command.", data);
+								dio.say(`${atkMessage}\n ${avoider}, Please select the unfortunate fellow who got shot on your behalf with the '!attack #' command.`, data);
 							} else {
 								playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-								dio.say(`${atkMessage}\n <@${playerList[playerTurn]}>: It is now your turn.`, data);
+								dio.say(`${atkMessage}\n <@${playerList[playerTurn].ID}>: It is now your turn.`, data);
 							}
 						} else { //not avoided
 							lifeList[target] -= atkSuccess;
-							atkMessage += `and hit <@${playerList[target]}>`;
+							atkMessage += `and hit <@${playerList[target].ID}>`;
 							
 							if (lifeList[target] < 1) { //player died.
 								atkMessage += ` eliminating the player. :dizzy_face::gun:\n`;
@@ -358,7 +355,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 								}	
 								
 								if (playerList.length === 1) {
-									dio.say(`${atkMessage} :tada: Congratulations, <@${playerList[playerTurn]}>! You are the Last Man Standing! :tada:`, data);
+									dio.say(`${atkMessage} :tada: Congratulations, <@${playerList[playerTurn].ID}>! You are the Last Man Standing! :tada:`, data);
 									playerList = [];
 									bulletList = []; 
 									chamberList = []; 
@@ -375,7 +372,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							
 							if (playerList.length != 0) {
 								playerTurn = (playerTurn + 1) % playerList.length;
-								dio.say(`${atkMessage}\n <@${playerList[playerTurn]}>: it is now your turn.`, data);
+								dio.say(`${atkMessage}\n <@${playerList[playerTurn].ID}>: it is now your turn.`, data);
 							}
 						}
 					}
