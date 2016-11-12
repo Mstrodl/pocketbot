@@ -51,10 +51,10 @@ if ( TOKEN.FBKEY2() != false ) {
 // ====================
 // Bot Personas
 // ====================
-var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', ':ryionbot:');
-let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', ':mastabot:');
-let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', ':bookbot:');
-let bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', ':bookbot:');
+var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:247030935021682688>');
+let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
+let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', '<:bookbot:247030934287810563>');
+let bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', '<:bookbot:247030934287810563>');
 
 var globalCmdManager	= new command.CommandManager('d'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands'),
