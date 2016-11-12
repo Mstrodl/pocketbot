@@ -54,6 +54,7 @@ if ( TOKEN.FBKEY2() != false ) {
 var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png');
 let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png');
 let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png');
+let bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png');
 
 var globalCmdManager	= new command.CommandManager('d'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot),
@@ -66,7 +67,7 @@ let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot),
-	lmsCmdGroup			= new command.CommandGroup('lms', bookbot);
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy);
 
 
 globalCmdManager.addGroup(basicCmdGroup);
