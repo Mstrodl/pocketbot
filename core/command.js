@@ -99,48 +99,57 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     // ===================================
     // SPAM Control
     // ===================================
-    this.cList.push(data.userID);
-    let c = helpers.getCount(this.cList,data.userID); // Check how many commands user has called recently
-    if (c===3) {
-        let v = [
-            `Take it easy on the command spam <@${data.userID}> or you'll be in big trouble.`,
-            `<@${data.userID}> simmer down, OR ELSE.`,
-            `<@${data.userID}> take a chill pill or I'll make you.`,
-            `Calm down <@${data.userID}>, too much spam and you're in for it.`
-            ],
-            n = Math.floor( Math.random()*4 );
+    console.log(`New msg, current spammers: ${JSON.stringify(this.spammers)}`);
 
-        dio.say(v[n], data);
-    } else if (c>2) {
-        dio.say(`<@${data.userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, data);
-        this.spammers[data.userID] = true;
+    if ( this.spammers.hasOwnProperty(data.userID) ) {
+        logger.log('Spammers gonna spam.', logger.MESSAGE_TYPE.Warn)
+        return false;
+    } else {
+        this.cList.push(data.userID);
+        let c = helpers.getCount(this.cList,data.userID), // Check how many commands user has called recently
+            spammers = this.spammers;
 
-        setTimeout( function() {
-            delete this.spammers[data.userID];
-        },120000);
-    }
+        console.log(`${data.user} has ${c} commands.`);
+        if (c===3) {
+            let v = [
+                `Take it easy on the command spam <@${data.userID}> or you'll be in big trouble.`,
+                `<@${data.userID}> simmer down, OR ELSE.`,
+                `<@${data.userID}> take a chill pill or I'll make you.`,
+                `Calm down <@${data.userID}>, too much spam and you're in for it.`
+                ],
+                n = Math.floor( Math.random()*4 );
 
-    if ( this.spammers.hasOwnProperty(data.userID) ) return false;
+            dio.say(v[n], data);
+        } else if (c>2) {
+            dio.say(`<@${data.userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, data);
+            spammers[data.userID] = true;
 
-    //Check for debug symbol
-    var hasDebugSymbol = (trigger[0] == this.debugSymbol);
-    trigger = (trigger[0] == this.debugSymbol ? trigger.substring(1, trigger.length) : trigger);
+            console.log(`Adding Spammer: ${JSON.stringify(spammers)}`);
+            setTimeout( function() {
+                delete spammers[data.userID];
+            },120000);
+        }
 
-    for(var group_name in this.groups){
-        for(var command_trigger in this.groups[group_name].commands){
-            if(trigger == command_trigger){
-                //Check if command has debug symbol and if bot is running in debug mode
-                if(helpers.isDebug()){
-                    if(hasDebugSymbol){
-                        this.groups[group_name].call(trigger, data);
+        //Check for debug symbol
+        var hasDebugSymbol = (trigger[0] == this.debugSymbol);
+        trigger = (trigger[0] == this.debugSymbol ? trigger.substring(1, trigger.length) : trigger);
+
+        for(var group_name in this.groups){
+            for(var command_trigger in this.groups[group_name].commands){
+                if(trigger == command_trigger){
+                    //Check if command has debug symbol and if bot is running in debug mode
+                    if(helpers.isDebug()){
+                        if(hasDebugSymbol){
+                            this.groups[group_name].call(trigger, data);
+                        }
+                    }else{
+                        if(!hasDebugSymbol){
+                            this.groups[group_name].call(trigger, data);
+                        }
                     }
-                }else{
-                    if(!hasDebugSymbol){
-                        this.groups[group_name].call(trigger, data);
-                    }
+                    //We found the trigger, no point in keeping searching
+                    return;
                 }
-                //We found the trigger, no point in keeping searching
-                return;
             }
         }
     }
