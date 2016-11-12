@@ -127,3 +127,13 @@ module.exports.isBPG = function(chan) {
 		return true;
 	}
 }
+
+//Get the DM channel for a given user ID
+module.exports.getDMChannel = function(client, userID){
+	for(var k in client.directMessages){
+		if(client.directMessages[k].recipient.id == userID){
+			return client.directMessages[k].id;
+		}
+	}
+	return null;
+}
