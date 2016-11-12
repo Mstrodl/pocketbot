@@ -87,13 +87,6 @@ Traits: ${traits.join(', ')}`, data);
 				});
 			}, 500);
 		});
-	// 	persona.setAvatarAndNick(`./assets/unit_${item}.png`, label, data, function(data) {
-	// 		console.log('yay')
-	// 		dio.say(`
-	// ${u.units[item].name} | **${tier}**
-	// :crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
-	// Traits: ${traits.join(', ')}`, data);
-	// 	});
 
 		return false;
 	} else if (u.filters.traits[item]) {
