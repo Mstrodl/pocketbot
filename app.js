@@ -51,24 +51,25 @@ if ( TOKEN.FBKEY2() != false ) {
 // ====================
 // Bot Personas
 // ====================
-var mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:247030935021682688>');
-let mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
-let bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', '<:bookbot:247030934287810563>');
-let bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', '<:bookbot:247030934287810563>');
+let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:247030935021682688>'),
+	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>'),
+	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', '<:bookbot:247030934287810563>'),
+	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', '<:bookbot:247030934287810563>'),
+	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
 
-var globalCmdManager	= new command.CommandManager('d'),
+// Manager and Groups
+let globalCmdManager	= new command.CommandManager('d'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands'),
-	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona, 'Commands brought to you by RyionBot');
-
-let matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot, 'Handles all the matchmaking commands'),
+	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona, 'Commands brought to you by RyionBot'),
+	matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot, 'Handles all the matchmaking commands'),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot, 'Handles "Crown" minigame commands'),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot, 'Let\'s you interface with the quoting system'),
 	communityCmdGroup 	= new command.CommandGroup('community', mastabot, 'All the basic, most-used community chat commands'),
 	keyCmdGroup 		= new command.CommandGroup('key', mastabot, 'Alpha tester onboarding commands'),
 	adminCmdGroup 		= new command.CommandGroup('admin', mastabot, 'Admin/Mod only commands'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
-	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde');
-
+	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
+	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command');
 
 globalCmdManager.addGroup(basicCmdGroup);
 globalCmdManager.addGroup(matchCmdGroup);
@@ -80,6 +81,7 @@ globalCmdManager.addGroup(adminCmdGroup);
 globalCmdManager.addGroup(ryionbotCmdGroup);
 globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
+globalCmdManager.addGroup(infoCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
