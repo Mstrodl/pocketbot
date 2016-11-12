@@ -47,8 +47,6 @@ Personality.prototype.set = function(command_data, callback){
 			callback(command_data);
 		}
 	});
-
-	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 }
 
 
@@ -72,6 +70,14 @@ Personality.prototype.setAvatar = function(avatar_path, command_data=null, callb
 			}
 		});
 	}
+}
+
+Personality.prototype.setNick = function(nick){
+	if(!nick){
+		throw new Error('Invalid nickname given');
+	}
+
+	this.name = nick;
 }
 
 module.exports = Personality;
