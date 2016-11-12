@@ -322,7 +322,7 @@ let cmd_attack = new command('lms', '!attack', "hans", function(data){
 							}
 						} else { //not avoided
 							lifeList[target] -= atkSuccess;
-							atkMessage += `and hit ${playerList[target]}`;
+							atkMessage += `and hit <@${playerList[target]}>`;
 							
 							if (lifeList[target] < 1) { //player died.
 								atkMessage += "eliminating the player.";
