@@ -3,20 +3,16 @@ var command = require('../core/command').Command;
 var helpers = require('../core/helpers');
 var dio     = require('../core/dio');
 
-var cmd_reset = new command('economy', '!resetwip', 'Resets your WIP amount to the default value', function(data){
-	//if(!data.userdata.users[data.userID]) data.userdata.users[data.userID] = {};
+var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account with the default WIP ammount', function(data){
+	if(!data.userdata.users[data.userID]) data.userdata.users[data.userID] = {};
 
-	data.userdata.setCurrency(data.userID, data.userdata.DEFAULT_CURRENCY_AMOUNT);
-	dio.say('According to my records, you have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);	
-});
-
-var cmd_check = new command('economy', '!checkwip', 'Check your currency account balance', function(data){
 	var res = data.userdata.getCurrency(data.userID);
 
 	if(res || res === 0){
-		dio.say('You have ' + res + ' Worthless Internet Points', data, data.channelID);
+		dio.say('My records say you have ' + res + ' Worthless Internet Points', data, data.channelID);
 	}else{
-		dio.say('I can\'t seem to find you in the user records...Try **!resetwip** first', data, data.channelID);
+		data.userdata.setCurrency(data.userID, data.userdata.DEFAULT_CURRENCY_AMOUNT);
+		dio.say('Your account has been added to my records, you now have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);	
 	}
 });
 
@@ -36,4 +32,4 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	}
 });
 
-module.exports.commands = [cmd_reset, cmd_check, cmd_transfer];
+module.exports.commands = [cmd_wip, cmd_transfer];
