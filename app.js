@@ -61,6 +61,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:
 let globalCmdManager	= new command.CommandManager('d'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands'),
 	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona, 'Commands brought to you by RyionBot'),
+	ryionbot_ecoCmdGroup= new command.CommandGroup('economy', mjPersona, 'RyionBot\'s currency system commands'),
 	matchCmdGroup 		= new command.CommandGroup('matchmake', mastabot, 'Handles all the matchmaking commands'),
 	crownCmdGroup 		= new command.CommandGroup('crown', mastabot, 'Handles "Crown" minigame commands'),
 	quoteCmdGroup 		= new command.CommandGroup('quote', mastabot, 'Let\'s you interface with the quoting system'),
@@ -79,6 +80,7 @@ globalCmdManager.addGroup(communityCmdGroup);
 globalCmdManager.addGroup(keyCmdGroup);
 globalCmdManager.addGroup(adminCmdGroup);
 globalCmdManager.addGroup(ryionbotCmdGroup);
+globalCmdManager.addGroup(ryionbot_ecoCmdGroup);
 globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
 globalCmdManager.addGroup(infoCmdGroup);
