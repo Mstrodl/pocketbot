@@ -4,6 +4,8 @@ var helpers = require('../core/helpers');
 var dio     = require('../core/dio');
 
 var cmd_reset = new command('economy', '!resetwip', 'Resets your WIP amount to the default value', function(data){
+	//if(!data.userdata.users[data.userID]) data.userdata.users[data.userID] = {};
+
 	data.userdata.setCurrency(data.userID, data.userdata.DEFAULT_CURRENCY_AMOUNT);
 	dio.say('According to my records, you have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);	
 });
@@ -30,7 +32,7 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	if(data.userdata.transferCurrency(data.userID, recipient, amount)){
 		dio.say('Transferred ' + amount + '. Use **!checkip** to make sure the funds transferred successfully', data, data.channelID);
 	}else{
-		dio.say('Something went wrong. Make sure ' + data.args[1] + ' exists and that they have an open account(they need to execute **!resetwip** if they don\'t)', data, data.channelID);
+		dio.say('Something went wrong. Make sure ' + data.args[1] + ' exists, that you have enough points and that they have an open account(they need to execute **!resetwip** if they don\'t)', data, data.channelID);
 	}
 });
 
