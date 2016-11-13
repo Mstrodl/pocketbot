@@ -17,10 +17,13 @@ userdata.prototype.saveToFile = function(path){
 }
 
 userdata.prototype.getCurrency = function(userID){
-    return this.users[userID].currency;
+    if(this.users[userID]) return this.users[userID].currency;
+    else return false;
 }
 
 userdata.prototype.setCurrency = function(userID, amount){
+    if(!this.users[userID]) this.users[userID] = {};
+    
     this.users[userID].currency = amount;
     return this.users[userID].currency;
 }
