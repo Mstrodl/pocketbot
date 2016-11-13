@@ -17,7 +17,7 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 });
 
 var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain amount of currency: `!transfer @recipient amount`, where amount > 0', function(data){
-	if(!data.args[1] || !data.args[2] || parseInt(data.args[2] <= 0)){
+	if(!data.args[1] || !data.args[2] || parseInt(data.args[2]) <= 0){
 		dio.say('The command syntax is `!transfer @recipient amount`', data, data.channelID);
 		return;
 	}
