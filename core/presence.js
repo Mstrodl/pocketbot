@@ -7,9 +7,10 @@ var exports = module.exports = {};
 
 let logger  = require('./logger'),
 	dio		= require('./dio'),
-	x 		= require('./vars');
+	x 		= require('./vars'),
+	userdata= require('./userdata');
 
-exports.onChange = function(status) {
+exports.onChange = function(status, udata=null) {
 	let from = status.user,
 		fromID = status.userID,
 		game = status.game;
@@ -72,5 +73,10 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		// },6000*10);
 	}
 
+	//Create a userdata object if they don't have one
+	if(udata && !udata.users[userID]){
+		udata.users[userID] = {};
+		udata.saveToFile('./data/users.json');
+	} 
 	logger.log("User '" + from + "' is now '" + status.state + "'");
 }
