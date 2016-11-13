@@ -58,7 +58,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', '<:ryionbot:
 	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', '<:mastabot:247030934933733376>');
 
 // Manager and Groups
-let globalCmdManager	= new command.CommandManager('d'),
+let globalCmdManager	= new command.CommandManager('!'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands'),
 	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona, 'Commands brought to you by RyionBot'),
 	ryionbot_ecoCmdGroup= new command.CommandGroup('economy', mjPersona, 'RyionBot\'s currency system commands'),
