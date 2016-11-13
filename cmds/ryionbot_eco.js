@@ -26,9 +26,9 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	var amount = parseInt(data.args[2])
 
 	if(data.userdata.transferCurrency(data.userID, recipient, amount)){
-		dio.say('Transferred ' + amount + '. Use **!checkip** to make sure the funds transferred successfully', data, data.channelID);
+		dio.say('Transferred ' + amount + '. Use **!wip** to make sure the funds transferred successfully', data, data.channelID);
 	}else{
-		dio.say('Something went wrong. Make sure ' + data.args[1] + ' exists, that you have enough points and that they have an open account(they need to execute **!resetwip** if they don\'t)', data, data.channelID);
+		dio.say('Something went wrong. Make sure ' + data.args[1] + ' exists, that you have enough points and that they have an open account(they need to execute **!wip** if they don\'t)', data, data.channelID);
 	}
 });
 
