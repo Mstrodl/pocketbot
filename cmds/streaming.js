@@ -10,8 +10,12 @@ let cmdStream = new command('streaming', '!stream', `Links to the Pocketwatch st
 		dio.del(data.messageID,data);
 		const day = 5; // Friday
 		let time;
-		if (moment().isoWeekday() < day || moment().isoWeekday() > day) {
+
+		if (moment().isoWeekday() < day) {
 			// If today is less than day needed -> "in x days"
+			time = moment( moment().isoWeekday(day).startOf('hour').hour(17) ).fromNow();
+		} else if (moment().isoWeekday() > day) {
+			// If today is Saturday, add a week
 			time = moment( moment().add(1, 'weeks').isoWeekday(day).startOf('hour').hour(17) ).fromNow();
 		} else if (moment().isoWeekday() === day) {
 			// If today is friday -> "in x hours, y minutes"
@@ -23,11 +27,15 @@ let cmdStream = new command('streaming', '!stream', `Links to the Pocketwatch st
 });
 
 let cmdTwitch = new command('streaming', '!streams', `Checks Twitch for anyone streaming TnT`, (data) => {
+	dio.say('🕑 Let me see if I can find any...',data);
 	req({
 		url: "https://api.twitch.tv/kraken/streams?game=Tooth and Tail",
 		headers: { "Client-ID": TOKEN.TWITCHID }
 	}, (err, resp, body) => {
-		if (err) { logger.log(err, logger.MESSAGE_TYPE.Error); } else {
+		if (err) {
+			logger.log(err, logger.MESSAGE_TYPE.Error);
+			dio.say('🕑 I had trouble with that request. :sob:',data);
+		} else {
 			let streams = JSON.parse(body);
 			console.log(streams)
 			if (streams._total === 0) {

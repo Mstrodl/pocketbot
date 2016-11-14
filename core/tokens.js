@@ -2,7 +2,7 @@ require('dotenv').config()
 
 module.exports = {
 	TOKEN: process.env.TOKEN,
-	//WOLFID: process.env.WOLFID,
+	TWITCHID: process.env.TWITCHID,
 	FBKEY: function() {
 		if (process.env.hasOwnProperty('FBKEY')) {
 			return process.env.FBKEY;
