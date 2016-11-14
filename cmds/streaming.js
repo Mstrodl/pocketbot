@@ -7,9 +7,10 @@ let logger  = require('../core/logger'),
 	x 		= require('../core/vars');
 
 let cmdStream = new command('streaming', '!stream', `Links to the Pocketwatch stream with time till next broadcast`, function(data) {
+		console.log('!stream');
 		dio.del(data.messageID,data);
 		const day = 5; // Friday
-		let time;
+		let time = 0;
 
 		if (moment().isoWeekday() < day) {
 			// If today is less than day needed -> "in x days"
@@ -23,7 +24,6 @@ let cmdStream = new command('streaming', '!stream', `Links to the Pocketwatch st
 		}
 
 		dio.say(`Check us out on Twitch @ http://www.twitch.tv/Pocketwatch (Fridays @ 5pm EST) \n The next stream will be \`${time}\``,data);
-		return false;
 });
 
 let cmdTwitch = new command('streaming', '!streams', `Checks Twitch for anyone streaming TnT`, (data) => {

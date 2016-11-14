@@ -30,22 +30,6 @@ let cmdEmotes = new command('community', '!emotes', `Lists the available emotes`
 	dio.say("🕑 Current emotes available: `"+x.emotes.join(', ')+"`",data);
 });
 
-let cmdStream = new command('community', '!stream', `Links to the Pocketwatch stream with time till next broadcast`, function(data) {
-		dio.del(data.messageID,data);
-		const day = 5; // Friday
-		let time;
-		if (moment().isoWeekday() < day || moment().isoWeekday() > day) {
-			// If today is less than day needed -> "in x days"
-			time = moment( moment().add(1, 'weeks').isoWeekday(day).startOf('hour').hour(17) ).fromNow();
-		} else if (moment().isoWeekday() === day) {
-			// If today is friday -> "in x hours, y minutes"
-			time = moment( moment().startOf('hour').hour(17) ).fromNow();
-		}
-
-		dio.say(`Check us out on Twitch @ http://www.twitch.tv/Pocketwatch (Fridays @ 5pm EST) \n The next stream will be \`${time}\``,data);
-		return false;
-});
-
 let cmdBalance = new command('community', '!balance', `Links moderators to balance sheet`, function(data) {
 	dio.del(data.messageID,data);
 
@@ -107,4 +91,4 @@ let cmdKillDancer = new command('community', '!killdancer', `Kills any dancers H
 // 	}
 // });
 
-module.exports.commands = [cmdBalance, cmdStream, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];
+module.exports.commands = [cmdBalance, cmdEmotes, cmdTourney, cmdWiki, cmdBugs, cmdControls, cmdAlpha, cmdKillDancer];
