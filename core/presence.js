@@ -57,28 +57,29 @@ exports.onChange = function(status, udata=null) {
 Please checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha. \n
 The developers hang out in the chat all the time, so feel free to say hi, ask questions, and tune in to our streams on Fridays @ 5PM EST! \n
 For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
+		}
 
-			if(		status.bot.servers[x.chan].members[fromID].roles[x.admin]
-				|| 	status.bot.servers[x.chan].members[fromID].roles[x.ranger] //Comment this line to disable PocketRanger greets
+		//Dev greetings
+		if(		status.bot.servers[x.chan].members[fromID].roles.indexOf(x.admin) != -1
+				//|| 	status.bot.servers[x.chan].members[fromID].roles.indexOf(x.ranger) != -1 //Uncomment this line to enable PocketRanger greets
 				){
-				//Dev greetings
+				
 				let greets = [
-					'Master <@${fromID}> joins us once again',
-					'I could not find Glyde around so a generic greeting is all I have this time, <@${fromID}>',
-					'o/ <@${fromID}>',
-					'May your devness shine light upon us all, <@${fromID}>',
-					'One <@${fromID}> a day makes bugs go away. Welcome back!',
-					'It\s Butters, not Butter, <@${fromID}>!',
-					'Howdy, <@${fromID}>',
-					'<@${fromID}> Roses are red,\nViolets are blue, This amazing community\nWas waiting for you',
-					'Carpe diem, <@${fromID}>',
-					'Welcome back, <@${fromID}>'
+					`Master <@${fromID}> joins us once again`,
+					`I could not find Glyde around so a generic greeting is all I have this time, <@${fromID}>`,
+					`o/ <@${fromID}>`,
+					`May your devness shine light upon us all, <@${fromID}>`,
+					`One <@${fromID}> a day makes bugs go away. Welcome back!`,
+					`It\s Butters, not Butter, <@${fromID}>!`,
+					`Howdy, <@${fromID}>`,
+					`<@${fromID}> Roses are red,\nViolets are blue, This amazing community\nWas waiting for you`,
+					`Carpe diem, <@${fromID}>`,
+					`Welcome back, <@${fromID}>`
 				];
 
 				let n = Math.floor( Math.random()*greets.length );
 				dio.say(greets[n], status, x.chan);
 			}
-		}
 	}
 
 	// A member starts a stream
