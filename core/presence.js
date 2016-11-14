@@ -60,6 +60,13 @@ The developers hang out in the chat all the time, so feel free to say hi, ask qu
 For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
 		}
 
+		//Challenge accepted, Masta
+		if(fromRoles.includes(x.ranger)){
+			if(fromID === x.mj){
+				dio.say(`PocketBot reporting o7, Master J`, status, fromID);
+			}
+		}
+
 		//Dev greetings
 		if ( fromRoles.includes(x.admin) ) {
 				let greets = [
