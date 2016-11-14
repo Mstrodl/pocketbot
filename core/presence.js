@@ -36,7 +36,8 @@ exports.onChange = function(status, udata=null) {
 
 	// Someone comes online
 	if (status.state === "online") {
-		if ( status.bot.servers[x.chan].members[fromID].roles.length === 0 ) {
+		let fromRoles = status.bot.servers[x.chan].members[fromID].roles;
+		if ( fromRoles.length === 0 ) {
 			// Stuff to tell new person
 			let v = [
 				`Welcome to the Pocketwatch chat, <@${fromID}>`,
@@ -60,10 +61,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		}
 
 		//Dev greetings
-		if(		status.bot.servers[x.chan].members[fromID].roles.indexOf(x.admin) != -1
-				//|| 	status.bot.servers[x.chan].members[fromID].roles.indexOf(x.ranger) != -1 //Uncomment this line to enable PocketRanger greets
-				){
-				
+		if ( fromRoles.includes(x.admin) ) {
 				let greets = [
 					`Master <@${fromID}> joins us once again`,
 					`I could not find Glyde around so a generic greeting is all I have this time, <@${fromID}>`,
@@ -76,6 +74,20 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 					`Carpe diem, <@${fromID}>`,
 					`Welcome back, <@${fromID}>`
 				];
+
+				if (fromID = x.schatz) {
+					greets.push(
+						`How's the fam, <@${fromID}>? :schatz:`
+					);
+				} else if (x.nguyen) {
+					greets.push(
+						`<@${fromID}> is here, commence the puns. :nguyen:`
+					);
+				} else if (x.dex) {
+					greets.push(
+						`Nasty girl <@${fromID}> has arrived! :dexter:`
+					);
+				}
 
 				let n = Math.floor( Math.random()*greets.length );
 				dio.say(greets[n], status, x.chan);
@@ -99,6 +111,6 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 	if(udata && !udata.users[userID]){
 		udata.users[userID] = {};
 		udata.saveToFile('./data/users.json');
-	} 
+	}
 	logger.log("User '" + from + "' is now '" + status.state + "'");
 }
