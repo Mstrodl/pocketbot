@@ -8,8 +8,9 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 
 	var res = data.userdata.getCurrency(data.userID);
 
-	if(res || res === 0){
-		dio.say('My records say you have ' + res + ' Worthless Internet Points', data, data.channelID);
+	//if(res || res === 0){
+		dio.say(':bank: My records say you have **' + res + '** <:wip:247433292587073536> coins', data, data.channelID);
+	if(res >= 0){
 	}else{
 		data.userdata.setCurrency(data.userID, data.userdata.DEFAULT_CURRENCY_AMOUNT);
 		dio.say('Your account has been added to my records, you now have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);	
