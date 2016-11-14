@@ -75,15 +75,15 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 					`Welcome back, <@${fromID}>`
 				];
 
-				if (fromID = x.schatz) {
+				if (fromID === x.schatz) {
 					greets.push(
 						`How's the fam, <@${fromID}>? :schatz:`
 					);
-				} else if (x.nguyen) {
+				} else if (fromID === x.nguyen) {
 					greets.push(
 						`<@${fromID}> is here, commence the puns. :nguyen:`
 					);
-				} else if (x.dex) {
+				} else if (fromID === x.dex) {
 					greets.push(
 						`Nasty girl <@${fromID}> has arrived! :dexter:`
 					);
