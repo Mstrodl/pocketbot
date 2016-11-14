@@ -71,6 +71,7 @@ let globalCmdManager	= new command.CommandManager('!'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
 	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
 	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command');
+	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands');
 
 globalCmdManager.addGroup(basicCmdGroup);
 globalCmdManager.addGroup(matchCmdGroup);
@@ -84,6 +85,7 @@ globalCmdManager.addGroup(ryionbot_ecoCmdGroup);
 globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
 globalCmdManager.addGroup(infoCmdGroup);
+globalCmdManager.addGroup(streamCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
