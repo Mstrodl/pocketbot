@@ -52,3 +52,6 @@ yay2.js
 
 #Prebuilt exes
 *.exe
+
+#Local bot userdata
+data
