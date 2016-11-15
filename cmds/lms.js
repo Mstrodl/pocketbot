@@ -254,7 +254,6 @@ let cmd_avoid = new command('lms', '!avoid', "If somebody shoots at you this rou
 });
 
 let cmd_ff = new command('lms', '!ff', "Leave a game in progress", function(data){
-
 	if (gameInProgress) {
 		if (isBPG(data)) {
 			for (let i = 0; i <playerList.length; i++) {
@@ -290,9 +289,9 @@ let cmd_ff = new command('lms', '!ff', "Leave a game in progress", function(data
 					}	
 					else{	//still more people
 						if (notTurn){ //no need to assign new turn
-							dio.say(${retreatMessage});
+							dio.say(${retreatMessage}, data);
 						} else{
-							dio.say(`${retreatMessate}\n <@${playerList[playerTurn].ID}>: it is now your turn.`) tunr moves to next person.
+							dio.say(`${retreatMessate}\n <@${playerList[playerTurn].ID}>: it is now your turn.`, data); //turn moves to next person.
 						}
 						break;
 					}
