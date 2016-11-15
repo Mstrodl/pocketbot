@@ -17,7 +17,7 @@ var attacker;
 var gameInProgress = false;
 
 // This used to be ?rules
-let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){
+let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){   // Explantion of game command and rules.
     if (!isBPG(data)) {
         dio.say("Last Man Standing (and all relevant commands) can only be done in the <#172429393501749248>", data);
     } else {
@@ -29,7 +29,8 @@ let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame L
 					"__Commands__\n"+
 					"**!join**: Adds yourself into the lobby. The game needs at least 2 but ideally 3 or more players to start.\n"+
 					"**!leave**: Removes yourself from the lobby. \n"+
-					"**!start**: Start the game \n\n"+
+					"**!start**: Start the game. \n\n"+
+					"**!ff**: Leave a game in progress. \n"+
 					
 					"**!load #**: load a bullet into your revolver chamber at location # (You start the game with a bullet at position 0.) After you load your gun the barrels will be spun and a random chamber will be at the trigger.\n# = 0,1,2,3, or 4\n\n"+
 					
@@ -44,7 +45,7 @@ let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame L
 	return "Execution successful.";
 });
 
-let cmd_game = new command('lms', '!game', "Play some **'Last Man Standing'**", function(data){
+let cmd_game = new command('lms', '!game', "Play some **'Last Man Standing'**", function(data){   //  THIS WILL BE CHANGED LATER AS MORE MINIGAMES ARE ADDED
     if (isBPG(data)) {
 	    dio.say("Game mode: Last Man Standing\nIf you would like to join, type in **'!join'**. \nFor rules, type in **'!rules'**. \nTo see who's currently playing or looking to play, type in **'!players'**", data);
 		return "Execution successful.";
@@ -54,7 +55,7 @@ let cmd_game = new command('lms', '!game', "Play some **'Last Man Standing'**", 
 });
 
 let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", function(data){
-    if (isBPG(data)) {
+    if (isBPG(data)) { //code to join the game
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
@@ -80,7 +81,7 @@ let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", funct
 
 // fix this
 let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", function(data){
-	if (isBPG(data)) {
+	if (isBPG(data)) { //code to leave the game before it starts
         if (gameInProgress) {
             dio.say("This game is currently in session, please wait until the game is finished.", data);
         } else {
@@ -100,7 +101,7 @@ let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", fu
 });
 
 let cmd_players = new command('lms', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
-    if (isBPG(data)) {
+    if (isBPG(data)) {	
         let playerMessage = "**__Current Players__**\n\n```";
 
         if(gameInProgress) {
@@ -170,13 +171,13 @@ let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", f
 
 let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel.", function(data){
     if (gameInProgress) {
-        if (data.channelID in data.bot.directMessages) {
+        if (data.channelID in data.bot.directMessages) {  //command was sent correctly via DM
 			if(data.userID != playerList[playerTurn].ID) {
 				dio.say("Please wait until your turn.", data);
-			}
+			}  //if not the person's turn
 			
 			else {
-				avoidList[playerTurn] = false;
+				avoidList[playerTurn] = false;  //player is no longer avoiding.
 				var chamberInt = parseInt(data.args[1]);
 				if ( chamberInt < 0 || chamberInt > 4 || isNaN(chamberInt)) {
 					dio.say("That is not a valid chamber location. Valid bullet chambers are: 0, 1, 2, 3, and 4", data);
@@ -214,6 +215,11 @@ let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel."
 
 			return "Execution successful.";
 		}
+		
+		{
+			
+			
+		}
 
 		return "Execution not successful: Incorrect channel.";
     }
@@ -244,6 +250,59 @@ let cmd_avoid = new command('lms', '!avoid', "If somebody shoots at you this rou
 		return "Execution not successful: Incorrect channel.";
 	}
 
+	return "Execution not successful: No game in progress.";
+});
+
+let cmd_ff = new command('lms', '!ff', "Leave a game in progress", function(data){
+
+	if (gameInProgress) {
+		if (isBPG(data)) {
+			for (let i = 0; i <playerList.length; i++) {
+				if (playerList[i].ID === data.userID) {
+					var notTurn = true;	//not the user's turn
+					if(data.userID != playerList[playerTurn].ID) {
+							notTurn = false;
+					}
+					playerList.splice(i,1);
+					bulletList.splice(i, 1);
+					chamberList.splice(i, 1);
+					avoidCount.splice(i, 1);
+					avoidList.splice(i, 1);
+					lifeList.splice(i, 1);		//remove player from game
+					if ( i > playerTurn){
+						playerTurn--;		//reduce playerTurn if needed to avoid skipping
+					}
+					var retreatMessage = `<@${playerList[playerTurn]}> decided seeing the light of day was better than dying and has fled the battle. `;
+					
+					if (playerList.length === 1) {	// last man standing.
+						dio.say(`${retreatMessage} :tada: Congratulations, <@${playerList[playerTurn]}>! You are the Last Man Standing! :tada:`, data);
+						playerList = [];
+						bulletList = []; 
+						chamberList = []; 
+						avoidCount = []; 
+						avoidList = [];
+						lifeList = []; 
+						playerTurn = 0;
+						strayBullets = 0;
+						avoider = null;				//reset game
+						gameInProgress = false;
+						break;
+					}	
+					else{	//still more people
+						if (notTurn){ //no need to assign new turn
+							dio.say(${retreatMessage});
+						} else{
+							dio.say(`${retreatMessate}\n <@${playerList[playerTurn].ID}>: it is now your turn.`) tunr moves to next person.
+						}
+						break;
+					}
+					
+				}
+			}
+			return "Execution successful.";
+		}
+		return "Execution not successful: Incorrect channel.";
+	}
 	return "Execution not successful: No game in progress.";
 });
 
