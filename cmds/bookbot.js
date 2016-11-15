@@ -1,5 +1,6 @@
 let logger  = require('../core/logger'),
 	dio		= require('../core/dio'),
+	x		= require('../core/vars'),
 	command = require('../core/command').Command;
 
 let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game.', function(data){
@@ -22,16 +23,47 @@ let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent i
 });
 
 let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Any problem with getting the game started?', function(data){
-	dio.say("If your game is acting weird, here's a few things you can try to remedy that.:\n"+
-		"__Game starts in top left corner:\nMenu UI doesn't show up:__\nGo to \"%AppData%\\ToothAndTail\\Options.xml\" or \"~/.config/ToothAndTail/Options.xml\" (if you're on mac) and change the parameter in ResolutionHeight to 1080.\n"+
-		"__Can't see game lobby__:\nThere is a text bug that partially hides the first lobby in the lobby list if your resolution is not of a 16:9 ratio. Try chaning your resolution to either 1920x1080, 1600x900, etc. in the path mentioned above. Restart your game afterwards.\n"+
-		"__Steam crashes__:\nThis may be a problem with AVG or Avast. To play the game you can either temporarily disable the anti-virus program, or add \"C:\\Program Files (x86)\\Steam\\steamapps\\common\\ToothAndTail\" this folder to the program's exemptions.\n"+
-		"__Cannot add Bots to Splitscreen__:\nIn the options.xml file, Add \"<DefaultPersonality>basic</DefaultPersonality>\" to your options file. Add bots should work after that.", data);
+	if (data.args[1] == null) {
+		dio.say(`What seems to be the trouble with your game? Type in '!troubleshoot #' by choosing an option below:
+
+:one: Game starts in top left corner OR Menu UI doesn't show
+:two: Can't see game lobby
+:three: Steam crashes
+:four: Cannot add Bots to Splitscreen
+:five: Other`, data);
+	} else {
+		let k = data.args[1];
+		let res;
+		switch (k) {
+			case ":one:":
+			case "1":
+				res = "**Game starts in top left corner OR Menu UI doesn't show**\nGo to `%AppData%\\ToothAndTail\\Options.xml` (Windows) or `~/.config/ToothAndTail/Options.xml` (Linux/Mac) and change the parameter in ResolutionHeight to 1080."
+				break;
+			case ":two:":
+			case "2":
+				res = `**Can't see game lobby**\nThere is a text bug that partially hides the first lobby in the lobby list if your resolution is not of a 16:9 ratio. Try changing your resolution to either 1920x1080, 1600x900, etc. in your options.xml. Restart your game afterwards.`
+				break;
+			case ":three:":
+			case "3":
+				res = "**Steam crashes**\nThis may be a problem with AVG or Avast. To play the game you can either temporarily disable the anti-virus program, or add `C:\\Program Files (x86)\\Steam\\steamapps\\common\\ToothAndTail\\` to the program's exemptions."
+				break;
+			case ":four:":
+			case "4":
+				res = `**Cannot add Bots to Splitscreen**\nIn the options.xml file, add \`<DefaultPersonality>basic</DefaultPersonality>\` to your options file. Adding bots should work after that.`
+				break;
+			case ":five:":
+			case "5":
+				res = `**Other**\nFor any other problems, report your problem in <#${x.trouble}>.`
+				break;
+		}
+
+		dio.say(res, data);
+	}
 });
 
-let cmd_guide = new command('bookbot', '!guide', 'hans', function(data){
+let cmd_guide = new command('bookbot', '!guide', 'Get a useful list of guides for the game.', function(data){
 	dio.say("Ah, hello there, if you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.\n\n"+
-		
+
 		"**0) Introduction: A basic guide (Courtesy of Lacante)**\n"+
 		"<https://www.youtube.com/watch?v=w8Y2gdrgpUA>\n"+
 		"**1) The Commander and You: Understanding What You Can Do**\n"+
@@ -50,18 +82,17 @@ let cmd_guide = new command('bookbot', '!guide', 'hans', function(data){
 		"<https://www.reddit.com/r/ToothAndTail/comments/4zmelb/tooth_and_tail_guide_chapter_5_the_subtleties_of/>", data);
 });
 
-let cmd_coc = new command('bookbot', '!coc', 'Clash of Comrades', function(data) {
-	dio.say("Sign up for Clash of Comrades' bi-monthly tournament: September Showdown **is now closed!**\n"+
-		"Tournament Rules and other info: <http://bit.ly/jsdfye>\n"+
-		"Bracket Info: <http://challonge.com/SeptemberShowdownFinals>\n\n"+
-		
+let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comrades**', function(data) {
+	dio.say("Sign up for Clash of Comrades' bi-monthly tournament: November Knockout **is now closed!**\n"+
+		"Tournament Rules and other info: https://www.facebook.com/ClashOfComrades/ \n"+
+		"Bracket Info: <http://challonge.com/cocnovemberknockout>\n\n"+
+
 		"**Youtube page:** <https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg>\n"+
-		"**Twitch Channel:** <https://www.twitch.tv/clashofcomrades>\n"+
-		"**Facebook Page:** <https://www.facebook.com/clashofcomrades>", data);
+		"**Twitch Channel:** <https://www.twitch.tv/clashofcomrades>\n", data);
 });
 
 let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot.', function(data) {
 	dio.say("Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.", data);
 });
-	
+
 module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc, cmd_bookbot];

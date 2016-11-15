@@ -25,6 +25,7 @@ module.exports = {
 	modchan: '180446374704316417',
 	wikichan: '235495724542853120',
 	techtalk: '200666247694778378',
+	trouble: '134810918113509376',
 	// ! - Maybe this can be automated to read from the directory instead...
 	emotes: [
 		':rekt:', ':yomama:', ':facefeel:',
