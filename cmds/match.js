@@ -51,6 +51,7 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 		from = data.user,
 		fromID = data.userID;
 
+	dio.del( data.messageID, data);
 	if (data.bot.servers[x.chan].members[fromID].roles.includes(x.lfg)) {
 		data.bot.removeFromRole({
 			serverID: x.chan,

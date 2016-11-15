@@ -10,10 +10,18 @@ let logger  = require('./logger'),
 	x 		= require('./vars'),
 	userdata= require('./userdata');
 
+// Timers
+let sTimer = 0,
+	nTimer = 0,
+	dTimer = 0,
+	fTimer = 0,
+	mTimer = 0;
+
 exports.onChange = function(status, udata=null) {
 	let from = status.user,
 		fromID = status.userID,
-		game = status.game;
+		game = status.game,
+		timer = new Date().getTime();
 
 	// Someone goes offline
 	if (status.state === "offline") {
@@ -31,6 +39,25 @@ exports.onChange = function(status, udata=null) {
 
 				dio.say(`Removing ${from} from ready list due to disconnect.`, status, x.chan);
 			});
+		}
+
+		// D/c dev Timers
+		switch (fromID) {
+			case x.schatz:
+				sTimer = new Date().getTime();
+				break;
+			case x.nguyen:
+				nTimer = new Date().getTime();
+				break;
+			case x.dex:
+				fTimer = new Date().getTime();
+				break;
+			case x.adam:
+				dTimer = new Date().getTime();
+				break;
+			case x.stealth:
+				mTimer = new Date().getTime();
+				break;
 		}
 	}
 
@@ -60,9 +87,9 @@ The developers hang out in the chat all the time, so feel free to say hi, ask qu
 For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
 		}
 
-		//Challenge accepted, Masta
-		if(fromRoles.includes(x.ranger)){
-			if(fromID === x.mj){
+		// Challenge accepted, Masta
+		if (fromRoles.includes(x.ranger)) {
+			if (fromID === x.mj) {
 				dio.say(`PocketBot reporting o7, Master J`, status, fromID);
 			}
 		}
@@ -70,30 +97,57 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		//Dev greetings
 		if ( fromRoles.includes(x.admin) ) {
 				let greets = [
-					`Master <@${fromID}> joins us once again`,
 					`I could not find Glyde around so a generic greeting is all I have this time, <@${fromID}>`,
 					`o/ <@${fromID}>`,
 					`May your devness shine light upon us all, <@${fromID}>`,
 					`One <@${fromID}> a day makes bugs go away. Welcome back!`,
 					`It\s Butters, not Butter, <@${fromID}>!`,
-					`Howdy, <@${fromID}>`,
 					`<@${fromID}> Roses are red,\nViolets are blue, This amazing community\nWas waiting for you`,
-					`Carpe diem, <@${fromID}>`,
-					`Welcome back, <@${fromID}>`
 				];
 
 				if (fromID === x.schatz) {
 					greets.push(
-						`How's the fam, <@${fromID}>? :schatz:`
+						`How's the fam, Master Schatz? :schatz:`,
+						"Ah! welcome back, Master Schatz! :schatz:",
+						"Good of you to join us, Master Schatz. :schatz:",
+						":schatz: Master Schatz, you've returned."
 					);
+
+					if ( (timer - sTimer) < 900000) return false;
+				} else if (fromID === x.adam) {
+					greets.push(
+						"The pixel artist has returned. Welcome back Master Adam :adam:.",
+						"Good of you to join us, Master Adam :adam:.",
+						":adam: Master DeGrandis, you've returned."
+					);
+
+					if ( (timer - dTimer) < 900000) return false;
 				} else if (fromID === x.nguyen) {
 					greets.push(
-						`<@${fromID}> is here, commence the puns. :nguyen:`
+						`Master Nguyen is here, commence the puns. :nguyen:`,
+						"Ah! welcome back, Master Nguyen! :nguyen:",
+						"Good of you to join us, Master Nguyen. :nguyen:",
+						"Master Nguyen, you've returned. :nguyen:"
 					);
+
+					if ( (timer - nTimer) < 900000) return false;
 				} else if (fromID === x.dex) {
 					greets.push(
-						`Nasty girl <@${fromID}> has arrived! :dexter:`
+						`:dexter: Greetings Master Dexter, or should I say "nasty girl"? :speak_no_evil: `,
+						":dexter: Master Dexter, welcome back to your laboratory!",
+						"I see your afro remains dynamic, Master Dexter. :dexter:",
+						"Back again I see, Master Dexter. :dexter:"
 					);
+
+					if ( (timer - fTimer) < 900000) return false;
+				} else if (fromID === x.stealth) {
+					greets.push(
+						"Ah! welcome back, Webmaster Stealth! :masta:",
+						"Good of you to join us, Master Masta. :masta:",
+						"Greetings, Mastastealth! :masta:"
+					);
+
+					if ( (timer - mTimer) < 900000) return false;
 				}
 
 				let n = Math.floor( Math.random()*greets.length );
