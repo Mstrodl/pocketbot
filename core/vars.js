@@ -34,7 +34,24 @@ module.exports = {
 		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
 		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
 		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
-	]
+	],
+	//Custom emojis
+	emojis: {
+		//Devs
+		schatz: '<:schatz:230393920842891264>',
+		nguyen: '<:nguyen:230394513560961024> ',
+		masta: '<:masta:230396612797661185>',
+		dexter: '<:dexter:230393518386970626>',
+		adam: '<:adam:230394845108240384>',
+		austin: '<:austin:230397896699281418>',
+		//Bots
+		ryionbot: '<:ryionbot:247030935021682688>',
+		bookbot: '<:bookbot:247030934287810563>',
+		mastabot: '<:mastabot:247030934933733376>',
+		lucille: '<:lucille:247030934929539073>',
+		//Other
+		wip: '<:wip:247433292587073536>'
+	}
 	// ! -- Move these 3 into the command stuff
 	// spammer: {}, // Object list of people banned for spam
 	// mute: false, // Mute? :P
