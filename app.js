@@ -140,9 +140,9 @@ bot.on('presence', function(user, userID, state, game, event) {
 		// Raw message string
 		state: state,
 		// Name of game being player OR stream title
-		game: game
+		game: game,
 		// Raw event
-		//e: event
+		e: event
 	}
 
 	status.onChange(statusData);
