@@ -89,17 +89,19 @@ The developers hang out in the chat all the time, so feel free to say hi, ask qu
 For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
 		}
 
+		// Challenge accepted, Masta
+		if (fromRoles.includes(x.ranger)) {
+			if(udata.getState(fromID) == 'offline' || udata.getState(fromID) == null){
+				if (fromID === x.nooneImportant) {
+					dio.say(`PocketBot reporting o7, Master J`, status, fromID);
+				}
+			}
+		}
+
 		//Dev greetings(and PR greetins, in debug mode)
 		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger))
 		) {
 			if(udata.getState(fromID) == 'offline' || udata.getState(fromID) == null){
-
-				// Challenge accepted, Masta
-				if (fromRoles.includes(x.ranger)) {
-					if (fromID === x.nooneImportant) {
-						dio.say(`PocketBot reporting o7, Master J`, status, fromID);
-					}
-				}
 
 				let greets = [
 					`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,
