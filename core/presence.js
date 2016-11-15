@@ -106,50 +106,50 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 					`o/ ${from}`,
 					`May your devness shine light upon us all, ${from}`,
 					`One ${from} a day makes bugs go away. Welcome back!`,
-					`It\s Butters, not Butter, ${from}!`,
+					`It\'s Butters, not Butter, ${from}!`,
 					`${from}\n, Roses are red,\nViolets are blue,\n This amazing community\nWas waiting for you`,
 				];
 
 				if (fromID === x.schatz) {
 					greets.push(
-						`How's the fam, Master Schatz? <@${x.emojis.schatz}>`,
-						`Ah! welcome back, Master Schatz! <@${x.emojis.schatz}>`,
-						`Good of you to join us, Master Schatz. <@${x.emojis.schatz}>`,
-						`<@${x.emojis.schatz}> Master Schatz, you've returned.`
+						`How's the fam, Master Schatz? ${x.emojis.schatz}`,
+						`Ah! welcome back, Master Schatz! ${x.emojis.schatz}`,
+						`Good of you to join us, Master Schatz. ${x.emojis.schatz}`,
+						`${x.emojis.schatz} Master Schatz, you've returned.`
 					);
 
 					if ( (timer - sTimer) < 900000) return false;
 				} else if (fromID === x.adam) {
 					greets.push(
-						`The pixel artist has returned. Welcome back Master Adam <@${x.emojis.adam}>.`,
-						`Good of you to join us, Master Adam <@${x.emojis.adam}>.`,
-						`<@${x.emojis.adam}> Master DeGrandis, you've returned.`
+						`The pixel artist has returned. Welcome back Master Adam ${x.emojis.adam}.`,
+						`Good of you to join us, Master Adam ${x.emojis.adam}.`,
+						`${x.emojis.adam} Master DeGrandis, you've returned.`
 					);
 
 					if ( (timer - dTimer) < 900000) return false;
 				} else if (fromID === x.nguyen) {
 					greets.push(
-						`Master Nguyen is here, commence the puns. <@${x.emojis.nguyen}>`,
-						`Ah! welcome back, Master Nguyen! <@${x.emojis.nguyen}>`,
-						`Good of you to join us, Master Nguyen. <@${x.emojis.nguyen}>`,
-						`Master Nguyen, you've returned. <@${x.emojis.nguyen}>`
+						`Master Nguyen is here, commence the puns. ${x.emojis.nguyen}`,
+						`Ah! welcome back, Master Nguyen! ${x.emojis.nguyen}`,
+						`Good of you to join us, Master Nguyen. ${x.emojis.nguyen}`,
+						`Master Nguyen, you've returned. ${x.emojis.nguyen}`
 					);
 
 					if ( (timer - nTimer) < 900000) return false;
 				} else if (fromID === x.dex) {
 					greets.push(
-						`<@${x.emojis.dexter}> Greetings Master Dexter, or should I say \`nasty girl\`? :speak_no_evil: `,
-						`<@${x.emojis.dexter}> Master Dexter, welcome back to your laboratory!`,
-						`I see your afro remains dynamic, Master Dexter. <@${x.emojis.dexter}>`,
-						`Back again I see, Master Dexter. <@${x.emojis.dexter}>`
+						`${x.emojis.dexter} Greetings Master Dexter, or should I say \`nasty girl\`? :speak_no_evil: `,
+						`${x.emojis.dexter} Master Dexter, welcome back to your laboratory!`,
+						`I see your afro remains dynamic, Master Dexter. ${x.emojis.dexter}`,
+						`Back again I see, Master Dexter. ${x.emojis.dexter}`
 					);
 
 					if ( (timer - fTimer) < 900000) return false;
 				} else if (fromID === x.stealth) {
 					greets.push(
-						`Ah! welcome back, Webmaster Stealth! <@${x.emojis.masta}>`,
-						`Good of you to join us, Master Masta. <@${x.emojis.masta}>`,
-						`Greetings, Mastastealth! <@${x.emojis.masta}>`
+						`Ah! welcome back, Webmaster Stealth! ${x.emojis.masta}`,
+						`Good of you to join us, Master Masta. ${x.emojis.masta}`,
+						`Greetings, Mastastealth! ${x.emojis.masta}`
 					);
 
 					if ( (timer - mTimer) < 900000) return false;
