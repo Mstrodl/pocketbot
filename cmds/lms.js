@@ -27,9 +27,15 @@ let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame L
 					"Each player will have 5 lives, and is eliminated once they lose all 5. Once all but one if left standing, that person wins.\n\n"+
 					
 					"__Commands__\n"+
-					"**!load #**: load a bullet into your revolver chamber at location # (You start the game with a bullet at position 0.) # = 0,1,2,3, or 4\n"+
-					"**!attack #**: Attack a target at position # continuously until you misfire. type in '!players' to see the list of players and their positions.\n"+
-					"**!avoid**: Avoid all incoming attacks until your next turn. If attacks are directed at you, you can choose one person (except your attacker) to take your hits for you. **Avoids last until your next turn** Limit: 3\n"+
+					"**!join**: Adds yourself into the lobby. The game needs at least 2 but ideally 3 or more players to start.\n"+
+					"**!leave**: Removes yourself from the lobby. \n"+
+					"**!start**: Start the game \n\n"+
+					
+					"**!load #**: load a bullet into your revolver chamber at location # (You start the game with a bullet at position 0.) After you load your gun the barrels will be spun and a random chamber will be at the trigger.\n# = 0,1,2,3, or 4\n\n"+
+					
+					"**!attack #**: Attack a target at position # **continuously** until you hit an empty barrel. type in '!players' to see the list of players and their positions. If you want to fire multiple shots, line your bullets up in a row.\n\n"+
+					
+					"**!avoid**: Avoid all incoming attacks until your next turn. If attacks are directed at you, you can choose one person (except your attacker) to take your hits for you. **Avoids last until your next turn** Limit: 3\n\n"+
 					"**!players**: See the list of players and their positions. **When a player is eliminated, player positions MAY be changed, so don't forget to check before you shoot!**\n\n"+
 					
 					"**If you choose to load or avoid, DM bookbot so you can keep your decision a secret. Attack commands are done in the #botplayground.**", data);
@@ -320,7 +326,7 @@ let cmd_attack = new command('lms', '!attack', "Attack one of your opponents.", 
 					
 					if ( atkSuccess === 0) { //no shots fired
 						playerTurn = (playerTurn + 1) % playerList.length; //next person's turn
-						dio.say(`*click!*\nThe attack failed.\n\n <@${playerList[playerTurn].ID}>: It is now your turn.`, data);
+						dio.say(`*click!*\nThe chamber was empty.\n\n <@${playerList[playerTurn].ID}>: It is now your turn.`, data);
 					} else {
 						atkMessage += atkSuccess + " shots were fired ";
 
