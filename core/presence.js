@@ -8,6 +8,7 @@ var exports = module.exports = {};
 let logger  = require('./logger'),
 	dio		= require('./dio'),
 	x 		= require('./vars'),
+	helper	= require('./helpers'),
 	userdata= require('./userdata');
 	helper	= require('./helpers')
 

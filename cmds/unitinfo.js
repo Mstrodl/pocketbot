@@ -55,10 +55,10 @@ let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data
 
 	// Check if unit exists
 	if ( u.units.hasOwnProperty(item) ) {
-		let label = (u.units[item].label != undefined) ? u.units[item].label : u.units[item].longname;
+		let label = (u.units[item].label != undefined) ? u.units[item].label : u.units[item].name;
 
 		// If label still sucks
-		if (label === undefined) label = '';
+		if (label === undefined) label = '???';
 
 		// Get some of the basic unit data
 		let traits = u.units[item].traits,
