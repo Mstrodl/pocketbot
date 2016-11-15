@@ -44,4 +44,23 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
     return true;
 }
 
+userdata.prototype.getState = function(userID){
+    if(!this.users[userID]){
+        this.users[userID] = {};
+        return null;
+    } 
+
+    return this.users[userID].state;
+}
+
+userdata.prototype.setState = function(userID, state){
+    if(!this.users[userID]){
+        this.users[userID] = {state: state};
+    } 
+
+    this.users[userID].state = state;
+ 
+    return this.users[userID].state;
+}
+
 module.exports = userdata;

@@ -9,6 +9,7 @@ let logger  = require('./logger'),
 	dio		= require('./dio'),
 	x 		= require('./vars'),
 	userdata= require('./userdata');
+	helper	= require('./helpers')
 
 // Timers
 let sTimer = 0,
@@ -87,64 +88,67 @@ The developers hang out in the chat all the time, so feel free to say hi, ask qu
 For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
 		}
 
-		// Challenge accepted, Masta
-		if (fromRoles.includes(x.ranger)) {
-			if (fromID === x.nooneImportant) {
-				dio.say(`PocketBot reporting o7, Master J`, status, fromID);
-			}
-		}
+		//Dev greetings(and PR greetins, in debug mode)
+		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger))
+		) {
+			if(udata.getState(fromID) == 'offline' || udata.getState(fromID) == null){
 
-		//Dev greetings
-		if ( fromRoles.includes(x.admin) ) {
+				// Challenge accepted, Masta
+				if (fromRoles.includes(x.ranger)) {
+					if (fromID === x.nooneImportant) {
+						dio.say(`PocketBot reporting o7, Master J`, status, fromID);
+					}
+				}
+
 				let greets = [
-					`I could not find Glyde around so a generic greeting is all I have this time, <@${fromID}>`,
-					`o/ <@${fromID}>`,
-					`May your devness shine light upon us all, <@${fromID}>`,
-					`One <@${fromID}> a day makes bugs go away. Welcome back!`,
-					`It\s Butters, not Butter, <@${fromID}>!`,
-					`<@${fromID}> Roses are red,\nViolets are blue, This amazing community\nWas waiting for you`,
+					`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,
+					`o/ ${from}`,
+					`May your devness shine light upon us all, ${from}`,
+					`One ${from} a day makes bugs go away. Welcome back!`,
+					`It\s Butters, not Butter, ${from}!`,
+					`${from} Roses are red,\nViolets are blue, This amazing community\nWas waiting for you`,
 				];
 
 				if (fromID === x.schatz) {
 					greets.push(
-						`How's the fam, Master Schatz? :schatz:`,
-						"Ah! welcome back, Master Schatz! :schatz:",
-						"Good of you to join us, Master Schatz. :schatz:",
-						":schatz: Master Schatz, you've returned."
+						`How's the fam, Master Schatz? <@${x.emojis.schatz}>`,
+						`Ah! welcome back, Master Schatz! <@${x.emojis.schatz}>`,
+						`Good of you to join us, Master Schatz. <@${x.emojis.schatz}>`,
+						`<@${x.emojis.schatz}> Master Schatz, you've returned.`
 					);
 
 					if ( (timer - sTimer) < 900000) return false;
 				} else if (fromID === x.adam) {
 					greets.push(
-						"The pixel artist has returned. Welcome back Master Adam :adam:.",
-						"Good of you to join us, Master Adam :adam:.",
-						":adam: Master DeGrandis, you've returned."
+						`The pixel artist has returned. Welcome back Master Adam <@${x.emojis.adam}>.`,
+						`Good of you to join us, Master Adam <@${x.emojis.adam}>.`,
+						`<@${x.emojis.adam}> Master DeGrandis, you've returned.`
 					);
 
 					if ( (timer - dTimer) < 900000) return false;
 				} else if (fromID === x.nguyen) {
 					greets.push(
-						`Master Nguyen is here, commence the puns. :nguyen:`,
-						"Ah! welcome back, Master Nguyen! :nguyen:",
-						"Good of you to join us, Master Nguyen. :nguyen:",
-						"Master Nguyen, you've returned. :nguyen:"
+						`Master Nguyen is here, commence the puns. <@${x.emojis.nguyen}>`,
+						`Ah! welcome back, Master Nguyen! <@${x.emojis.nguyen}>`,
+						`Good of you to join us, Master Nguyen. <@${x.emojis.nguyen}>`,
+						`Master Nguyen, you've returned. <@${x.emojis.nguyen}>`
 					);
 
 					if ( (timer - nTimer) < 900000) return false;
 				} else if (fromID === x.dex) {
 					greets.push(
-						`:dexter: Greetings Master Dexter, or should I say "nasty girl"? :speak_no_evil: `,
-						":dexter: Master Dexter, welcome back to your laboratory!",
-						"I see your afro remains dynamic, Master Dexter. :dexter:",
-						"Back again I see, Master Dexter. :dexter:"
+						`<@${x.emojis.dexter}> Greetings Master Dexter, or should I say \`nasty girl\`? :speak_no_evil: `,
+						`<@${x.emojis.dexter}> Master Dexter, welcome back to your laboratory!`,
+						`I see your afro remains dynamic, Master Dexter. <@${x.emojis.dexter}>`,
+						`Back again I see, Master Dexter. <@${x.emojis.dexter}>`
 					);
 
 					if ( (timer - fTimer) < 900000) return false;
 				} else if (fromID === x.stealth) {
 					greets.push(
-						"Ah! welcome back, Webmaster Stealth! :masta:",
-						"Good of you to join us, Master Masta. :masta:",
-						"Greetings, Mastastealth! :masta:"
+						`Ah! welcome back, Webmaster Stealth! <@${x.emojis.masta}>`,
+						`Good of you to join us, Master Masta. <@${x.emojis.masta}>`,
+						`Greetings, Mastastealth! <@${x.emojis.masta}>`
 					);
 
 					if ( (timer - mTimer) < 900000) return false;
@@ -153,6 +157,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 				let n = Math.floor( Math.random()*greets.length );
 				dio.say(greets[n], status, x.chan);
 			}
+		}
 	}
 
 	// A member starts a stream
@@ -169,8 +174,10 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 	}
 
 	//Create a userdata object if they don't have one
-	if(udata && !udata.users[userID]){
-		udata.users[userID] = {};
+	udata.setState(fromID, status.state);
+
+	if(udata && !udata.users[fromID]){
+		udata.users[fromID] = {};
 		udata.saveToFile('./data/users.json');
 	}
 
