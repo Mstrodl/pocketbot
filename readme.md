@@ -50,6 +50,23 @@ Every command should be defined as a `new command`. The arguments will define:
 
 `module.exports.commands` is an array which should contain the names of all the commands you define in your file.
 
+Once you've completed this, you need to add your group into app.js:
+
+```javascript
+// Contains the group name (must match the one from your commands), persona, and help descriptor for group
+let basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands');
+```
+
+You can see the available personas (or create your own) a few lines above the group assignment.
+
+Lastly, you actually add the group into the command manager:
+
+```javascript
+globalCmdManager.addGroup(basicCmdGroup);
+```
+
+Your commands are now part of Pocketbot!
+
 
 
 ### The `data` object
