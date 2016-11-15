@@ -107,7 +107,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 					`May your devness shine light upon us all, ${from}`,
 					`One ${from} a day makes bugs go away. Welcome back!`,
 					`It\s Butters, not Butter, ${from}!`,
-					`${from} Roses are red,\nViolets are blue, This amazing community\nWas waiting for you`,
+					`${from}\n, Roses are red,\nViolets are blue,\n This amazing community\nWas waiting for you`,
 				];
 
 				if (fromID === x.schatz) {
