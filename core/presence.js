@@ -89,7 +89,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		// Challenge accepted, Masta
 		if (fromRoles.includes(x.ranger)) {
-			if (fromID === x.mj) {
+			if (fromID === x.nooneImportant) {
 				dio.say(`PocketBot reporting o7, Master J`, status, fromID);
 			}
 		}
