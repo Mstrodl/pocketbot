@@ -1,9 +1,9 @@
 /* ----------------------------------------
 	These are simple helper functions to do
 	some quick task/calculation
- ---------------------------------------- */
- let dio = require('../core/dio'),
-	 x		= require('../core/vars');
+---------------------------------------- */
+let dio = require('../core/dio'),
+	x	= require('../core/vars');
 // ! -- Feel free to improve any of these functions
 
 // Debug function

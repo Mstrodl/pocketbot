@@ -20,26 +20,31 @@ module.exports.log = function(msg, type=0, err=null){
 	var final_msg = "";
 
 	switch(type){
-		case MESSAGE_TYPE.OK:{
+		case 1:
+		case 'OK':
+		case MESSAGE_TYPE.OK:
 			final_msg = chalk.green('[OK] ' + msg);
 			break;
-		}
-		case MESSAGE_TYPE.Warn:{
+		case 2:
+		case 'Warn':
+		case MESSAGE_TYPE.Warn:
 			final_msg = chalk.yellow('[WARN] ' + msg);
 			break;
-		}
-		case MESSAGE_TYPE.Error:{
+		case 3:
+		case 'Error':
+		case MESSAGE_TYPE.Error:
 			//final_msg = chalk.red('[ERROR] ' + msg);
 			if(err){
 				//final_msg += '\n' + err.stack;
 				final_msg = chalk.red('[ERROR] ' + err.stack);
 			}
 			break;
-		}
+		case 0:
+		case 'Info':
 		case MESSAGE_TYPE.Info:
-		default:{
+		default:
 			final_msg = '[INFO] ' + msg;
-		}
+			break;
 	}
 
 	console.log(final_msg);
