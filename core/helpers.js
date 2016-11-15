@@ -8,7 +8,7 @@ let dio = require('../core/dio'),
 
 // Debug function
 module.exports.isDebug = function() {
-	if ((process.argv[2] == "--debug") || (process.argv[2] == "--d")) {
+	if ((process.argv.includes("--debug")) || (process.argv.includes("--d"))) {
 		return true;
 	}
 	return false;
