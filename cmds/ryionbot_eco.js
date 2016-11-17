@@ -18,19 +18,26 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 });
 
 var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain amount of currency: `!transfer @recipient amount`, where amount > 0', function(data){
-	if(!data.args[1] || !data.args[2] || parseInt(data.args[2]) <= 0){
+	if(!data.args[1] || !data.args[2]){
 		dio.say('The command syntax is `!transfer @recipient amount`', data, data.channelID);
+		return;
+	}
+
+	if(parseInt(data.args[2]) <= 0){
+		dio.say('Amount cannot be negative or zero', data, data.channelID);
 		return;
 	}
 
 	var recipient = helpers.getUser(data.args[1]);
 	var amount = parseInt(data.args[2])
 
-	if(data.userdata.transferCurrency(data.userID, recipient, amount)){
-		dio.say('Transferred ' + amount + '. Use **!wip** to make sure the funds transferred successfully', data, data.channelID);
-	}else{
-		dio.say('Something went wrong. Make sure ' + data.args[1] + ' exists, that you have enough points and that they have an open account(they need to execute **!wip** if they don\'t)', data, data.channelID);
-	}
+	data.userdata.transferCurrency(data.userID, recipient, amount, function(err, tdata){
+		if(err){
+			dio.say(err, data);
+		}else{
+			dio.say(amount + ' sent successfully', data);
+		}
+	});
 });
 
 module.exports.commands = [cmd_wip, cmd_transfer];

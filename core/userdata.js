@@ -28,20 +28,21 @@ userdata.prototype.setCurrency = function(userID, amount){
     return this.users[userID].currency;
 }
 
-userdata.prototype.transferCurrency = function(fromID, toID, amount){
+userdata.prototype.transferCurrency = function(fromID, toID, amount, callback){
     //Check for parameters and users existence
-    if(!fromID || !toID || !amount || !this.users[fromID]) return false;
+    if(!fromID || !toID || !amount) return callback(`Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`, {});
+    if(!this.users[fromID]) return callback("Invalid sender. No userdata found", {});
     if(!this.users[toID]) this.users[toID] = {};
     //Check for account existence for the sender. If the receiverd doesn't have one, it's fine as it will be created
-    if(!this.users[fromID].currency) return false;
+    if(!this.users[fromID].currency) return callback("User has no wallet", {});
     if(!this.users[toID].currency) this.setCurrency(toID, this.DEFAULT_CURRENCY_AMOUNT);
     //Check for balance
-    if(this.getCurrency(fromID) < amount) return false;
+    if(this.getCurrency(fromID) < amount) return callback("User has insufficient funds", {});
     //Do the transfer
     this.setCurrency(fromID, this.getCurrency(fromID) - amount);
     this.setCurrency(toID, this.getCurrency(toID) + amount);
 
-    return true;
+    return callback(null, {from: this.users[fromID], to: this.users[toID]});
 }
 
 userdata.prototype.getState = function(userID){
