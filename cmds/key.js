@@ -3,7 +3,7 @@
 	to the onboarding process of giving keys
 	to new users via vote/admin powers.
  ---------------------------------------- */
-require('dotenv').config()
+require('dotenv').config({silent: true});
 
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
