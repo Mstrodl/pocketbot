@@ -35,7 +35,7 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 		if(err){
 			dio.say(err, data);
 		}else{
-			dio.say(amount + ' sent successfully', data);
+			dio.say(amount + ' ' + vars.emojis.wip + ' sent successfully', data);
 		}
 	});
 });
