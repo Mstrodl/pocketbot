@@ -92,7 +92,8 @@ logger.clearLogFile();
 
 // Ready the user data
 userdata = new userdata();
-userdata.loadFromFile('./data/users.json');
+//Just stop bitching about the folders ffs
+userdata.loadFromFile('./users.json');
 
 // Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
