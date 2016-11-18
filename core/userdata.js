@@ -9,7 +9,20 @@ function userdata(){
 };
 
 userdata.prototype.loadFromFile = function(path){
-    this.users = JSON.parse(fs.readFileSync(path));
+    var self = this;
+
+    fs.readFile(path, function(err, res){
+        if(err){
+            if(err.message.indexOf("ENOENT" != -1)){
+                fs.writeFileSync(path, "{}");
+                self.loadFromFile(path);
+            }else{
+                throw new Error(err);
+            }
+        }else{
+            self.users = JSON.parse(res);
+        }
+    });
 }
 
 userdata.prototype.saveToFile = function(path){
