@@ -9,7 +9,7 @@ let chat 	= require('discord.io'),
 	fs 		= require('fs'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
 	steam 	= require('steam-webapi');
-
+	
 // ===================================
 // Modules
 // ===================================
@@ -55,7 +55,8 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.
 	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', vars.emojis.mastabot),
 	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.pocketbot),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', vars.emojis.bookbot),
-	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot);
+	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
+	lucillePersona = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
 
 // Manager and Groups
 let globalCmdManager	= new command.CommandManager('d'),
@@ -71,7 +72,8 @@ let globalCmdManager	= new command.CommandManager('d'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
 	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
 	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command'),
-	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands');
+	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands'),
+	lucilleCmdGroup 	= new command.CommandGroup('lucille', lucille, 'Lucille gives us the latest tweets.');
 
 globalCmdManager.addGroup(basicCmdGroup);
 globalCmdManager.addGroup(matchCmdGroup);
@@ -86,6 +88,7 @@ globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
 globalCmdManager.addGroup(infoCmdGroup);
 globalCmdManager.addGroup(streamCmdGroup);
+globalCmdManager.addGroup(lucilleCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
@@ -117,6 +120,7 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 // ===================================
 // Bot Events
 // ===================================
+
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
@@ -183,6 +187,15 @@ bot.on('message', function(user, userID, channelID, message, event){
 		db: fire
 	}
 
+	//On Twitter Message
+	stream.on('tweet', function(tweet){
+	    if (ArrHandle.indexOf(tweet.user.screen_name) != -1 ){ //If Tracked User
+	      dio.say(BotPostSelf(tweet.text, tweet.user.screen_name, tweet.id_str)); //BotPostSelf resides within lucille.js
+	  };
+
+
+
+	});
 	// Dance Detector
 	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {
 		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {
