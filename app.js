@@ -129,7 +129,9 @@ bot.on('ready', function(event) {
 	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 
 	// Work around to giving Lucille bot/persona info!
-	dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
+	setTimeout(function(){
+		dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
+	}, 5000);
 });
 
 bot.on('disconnect', function(err, errcode) {
