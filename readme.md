@@ -106,6 +106,8 @@ Can be seen in app.js and is fairly self-explanatory, but basically contains the
 Pocketbot primary uses [Firebase](https://www.firebase.com/) as a backend for data. In the above `data` object,
 you can access the public database which currently contains quotes and player data under `data.db.quotes` and `data.db.soldiers`, respectively.
 
+For complete Firebase documentation, check [here](https://firebase.google.com/docs/database/web/read-and-write).
+
 ### Writing Data
 
 You can write data in 2 main ways: a `set` will push (and overwrite any existing) data into a new object, while an `update` can be used to change 
@@ -148,7 +150,31 @@ There are of course a ton of checks and stuff you'd want to do before you update
 data.db.soldiers to make sure the user exists, already has votes, hasn't been voted already by same user, etc.) but this is 
 how you would update a user.
 
-**=========================**
-**WARNING** Unless you're writing brand new data, always try to use update to be safe. If we replaced the above with `newplayer.child('vote').set(voter);`
-you would end up nuking **all** previous data except the new stuff you just pushed in.
-**=========================**
+**============================================================================**
+
+**WARNING** Unless you're writing brand new data, 
+always try to use update to be safe. 
+
+If we replaced the above with `newplayer.child('vote').set(voter);` you would 
+
+end up nuking **all** previous data except the new stuff you just pushed in.
+
+**============================================================================**
+
+### Reading Data
+
+The most used reading call in Pocketbot is currently the `.once()` call, which is basically the equivalent of `.ajax()` for Firebase:
+
+```javascript
+data.db.soldiers.once("value", function(snap) {
+    // The snap(shot) that is returned by once is a JSON object of the database.
+    // You can read through it just like any other JSON
+    let playerList = snap.val(),
+        masta = playerList[x.masta],
+        mastaStatus = masta.status;
+}, function(err) {
+    // Make sure to error log the crap out of Firebase, since it fails silently 
+    // by default and then you'll bang your face against a wall for hours why something doesn't work!
+	logger.log(err, logger.MESSAGE_TYPE.Error);
+});
+```
