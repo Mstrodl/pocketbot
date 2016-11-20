@@ -100,3 +100,55 @@ Can be seen in app.js and is fairly self-explanatory, but basically contains the
 		db: fire
 	}
 ```
+
+## Firebase Quick Start
+
+Pocketbot primary uses [Firebase](https://www.firebase.com/) as a backend for data. In the above `data` object,
+you can access the public database which currently contains quotes and player data under `data.db.quotes` and `data.db.soldiers`, respectively.
+
+### Writing Data
+
+You can write data in 2 main ways: a `set` will push (and overwrite any existing) data into a new object, while an `update` can be used to change 
+a specific property (or multiple) of an existing object.
+
+#### Set
+For example, to push a new quote, we do the following:
+```javascript
+// This is the structure of the quote, and the data we are pushing into it
+let newquote = {
+	id: qid,
+	user: from,
+	quote: data.message.replace('!addquote ',''),
+	time: Math.round(+new Date()/1000)
+}
+
+// We allow the quotes to generate its own ID in the Firebase,
+// so we go ahead and push new data in, and get the reference for
+// the new, empty object in the database
+let newquoteRef = quotes.push();
+// Then we set the data on that object/reference w/ our stuff
+newquoteRef.set(newquote);
+```
+
+#### Update
+
+In the case of an update, here's an example of how we add votes to a player in the database:
+```javascript
+// .child let's us grab a child object/reference. In this case we access our player database
+// under data.db.soldiers, and we look for the child reference by the user ID (in this case, 
+// we've set 'lucky' to be the userID of the player being voted to receive a key)
+let newplayer = data.db.soldiers.child(lucky);
+
+// Now we access (or create if it doesn't exist) the `vote` property of the previous user reference
+// and update it with our voter object
+newplayer.child('vote').update(voter);
+```
+
+There are of course a ton of checks and stuff you'd want to do before you update info (the above example first reads all of 
+data.db.soldiers to make sure the user exists, already has votes, hasn't been voted already by same user, etc.) but this is 
+how you would update a user.
+
+**=========================**
+**WARNING** Unless you're writing brand new data, always try to use update to be safe. If we replaced the above with `newplayer.child('vote').set(voter);`
+you would end up nuking **all** previous data except the new stuff you just pushed in.
+**=========================**
