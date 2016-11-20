@@ -2,8 +2,7 @@ let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x 		= require('../core/vars'),
 	dio 	= require('../core/dio'),
-	udata 	= require('../core/unitdata'),
-	persona = require('../core/personality');
+	udata 	= require('../core/unitdata');
 
 let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data) {
 	let chan = data.channelID,

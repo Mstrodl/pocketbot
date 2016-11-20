@@ -55,7 +55,8 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.
 	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', vars.emojis.mastabot),
 	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.pocketbot),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', vars.emojis.bookbot),
-	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot);
+	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
+	lucille = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
 
 // Manager and Groups
 let globalCmdManager	= new command.CommandManager('d'),
@@ -71,7 +72,8 @@ let globalCmdManager	= new command.CommandManager('d'),
 	bookbotCmdGroup		= new command.CommandGroup('bookbot', bookbot, 'Informational commands'),
 	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
 	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command'),
-	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands');
+	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands'),
+	lucilleCmdGroup 	= new command.CommandGroup('lucille', lucille, 'Lucille gives us the latest tweets.');
 
 globalCmdManager.addGroup(basicCmdGroup);
 globalCmdManager.addGroup(matchCmdGroup);
@@ -86,6 +88,7 @@ globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
 globalCmdManager.addGroup(infoCmdGroup);
 globalCmdManager.addGroup(streamCmdGroup);
+globalCmdManager.addGroup(lucilleCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
@@ -118,11 +121,15 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 // Bot Events
 // ===================================
 
+
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
 	// May as well
-	bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
+	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
+
+	// Work around to giving Lucille bot/persona info!
+	dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -149,7 +156,7 @@ bot.on('presence', function(user, userID, state, game, event) {
 	status.onChange(statusData, userdata);
 });
 
-bot.on('message', function(user, userID, channelID, message, event){
+bot.on('message', function(user, userID, channelID, message, event) {
 	//Remove whitespace
 	message = message.trim()
 

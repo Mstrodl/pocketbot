@@ -27,6 +27,7 @@ module.exports = {
 	wikichan: '235495724542853120',
 	techtalk: '200666247694778378',
 	trouble: '134810918113509376',
+	testing: '246281054598594560',
 	// ! - Maybe this can be automated to read from the directory instead...
 	emotes: [
 		':rekt:', ':yomama:', ':facefeel:',
@@ -50,7 +51,8 @@ module.exports = {
 		mastabot: '<:mastabot:247030934933733376>',
 		lucille: '<:lucille:247030934929539073>',
 		//Other
-		wip: '<:wip:247433292587073536>'
+		wip: '<:wip:247433292587073536>',
+		wolf: '<:tntwolf:230095674283261954>'
 	}
 	// ! -- Move these 3 into the command stuff
 	// spammer: {}, // Object list of people banned for spam
