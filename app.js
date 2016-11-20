@@ -9,7 +9,7 @@ let chat 	= require('discord.io'),
 	fs 		= require('fs'),
 	gm 		= require('gm').subClass({ imageMagick: true }),
 	steam 	= require('steam-webapi');
-	
+
 // ===================================
 // Modules
 // ===================================
@@ -56,7 +56,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.
 	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.pocketbot),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', vars.emojis.bookbot),
 	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
-	lucillePersona = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
+	lucille = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
 
 // Manager and Groups
 let globalCmdManager	= new command.CommandManager('d'),
@@ -126,7 +126,10 @@ bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
 	// May as well
-	bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
+	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
+
+	// Work around to giving Lucille bot/persona info!
+	dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -153,7 +156,7 @@ bot.on('presence', function(user, userID, state, game, event) {
 	status.onChange(statusData, userdata);
 });
 
-bot.on('message', function(user, userID, channelID, message, event){
+bot.on('message', function(user, userID, channelID, message, event) {
 	//Remove whitespace
 	message = message.trim()
 
@@ -187,15 +190,6 @@ bot.on('message', function(user, userID, channelID, message, event){
 		db: fire
 	}
 
-	//On Twitter Message
-	stream.on('tweet', function(tweet){
-	    if (ArrHandle.indexOf(tweet.user.screen_name) != -1 ){ //If Tracked User
-	      dio.say(BotPostSelf(tweet.text, tweet.user.screen_name, tweet.id_str)); //BotPostSelf resides within lucille.js
-	  };
-
-
-
-	});
 	// Dance Detector
 	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {
 		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {

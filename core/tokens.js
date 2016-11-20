@@ -22,5 +22,9 @@ module.exports = {
 		if (process.env.hasOwnProperty('FBKEY2')) {
 			return process.env.FBKEY2;
 		} else { return false; }
-	}
+	},
+	TWITKEY: process.env.TWITKEY,
+	TWITTOKEN: process.env.TWITTOKEN,
+	TWITATOKEN: process.env.TWITATOKEN,
+	TWITSECRET: process.env.TWITSECRET
 }

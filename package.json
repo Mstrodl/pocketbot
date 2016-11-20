@@ -21,6 +21,7 @@
     "gm": "^1.22.0",
     "jsonfile": "^2.4.0",
     "moment": "^2.16.0",
-    "steam-webapi": "^0.6.5"
+    "steam-webapi": "^0.6.5",
+    "twit": "^2.2.5"
   }
 }
