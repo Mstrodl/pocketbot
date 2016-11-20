@@ -23,7 +23,7 @@ let logger  = require('../core/logger'),
 			'834635096', //@PowerUpAudio
 			'718565399944634372', //@ClashOfComrades
 			'3271155122' //@ToothAndTail
-			,'14423000' //@brianfranco
+			//,'14423000' //@brianfranco
 		],
 		stream = twitter.stream('statuses/filter', { follow: watchList }),
 		lucilleBot = false,
