@@ -148,6 +148,20 @@ CommandManager.prototype.call = function(data, trigger, group=null){
     return false;
 }
 
+CommandManager.prototype.hasPermission = function(callerRoles, commandMinRole){
+    if(commandMinRole == null){
+        return true;
+    }else{
+        for(var key in commandMinRole){
+            if(callerRoles.includes(commandMinRole[key])){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
 //Gets the help text for either one or all commands
 //filter        -   command trigger or group name
 //lookupTarget  -   'all' for all commands, 'group' for one group, 'command' for one command
@@ -212,7 +226,7 @@ CommandGroup.prototype.add = function(command){
         throw new Error("Command undefined cannot be added to group '" + this.name + "'");
     }
 
-    this.commands[command.trigger] = command;
+    this.commands[command.triggers] = command;
 }
 
 //Looks up the command map for a given trigger and returns the command object if it is found
@@ -228,8 +242,13 @@ CommandGroup.prototype.getCommand = function(command_trigger){
 
     var cmd = null;
     for(var key in this.commands){
-        if(command_trigger == key){
-            cmd = this.commands[key];
+        //if(command_trigger == key){
+        //    cmd = this.commands[key];
+        //}
+        for(var tkey in this.commands[key].triggers){
+            if(command_trigger == this.commands[key].triggers[tkey]){
+                cmd = this.commands[key];
+            }
         }
     }
 
@@ -251,7 +270,11 @@ CommandGroup.prototype.getHelp = function(filter, lookupTarget){
             var found = false;
             for(var k in this.commands){
                 if(k == filter){
-                    s = "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\nBrought to you by " + this.personality.emote;
+                    s = "**";
+                    for(var tkey in this.commands[k].triggers){
+                        s+= this.commands[k].triggers[tkey] + " ";
+                    }
+                    s += "**- " + this.commands[k].description + "\nBrought to you by " + this.personality.emote;
                     found = true;
                 }
             }
@@ -264,8 +287,13 @@ CommandGroup.prototype.getHelp = function(filter, lookupTarget){
         case('group'):
         default:{
             for(var k in this.commands){
-                s += "**" + this.commands[k].trigger + "** - " + this.commands[k].description + "\n";
+                s += "\n**";
+                for(var tkey in this.commands[k].triggers){
+                    s+= this.commands[k].triggers[tkey] + " ";
+                }
+                s += "**- " + this.commands[k].description;
             }
+            s += "\nBrought to you by " + this.personality.emote;
             return s;
         }
     }
@@ -281,11 +309,19 @@ CommandGroup.prototype.call = function(trigger, command_data){
 
 //Command object
 //groupName     : string    - name of the group the command will belong to
-//trigger       : string    - chat keyword that triggers the command
+//triggers      : string | array    - chat keyword(s) that triggers the command
 //action        : function  - function to be exectued on trigger
-function Command(groupName, trigger, description="", action){
+function Command(groupName, triggers, description="", action=null, permission=null){
     this.groupName = groupName;
-    this.trigger = trigger;
+    this.triggers = [];
+
+    if(Array.isArray(triggers)){
+        this.triggers = triggers;
+    }else{
+        this.triggers.push(triggers);
+    }
+
+    this.permissions = permission;
     this.description = description;
     this.action = action;
 }
@@ -294,11 +330,16 @@ function Command(groupName, trigger, description="", action){
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 Command.prototype.call = function(command_data){
     try{
+        //Check if user has permission to call the command
+        if(!command_data.commandManager.hasPermission(helpers.getUserRoles(command_data.bot, command_data.userID), this.permissions)){
+            throw new Error("User does not have permission to call command");
+        }
+
         var cmdResult = this.action(command_data);
         logger.log(this.groupName +': ' + (cmdResult ? cmdResult : '<no return value>'), logger.MESSAGE_TYPE.OK);
         return cmdResult;
     }catch(e){
-        logger.log(this.groupName + ' - ' + this.trigger + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error, e);
+        logger.log(this.groupName + ' - ' + this.triggers + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error, e);
         return -1;
     }
 
