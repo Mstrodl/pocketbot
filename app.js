@@ -131,7 +131,7 @@ bot.on('ready', function(event) {
 	// Work around to giving Lucille bot/persona info!
 	setTimeout(function(){
 		dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
-	}, 5000);
+	}, 10000);
 });
 
 bot.on('disconnect', function(err, errcode) {
