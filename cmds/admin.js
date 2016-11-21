@@ -5,7 +5,7 @@ let logger  = require('../core/logger'),
 	x 		= require('../core/vars');
 
 let cmdSay = new command('admin', '!say', `Allows Masta to speak as Mastabot`, function(data) {
-	if (data.userID === x.stealth) dio.say(data.message.replace('!say ',''), data);
+	if (data.userID === x.stealth) dio.say(data.message.replace('!say ',''), data, x.chan);
 });
 
 let cmdNewBuild = new command('admin', 'new build live',`Admin trigger to automatically bring up verification link`, function(data) {
