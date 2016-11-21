@@ -10,9 +10,12 @@ let logger  = require('../core/logger'),
 	TOKEN 	= require('../core/tokens'),
 	x 		= require('../core/vars'),
 	dio 	= require('../core/dio'),
-	T		= require('twit');
+	T		= (process.env.ISHEROKU ? require('twit') : null);
 
 // These go somewhere, not sure where, definitely not here most likely.
+var stream = null;
+
+if(T){
 	let twitter = new T({
 		consumer_key:         TOKEN.TWITKEY,
 		consumer_secret:      TOKEN.TWITTOKEN,
@@ -35,6 +38,7 @@ let logger  = require('../core/logger'),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
+}
 
 function twitterList(watchList){
 	let x = "The Current Twitter Accounts Being Tracked Are: \n "
@@ -83,20 +87,21 @@ let cmdLucy = new command('lucille', '!lucille', 'Activates Lucille', function(d
 });
 
 //On Twitter Message
-stream.on('tweet', function(tweet) {
-	//console.log(tweet);
-	//If Tracked User
-	if ( watchList.includes(tweet.user.id_str) ) {
-		if (!lucilleBot) return false;
-		lucilleTweet = {
-			user: tweet.user.screen_name,
-			uid: tweet.user.id,
-			tweet: tweet.text,
-			id: tweet.id_str
+if(stream){
+	stream.on('tweet', function(tweet) {
+		//console.log(tweet);
+		//If Tracked User
+		if ( watchList.includes(tweet.user.id_str) ) {
+			if (!lucilleBot) return false;
+			lucilleTweet = {
+				user: tweet.user.screen_name,
+				uid: tweet.user.id,
+				tweet: tweet.text,
+				id: tweet.id_str
+			}
+			// Work around!
+			dio.say( `!tweet`, { bot: lucilleBot, channelID: x.testing } );
 		}
-		// Work around!
-		dio.say( `!tweet`, { bot: lucilleBot, channelID: x.testing } );
-	}
-});
-
+	});
+}
 module.exports.commands = [cmdLucy, cmdTweet];
