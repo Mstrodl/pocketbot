@@ -137,3 +137,10 @@ module.exports.getDMChannel = function(client, userID){
 	}
 	return null;
 }
+
+//Gets a user's roles given the user ID
+module.exports.getUserRoles = function(client , userID, serverID = x.chan){
+	return client.servers[serverID].members[userID].roles;
+}
+
+module.exports.vars = x;
