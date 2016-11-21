@@ -14,7 +14,9 @@ let cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
 	});
 });
 
-let cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data){
+cmd_ping.permissions = [helpers.vars.admin];
+
+var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data){
     data.bot.sendMessage({
         to      : data.channelID,
         message : "Dong <:nguyen:230394513560961024>"
