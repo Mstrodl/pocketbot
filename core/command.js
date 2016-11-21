@@ -76,15 +76,11 @@ CommandManager.prototype.isTrigger = function(trigger){
         trigger = trigger.substring(1, trigger.length);
     }
 
-    for(var group_name in this.groups){
-        for(var command_trigger in this.groups[group_name].commands){
-            if(trigger == command_trigger){
-                return true;
-            }
-        }
+    if(this.getCommand(trigger)){
+        return true;
+    }else{
+        return false;
     }
-
-    return false;
 }
 
 CommandManager.prototype.call = function(data, trigger, group=null){
