@@ -50,7 +50,7 @@ let cmdTweet = new command('lucille', '!tweet', 'Performs a tweet, ignored by us
 		let lT = lucilleTweet,
 			face = '';
 
-		switch(lT.id) {
+		switch(lT.uid) {
 			case '19382657':
 				face = x.emojis.schatz;
 				break;
@@ -65,7 +65,7 @@ let cmdTweet = new command('lucille', '!tweet', 'Performs a tweet, ignored by us
 				break;
 		}
 
-		dio.say( `**${face} @${lT.user} just tweeted**: \n ${lT.tweet} \n \n <http://twitter.com/${lT.user}/status/${lT.id}>`, data);
+		dio.say( `**${face} @${lT.user} just tweeted**: \n ${lT.tweet} \n \n <http://twitter.com/${lT.user}/status/${lT.id}>`, data, x.chan);
 		lucilleTweet = false;
 	}
 });
@@ -84,6 +84,7 @@ stream.on('tweet', function(tweet) {
 		if (!lucilleBot) return false;
 		lucilleTweet = {
 			user: tweet.user.screen_name,
+			uid: tweet.user.id,
 			tweet: tweet.text,
 			id: tweet.id_str
 		}
