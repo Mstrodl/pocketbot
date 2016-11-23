@@ -166,7 +166,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 	let args = helper.getArgs(message);
 
 	//Prepare command_data object
-	var command_data = {
+	let command_data = {
 		//User data created by bots
 		userdata: userdata,
 		//Command manager
@@ -224,10 +224,15 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		return false;
 	}
 
-	// If from Mastabot, check for timed message otherwise ignore
+	// If from Mastabot, check for timed message or tweet stuff otherwise ignore
 	if (userID === vars.pocketbot) {
-		if (message.includes("🕑")) helper.countdownMessage(event.d.id,message,channelID,5,bot);
-		return false;
+		if (message.includes("🕑")) {
+			helper.countdownMessage(event.d.id,message,channelID,5,bot);
+		} else if (message.includes("!tweet") || message.includes("!lucille")) {
+			// Do nothing
+		} else {
+			return false;
+		}
 	}
 
 	try {
