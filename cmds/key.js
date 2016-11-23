@@ -179,7 +179,7 @@ if (!TOKEN.FBPKEYID()) {
 						}
 					}
 
-					dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}, ${votes} of 4!`, data, x.history)
+					dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}, ${votes} of 5!`, data, x.history)
 					if (votes === 5)  {
 						dio.say(`:tada: <@${lucky}> has been voted to receive a key.`, data, x.history);
 						newplayer.set( memsnap[lucky] );
