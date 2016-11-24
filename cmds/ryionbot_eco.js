@@ -1,8 +1,13 @@
-var logger  = require('../core/logger');
-var command = require('../core/command').Command;
-var helpers = require('../core/helpers');
-var dio     = require('../core/dio');
-var vars 	= require('../core/vars')
+/* ----------------------------------------
+	This file controls all the stuff related
+	to the Worthless Internet Point currency.
+ ---------------------------------------- */
+
+let logger  = require('../core/logger'),
+	command = require('../core/command').Command,
+	helpers = require('../core/helpers'),
+	dio     = require('../core/dio'),
+	vars 	= require('../core/vars');
 
 var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account with the default WIP ammount', function(data){
 	if(!data.userdata.users[data.userID]) data.userdata.users[data.userID] = {};
@@ -13,7 +18,7 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 		dio.say(':bank: My records say you have **' + res + '** ' + vars.emojis.wip + ' coins', data, data.channelID);
 	}else{
 		data.userdata.setCurrency(data.userID, data.userdata.DEFAULT_CURRENCY_AMOUNT);
-		dio.say('Your account has been added to my records, you now have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);	
+		dio.say('Your account has been added to my records, you now have ' + data.userdata.users[data.userID].currency + ' Worthless Internet Points', data, data.channelID);
 	}
 });
 

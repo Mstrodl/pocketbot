@@ -1,3 +1,9 @@
+/* ----------------------------------------
+	This file contains most of the general
+	commands (formerly in Mastabot) that the
+	public community uses.
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	moment 	= require('moment'),

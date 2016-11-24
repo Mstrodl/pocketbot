@@ -1,3 +1,9 @@
+/* ----------------------------------------
+	This file contains all commands that
+	require a higher-level of permission
+	than usual, i.e. mods/developers
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	dio		= require('../core/dio'),

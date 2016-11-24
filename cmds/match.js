@@ -1,3 +1,8 @@
+/* ----------------------------------------
+	This file controls all the stuff related
+	to matchmaking within the chat.
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x		= require('../core/vars'),

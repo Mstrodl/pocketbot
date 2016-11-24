@@ -1,3 +1,8 @@
+/* ----------------------------------------
+	This file contains the updated version
+	of the !info command from Mastabot.
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	x 		= require('../core/vars'),

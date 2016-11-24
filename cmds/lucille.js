@@ -1,3 +1,9 @@
+/* ----------------------------------------
+	This is the port of AlexPanda's Lucille
+	bot, which posts in #community whenever
+	certain devs tweet.
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	helpers = require('../core/helpers'),

@@ -1,3 +1,7 @@
+/* ----------------------------------------
+	Port of most the Bookbot code
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	dio		= require('../core/dio'),
 	x		= require('../core/vars'),

@@ -1,3 +1,8 @@
+/* ----------------------------------------
+	This file controls all the stuff related
+	to Twitch streams.
+ ---------------------------------------- */
+
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
 	moment 	= require('moment'),
