@@ -1,9 +1,9 @@
-Mastabot.7z
-data
 # Logs
 logs
 *.log
+log.txt
 npm-debug.log*
+.env
 
 # Runtime data
 pids
@@ -37,8 +37,22 @@ jspm_packages
 
 # Optional REPL history
 .node_repl_history
-yay2.js
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
+yay2.js
+
+# Elastic Beanstalk Files
+
+.elasticbeanstalk/*
+
+!.elasticbeanstalk/*.cfg.yml
+
+!.elasticbeanstalk/*.global.yml
+
+#VS Code fluff
+.vscode
+
+#Prebuilt exes
+*.exe
+
+#Local bot userdata
+data
+users.json

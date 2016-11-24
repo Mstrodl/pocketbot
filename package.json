@@ -7,19 +7,21 @@
     "start": "node app.js"
   },
   "engines": {
-    "node": "6.7.0"
+    "node": "6.9.1"
   },
   "contributors": [
-      "Brian Franco <mastastealth@gmail.com>"
+    "Brian Franco <mastastealth@gmail.com>"
   ],
   "license": "MIT",
   "dependencies": {
+    "chalk": "^1.1.1",
     "discord.io": "^2.2.4",
+    "dotenv": "^2.0.0",
     "firebase": "^3.0.2",
     "gm": "^1.22.0",
-    "node-wolfram": "0.0.1",
+    "jsonfile": "^2.4.0",
+    "moment": "^2.16.0",
     "steam-webapi": "^0.6.5",
-    "webshot": "^0.18.0",
-    "jsonfile": "^2.4.0"
+    "twit": "^2.2.5"
   }
 }
