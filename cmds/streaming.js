@@ -80,7 +80,7 @@ let cmdTwitch = new command('streaming', '!streams', `Checks Twitch for anyone s
 	});
 });
 
-let cmdStreamers = new command('streaming', '!streamers', `Lists some of the known TnT community streamers.`, (data) => {
+let cmdStreamers = new command('streaming', '!streamers', `Lists some of the known TnT community streamers`, (data) => {
 	dio.say(`You can find a list of streamers over here: <http://www.clashofcomrades.com/events>`, data);
 });
 

@@ -61,7 +61,7 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
     });
 });
 
-var cmd_roll = new command('ryionbot', '!roll', 'Returns a random number within a given range(default range is [1, 6])', function(data){
+var cmd_roll = new command('ryionbot', '!roll', 'Returns a random number within a given range (default range is [1, 6])', function(data){
 
     //If no range given, default to [1, 6]
     if(!data.args[1] || !data.args[2])

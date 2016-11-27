@@ -44,7 +44,7 @@ let cmdQuote = new command('quote', '!quote', `Specify a quote number to bring i
 	}
 });
 
-let cmdAddQuote = new command('quote', '!addquote', `Adds everything quoted into the database`, function(data) {
+let cmdAddQuote = new command('quote', '!addquote', `Adds new quote to the database`, function(data) {
 	// Make sure we're getting Firebase
 	if (!data.db.quotes) {
 		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);
@@ -79,7 +79,7 @@ let cmdAddQuote = new command('quote', '!addquote', `Adds everything quoted into
 	});
 });
 
-let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id`, function(data) {
+let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id from the database`, function(data) {
 	// Make sure we're getting Firebase
 	if (!data.db.quotes) {
 		logger.log('Firebase tokens are busted.', logger.MESSAGE_TYPE.Warn);

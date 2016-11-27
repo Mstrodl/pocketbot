@@ -28,7 +28,7 @@ let cmdWiki = new command('community', '!wiki', `Link to Freakspot's TnT Wiki`, 
 	dio.say("Check out the wiki: http://toothandtailwiki.com/",data);
 });
 
-let cmdTourney = new command('community', '!tournament', `Link to Clash of Comrades website`, function(data) {
+let cmdTourney = new command('community', '!tournament', `Link to the Clash of Comrades website`, function(data) {
 	dio.say("For Tournament and game info, VODs, and other community events, check out http://www.clashofcomrades.com",data);
 });
 

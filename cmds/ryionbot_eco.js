@@ -9,7 +9,7 @@ let logger  = require('../core/logger'),
 	dio     = require('../core/dio'),
 	vars 	= require('../core/vars');
 
-var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account with the default WIP ammount', function(data){
+var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account with the default WIP amount', function(data){
 	if(!data.userdata.users[data.userID]) data.userdata.users[data.userID] = {};
 
 	var res = data.userdata.getCurrency(data.userID);
