@@ -43,6 +43,10 @@ if ( TOKEN.FBKEY2() != false ) {
 		quotes: 	Fb.database().ref("quote")
 	}
 
+	// Ready the user data
+	userdata = new userdata();
+	userdata.load(fire.soldiers);
+
 	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
 } else {
 	logger.log('Public Firebase not initialized.', logger.MESSAGE_TYPE.Warn);
@@ -92,11 +96,6 @@ globalCmdManager.addGroup(lucilleCmdGroup);
 
 // Clear the log file
 logger.clearLogFile();
-
-// Ready the user data
-userdata = new userdata();
-//Just stop bitching about the folders ffs
-userdata.loadFromFile('./users.json');
 
 // Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
@@ -153,6 +152,8 @@ bot.on('presence', function(user, userID, state, game, event) {
 		state: state,
 		// Name of game being player OR stream title
 		game: game,
+		// Reference to the Firebase DB's
+		db: fire,
 		// Raw event
 		e: event
 	}

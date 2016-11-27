@@ -182,7 +182,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		udata.users[fromID] = {};
 	}
 
-	udata.saveToFile('./users.json');
+	udata.save(status.db.soldiers);
 
 	if ( helper.isDebug() ) logger.log("User '" + from + "' is now '" + status.state + "'");
 }

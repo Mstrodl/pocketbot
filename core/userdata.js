@@ -1,6 +1,6 @@
 var fs = require('fs');
 var logger = require('./logger');
- 
+
 
 function userdata(){
     this.users = {};
@@ -10,7 +10,7 @@ function userdata(){
 userdata.prototype.load = function(db){
     var self = this;
 
-    db.userdata.once("", function(ud){
+    db.once("value", function(ud){
         self.users = ud;
     }, function(err){
         logger.log(err, logger.MESSAGE_TYPE.Error);
@@ -18,7 +18,8 @@ userdata.prototype.load = function(db){
 }
 
 userdata.prototype.save = function(db){
-    db.userdata.set(this.users);
+    console.log(db);
+    //db.set(this.users);
 }
 
 userdata.prototype.getCurrency = function(userID){
@@ -28,7 +29,7 @@ userdata.prototype.getCurrency = function(userID){
 
 userdata.prototype.setCurrency = function(userID, amount){
     if(!this.users[userID]) this.users[userID] = {};
-    
+
     this.users[userID].currency = amount;
     return this.users[userID].currency;
 }
@@ -54,7 +55,7 @@ userdata.prototype.getState = function(userID){
     if(!this.users[userID]){
         this.users[userID] = {};
         return null;
-    } 
+    }
 
     return this.users[userID].state;
 }
@@ -62,10 +63,10 @@ userdata.prototype.getState = function(userID){
 userdata.prototype.setState = function(userID, state){
     if(!this.users[userID]){
         this.users[userID] = {state: state};
-    } 
+    }
 
     this.users[userID].state = state;
- 
+
     return this.users[userID].state;
 }
 
