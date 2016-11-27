@@ -9,7 +9,7 @@ let logger  = require('../core/logger'),
 	dio 	= require('../core/dio'),
 	udata 	= require('../core/unitdata');
 
-let cmdInfo = new command('unitinfo', '!info', `Unit information`, function(data) {
+let cmdInfo = new command('unitinfo', '!info', `Given a unit's name, displays it's stats`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
 		item = (data.args[1]) ? data.args[1].toLowerCase() : '',

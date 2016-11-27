@@ -54,8 +54,4 @@ module.exports = {
 		wip: '<:wip:247433292587073536>',
 		wolf: '<:tntwolf:230095674283261954>'
 	}
-	// ! -- Move these 3 into the command stuff
-	// spammer: {}, // Object list of people banned for spam
-	// mute: false, // Mute? :P
-	// streamer: ''
 }

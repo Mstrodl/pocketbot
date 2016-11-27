@@ -53,7 +53,7 @@ if ( TOKEN.FBKEY2() != false ) {
 // ====================
 let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.ryionbot),
 	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', vars.emojis.mastabot),
-	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.pocketbot),
+	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.bookbot),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', vars.emojis.bookbot),
 	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
 	lucille = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
@@ -241,7 +241,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		if (channelID === vars.modchan) {
 			// Stop spying on us Freakspot.
 		} else if (!(channelID in bot.directMessages)) {
-			if ( helper.isDebug() ) logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}}] ${user}: ${message}`);
+			if ( helper.isDebug() ) logger.log(`[#${bot.servers[vars.chan].channels[channelID].name}] ${user}: ${message}`);
 		} else {
 			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
 		}

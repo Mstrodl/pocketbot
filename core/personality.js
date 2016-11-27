@@ -1,4 +1,5 @@
 var logger = require('./logger');
+var helpers = require('./helpers');
 var fs = require('fs');
 
 //Object defining a bot 'personality', that is, a nickname and an avatar
@@ -10,7 +11,7 @@ var Personality = function(name, avatar_path, emote){
 
 	if(!avatar_path) throw new Error('Empty avatar face given when creating personality');
 
-	this.name = name;
+	this.name = (helpers.isDebug() ? name + '[DEBUG]' : name);
 	this.avatar_path = avatar_path;
 	this.emote = emote ? emote : null;
 	this.avatar_buffer = fs.readFileSync(avatar_path, 'base64');
