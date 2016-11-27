@@ -1,6 +1,5 @@
 var fs = require('fs');
 var logger = require('./logger');
-
  
 
 function userdata(){
@@ -8,25 +7,18 @@ function userdata(){
     this.DEFAULT_CURRENCY_AMOUNT = 10;
 };
 
-userdata.prototype.loadFromFile = function(path){
+userdata.prototype.load = function(db){
     var self = this;
 
-    fs.readFile(path, function(err, res){
-        if(err){
-            if(err.message.indexOf("ENOENT" != -1)){
-                fs.writeFileSync(path, "{}");
-                self.loadFromFile(path);
-            }else{
-                throw new Error(err);
-            }
-        }else{
-            self.users = JSON.parse(res);
-        }
+    db.userdata.once("", function(ud){
+        self.users = ud;
+    }, function(err){
+        logger.log(err, logger.MESSAGE_TYPE.Error);
     });
 }
 
-userdata.prototype.saveToFile = function(path){
-    fs.writeFileSync(path, JSON.stringify(this.users));
+userdata.prototype.save = function(db){
+    db.userdata.set(this.users);
 }
 
 userdata.prototype.getCurrency = function(userID){
