@@ -86,4 +86,16 @@ let cmdNoobify = new command('admin', '!noobify', `This will remove the member r
 	}
 });
 
-module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck, cmdNoobify];
+let cmdGetEnv = new command('ryionbot', '!getenv', 'Prints a list of all the env variables found', function(data){
+	var msg = '';
+
+	for(let key in process.env){
+		msg += key + '=' + process.env[key] + '\n';
+	}
+
+	dio.say(msg, data, data.userID);
+});
+
+cmdGetEnv.permissions = [x.ranger];
+
+module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck, cmdNoobify, cmdGetEnv];
