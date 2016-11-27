@@ -20,7 +20,7 @@ let cmdControls = new command('community', '!controls', `Display game controls`,
 	dio.say(":video_game: These are the current controls: http://www.toothandtailgame.com/images/big/ctrl.png",data);
 });
 
-let cmdBugs = new command('community', '!bugs', `Link to the Pocketwatch bug tracker`, function(data) {
+let cmdBugs = new command('community', '!bugs', `Link to the troubleshooting channel`, function(data) {
 	dio.say(":beetle: Report bugs here: <#134810918113509376>",data);
 });
 

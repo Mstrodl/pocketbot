@@ -21,7 +21,7 @@ let cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data
     });
 });
 
-let cmd_help = new command('ryionbot', '!help', 'Helps you with commands', function(data){
+let cmd_help = new command('ryionbot', '!help', 'Sends the user a list of all command groups for further info', function(data){
     let k = (data.args[1]) ? data.args[1] : null;
 
     let helpText = "";
