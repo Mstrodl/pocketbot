@@ -9,7 +9,11 @@ var exports = module.exports = {};
 
 exports.say = function(msg,data,chan=false) {
 	let c = (chan) ? chan : data.channelID;
-	data.bot.sendMessage({ to:c, message: msg });
+
+	for(var i = 0; i < Math.floor(msg.length / 2000); i++)
+	{
+		data.bot.sendMessage({ to:c, message: msg.substring(i*2000, Math.min(msg.length - i*2000, (i+1)*2000-1)) });
+	}
 }
 
 exports.sendImage = function(t,user,data,chan=false) {
