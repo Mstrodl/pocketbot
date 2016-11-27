@@ -8,7 +8,7 @@ let logger  = require('../core/logger'),
 	x		= require('../core/vars'),
 	dio 	= require('../core/dio');
 
-let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looking for a Game"`, function(data) {
+let cmdReady = new command('matchmake', '!ready', `This marks a player as **'Looking for a Game'**`, function(data) {
 	//regPlayer(fromID,'');
 	let chan = data.channelID,
 		from = data.user,
@@ -51,7 +51,7 @@ let cmdReady = new command('matchmake', '!ready', `This marks a player as "Looki
 	}
 });
 
-let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as "Looking for a Game"`, function(data) {
+let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as **'Looking for a Game'**`, function(data) {
 	let chan = data.channelID,
 		from = data.user,
 		fromID = data.userID;
@@ -75,7 +75,7 @@ let cmdUnready = new command('matchmake', '!unready', `This unmarks a player as 
 	}
 });
 
-let cmdVerify = new command('matchmake', '!verify', `This posts a Steam link which automatically verifies the TnT directory.`, function(data) {
+let cmdVerify = new command('matchmake', '!verify', `This posts a Steam link which automatically verifies the TnT directory`, function(data) {
 	dio.say(":white_check_mark: Click here to verify your TnT files: http://toothandtailgame.com/verify", data);
 });
 

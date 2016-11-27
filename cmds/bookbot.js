@@ -7,14 +7,14 @@ let logger  = require('../core/logger'),
 	x		= require('../core/vars'),
 	command = require('../core/command').Command;
 
-let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game.', function(data){
+let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game', function(data){
 	dio.say(""+
 		// I love this.
 		"Most recent Documented Changes (8/8/16):\n"+
 		"<http://blog.pocketwatchgames.com/post/150743867811/tooth-and-tail-patch-notes-pre-alpha-19>\n", data);
 });
 
-let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren.', function(data){
+let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren', function(data){
 	dio.say("The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes. \n\n"+
 		"Issue 9: http://bit.ly/2dgEmU6\n"+
 		"Issue 7: <http://bit.ly/2aT5dGI>\n"+
@@ -26,7 +26,7 @@ let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent i
 		"Issue 1: <http://bit.ly/29EtwWM>", data);
 });
 
-let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Any problem with getting the game started?', function(data){
+let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Troubleshoot common errors', function(data){
 	if (data.args[1] == null) {
 		dio.say(`What seems to be the trouble with your game? Type in '!troubleshoot #' by choosing an option below:
 
@@ -65,7 +65,7 @@ let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Any problem with
 	}
 });
 
-let cmd_guide = new command('bookbot', '!guide', 'Get a useful list of guides for the game.', function(data){
+let cmd_guide = new command('bookbot', '!guide', 'Get a useful list of guides for the game', function(data){
 	dio.say("Ah, hello there, if you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.\n\n"+
 
 		"**0) Introduction: A basic guide (Courtesy of Lacante)**\n"+
@@ -95,7 +95,7 @@ let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comr
 		"**Twitch Channel:** <https://www.twitch.tv/clashofcomrades>\n", data);
 });
 
-let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot.', function(data) {
+let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot', function(data) {
 	dio.say("Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.", data);
 });
 

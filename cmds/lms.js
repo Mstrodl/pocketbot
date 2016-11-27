@@ -22,7 +22,7 @@ let playerList = [],
 	gameInProgress = false;
 
 // This used to be ?rules
-let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame Last Man Standing", function(data){   // Explantion of game command and rules.
+let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame **Last Man Standing**", function(data){   // Explantion of game command and rules.
 	if (!isBPG(data)) {
 		dio.say("Last Man Standing (and all relevant commands) can only be done in the <#172429393501749248>", data);
 	} else {
@@ -59,7 +59,7 @@ let cmd_game = new command('lms', '!game', "Play some **'Last Man Standing'**", 
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", function(data){
+let cmd_join = new command('lms', '!join', "Join a round **'Last Man Standing'** if no game is in progress", function(data){
 	if (isBPG(data)) { //code to join the game
 		if (gameInProgress) {
 			dio.say("This game is currently in session, please wait until the game is finished.", data);
@@ -85,7 +85,7 @@ let cmd_join = new command('lms', '!join', "Join **'Last Man Standing'**", funct
 });
 
 // fix this
-let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", function(data){
+let cmd_leave = new command('lms', '!leave', "Leave a round of **'Last Man Standing'**", function(data){
 	if (isBPG(data)) { //code to leave the game before it starts
 		if (gameInProgress) {
 			dio.say("This game is currently in session, please wait until the game is finished.", data);
@@ -105,7 +105,7 @@ let cmd_leave = new command('lms', '!leave', "Leave **'Last Man Standing'**", fu
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_players = new command('lms', '!players', "Show all current players for **'Last Man Standing'**.", function(data){
+let cmd_players = new command('lms', '!players', "Show all currently living players for **'Last Man Standing'**", function(data){
 	if (isBPG(data)) {
 		let playerMessage = "**__Current Players__**\n\n```";
 
@@ -125,7 +125,7 @@ let cmd_players = new command('lms', '!players', "Show all current players for *
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing'**.", function(data) {
+let cmd_start = new command('lms', '!start', "Start playing a round of **'Last Man Standing'**", function(data) {
 	if (isBPG(data)) {
 		if (!gameInProgress) {
 			if (playerList.length > 1) {
@@ -150,7 +150,7 @@ let cmd_start = new command('lms', '!start', "Start playing **'Last Man Standing
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", function(data) {
+let cmd_reset = new command('lms', '!reset', "Reset and abort a round of **'Last Man Standing'**", function(data) {
 	if (isBPG(data)) {
 		if (gameInProgress) {
 			playerList = [];
@@ -174,7 +174,7 @@ let cmd_reset = new command('lms', '!reset', "Reset **'Last Man Standing'**.", f
 	return "Execution not successful: Incorrect channel.";
 });
 
-let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel.", function(data){
+let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {  //command was sent correctly via DM
 			if(data.userID != playerList[playerTurn].ID) {
@@ -232,7 +232,7 @@ let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel."
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_avoid = new command('lms', '!avoid', "If somebody shoots at you this round, avoid the attack.", function(data){
+let cmd_avoid = new command('lms', '!avoid', "If somebody shoots at you this round, avoid the attack", function(data){
 	if (gameInProgress) {
 		if (data.channelID in data.bot.directMessages) {
 			if (data.userID != playerList[playerTurn].ID) {
@@ -310,7 +310,7 @@ let cmd_ff = new command('lms', '!ff', "Leave a game in progress", function(data
 	return "Execution not successful: No game in progress.";
 });
 
-let cmd_attack = new command('lms', '!attack', "Attack one of your opponents.", function(data){
+let cmd_attack = new command('lms', '!attack', "Attack one of your opponents", function(data){
 	if (isBPG(data)) {
 		var target = parseInt(data.args[1]);
 		if ( target < 0 || target >= playerList.length || isNaN(target)) {
