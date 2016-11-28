@@ -44,8 +44,8 @@ if ( TOKEN.FBKEY2() != false ) {
 	}
 
 	// Ready the user data
-	userdata = new userdata();
-	userdata.load(fire.soldiers);
+	userdata = new userdata(fire.soldiers);
+	userdata.load(); // ! -- Might be unneeded?
 
 	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
 } else {
@@ -128,9 +128,9 @@ bot.on('ready', function(event) {
 	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 
 	// Work around to giving Lucille bot/persona info!
-	setTimeout(function(){
-		dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
-	}, 5000);
+	// setTimeout(function(){
+	// 	dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
+	// }, 5000);
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -260,7 +260,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 				globalCmdManager.call(command_data, args[0]);
 			}
 		}
-		userdata.saveToFile('./users.json');
+		//userdata.save('./users.json');
 	} catch(e) {
 		bot.sendMessage({
 			to: channelID,

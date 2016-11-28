@@ -65,6 +65,7 @@ exports.onChange = function(status, udata=null) {
 
 	// Someone comes online
 	if (status.state === "online") {
+		// ! -- Update this to grab from Firebase data first, then check Discord
 		let fromRoles = status.bot.servers[x.chan].members[fromID].roles;
 		if ( fromRoles.length === 0 ) {
 			// Stuff to tell new person
@@ -90,8 +91,8 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		}
 
 		// Challenge accepted, Masta
-		if((udata.getState(fromID) == 'offline' || udata.getState(fromID) == null) && udata.getState(fromID) != status.state){
-			if (fromRoles.includes(x.ranger)) {
+		if (fromRoles.includes(x.ranger)) {
+			if((udata.getState(fromID) == 'offline' || udata.getState(fromID) == null) && udata.getState(fromID) != status.state){
 				if (fromID === x.nooneImportant) {
 					dio.say(`PocketBot reporting o7, Master J`, status, fromID);
 				}
@@ -175,14 +176,8 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		// },6000*10);
 	}
 
-	//Create a userdata object if they don't have one
-	udata.setState(fromID, status.state);
-
-	if(udata && !udata.users[fromID]){
-		udata.users[fromID] = {};
-	}
-
-	udata.save(status.db.soldiers);
+	// Update user data on Firebase - Line 63 in userdata.js
+	udata.setState( status.bot.servers[x.chan].members[fromID] );
 
 	if ( helper.isDebug() ) logger.log("User '" + from + "' is now '" + status.state + "'");
 }

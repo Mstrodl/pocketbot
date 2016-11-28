@@ -2,24 +2,29 @@ var fs = require('fs');
 var logger = require('./logger');
 
 
-function userdata(){
+function userdata(fb){
     this.users = {};
+    this.db = (fb) ? fb : null;
     this.DEFAULT_CURRENCY_AMOUNT = 10;
 };
 
-userdata.prototype.load = function(db){
-    var self = this;
+userdata.prototype.load = function(){
+    if (this.db === null) {
+        logger.log('User Database Loaded Unsuccessfully', 'Error');
+        return false;
+    }
 
-    db.once("value", function(ud){
-        self.users = ud;
+    this.db.once("value", function(ud){
+        //this.users = ud.val();
+        logger.log('Loaded User Database', 'OK');
     }, function(err){
-        logger.log(err, logger.MESSAGE_TYPE.Error);
+        logger.log(err, 'Error');
     });
 }
 
 userdata.prototype.save = function(db){
-    console.log(db);
-    //db.set(this.users);
+    console.log(this.users);
+    //db.child('playerstest').update(this.users);
 }
 
 userdata.prototype.getCurrency = function(userID){
@@ -52,22 +57,27 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount, callback){
 }
 
 userdata.prototype.getState = function(userID){
-    if(!this.users[userID]){
-        this.users[userID] = {};
+    // Checks userID in database, should return
+    // null if user didn't exist or on Firebase error
+    this.db.child(userID).once("value", function(user){
+        if (user.val().status) {
+            return user.val().status;
+        } else {
+            return null;
+        }
+    }, function(err){
+        logger.log(err, logger.MESSAGE_TYPE.Error);
         return null;
-    }
-
-    return this.users[userID].state;
+    });
 }
 
-userdata.prototype.setState = function(userID, state){
-    if(!this.users[userID]){
-        this.users[userID] = {state: state};
-    }
+userdata.prototype.setState = function(user){
+    // Copies Discord user object into FB.
+    // .update() will autoadd if user doesn't exist,
+    // and will only update new information
+    this.db.child(user.id).update(user);
 
-    this.users[userID].state = state;
-
-    return this.users[userID].state;
+    return user.status;
 }
 
 module.exports = userdata;
