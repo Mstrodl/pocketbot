@@ -92,15 +92,17 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
 }
 
 userdata.prototype.getState = function(userID){
-    this.db.child(userID).once("value", function(user){
-        if ( user.val().hasOwnProperty('status') ) {
-            return user.val().status;
-        } else {
-            return null;
-        }
-    }, function(err){
-        logger.log(err, logger.MESSAGE_TYPE.Error);
-        return null;
+    return new Promise( (resolve, reject) => {
+        this.db.child(userID).once("value", function(user){
+            if ( user.val().hasOwnProperty('status') ) {
+                resolve( user.val().status );
+            } else {
+                resolve(null);
+            }
+        }, function(err){
+            logger.log(err, logger.MESSAGE_TYPE.Error);
+            reject(null);
+        });
     });
 }
 
