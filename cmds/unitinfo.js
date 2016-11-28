@@ -9,6 +9,29 @@ let logger  = require('../core/logger'),
 	dio 	= require('../core/dio'),
 	udata 	= require('../core/unitdata');
 
+function listStuff(l,data,u=false) {
+	console.log('LISTING')
+	let list = [];
+	Object.keys(l).forEach( (el) => {
+		list.push(el);
+	});
+
+	if (u) {
+		dio.say(`🕑 Available units: \n \`\`\`${list.join(' | ')} \`\`\` ` , data);
+	} else {
+		dio.say(`🕑 Available traits: \n \`\`\`${list.join(' | ')} \`\`\` ` , data);
+	}
+}
+
+let cmdListUnits = new command('unitinfo', '!units', `Shows you information on a given unit`, function(data) {
+	console.log('!UNITS sucka')
+	listStuff(udata.u.units, data, true);
+});
+
+let cmdListTraits = new command('unitinfo', '!traits', `Shows you information on a given unit`, function(data) {
+	listStuff(udata.u.filters.traits, data);
+});
+
 let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given unit`, function(data) {
 	let chan = data.channelID,
 		fromID = data.userID,
@@ -101,9 +124,9 @@ Traits: ${traits.join(', ')}`, data);
 
 		dio.say(`${w} **${t.label}** - ${t.desc}${extra}`, data)
 	} else {
-		dio.say("I don't recognize that unit/trait.", data);
+		dio.say("I don't recognize that unit/trait. Try `!units` or `!traits` to get a list.", data);
 		return false;
 	}
 });
 
-module.exports.commands = [cmdInfo];
+module.exports.commands = [cmdInfo, cmdListUnits, cmdListTraits];
