@@ -260,7 +260,6 @@ bot.on('message', function(user, userID, channelID, message, event) {
 				globalCmdManager.call(command_data, args[0]);
 			}
 		}
-		//userdata.save('./users.json');
 	} catch(e) {
 		bot.sendMessage({
 			to: channelID,
