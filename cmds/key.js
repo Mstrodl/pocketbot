@@ -13,11 +13,17 @@ let logger  = require('../core/logger'),
 	x 		= require('../core/vars'),
 	//ud 		= require('../core/userdata'),
 	cmdKey	= null,
+	cmdNoKey = null,
 	VOTE_COUNT = 5;
 
 // If there is no FB token (localhost), ABORT!
 if (!TOKEN.FBPKEYID()) {
 	cmdKey = new command('key', '!key', `Adds a vote to key a member/instakey by dev`, function(data) {
+		logger.log('Firebase tokens are busted.', 'Warn');
+		logger.log(TOKEN.FBPKEYID(), 'Warn');
+	});
+
+	cmdNoKey = new command('key', '!nokey', `Blocks a vote to key a member`, function(data) {
 		logger.log('Firebase tokens are busted.', 'Warn');
 		logger.log(TOKEN.FBPKEYID(), 'Warn');
 	});

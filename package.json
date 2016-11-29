@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "chalk": "^1.1.1",
-    "discord.io": "^2.2.4",
+    "discord.io": "^2.3.0",
     "dotenv": "^2.0.0",
     "firebase": "^3.0.2",
     "gm": "^1.22.0",
