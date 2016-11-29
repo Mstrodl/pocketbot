@@ -21,11 +21,6 @@ userdata.prototype.load = function(){
     });
 }
 
-// ! -- What was this for?
-// userdata.prototype.save = function(db){
-//     console.log(this.users);
-// }
-
 userdata.prototype.getProp = function(userID, prop){
     // Checks userID in database, should return
     // null if user didn't exist or on Firebase error
@@ -52,7 +47,9 @@ userdata.prototype.setProp = function({ user = null, prop = null, }){
         } else if (user != null) {
             // .update() will autocreate user if they don't
             // exist, and will only update new information
-            this.db.child(user).update(prop);
+            let newprop = {};
+            newprop[prop.name] = prop.data;
+            this.db.child(user).update(newprop);
             // For user banking updates
             if (prop.name === 'currency') return prop.data;
 
