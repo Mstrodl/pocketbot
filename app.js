@@ -153,7 +153,7 @@ bot.on('presence', function(user, userID, state, game, event) {
 		e: event
 	}
 
-	status.onChange(statusData, userdata);
+	if (fire) status.onChange(statusData, userdata);
 });
 
 bot.on('message', function(user, userID, channelID, message, event) {
