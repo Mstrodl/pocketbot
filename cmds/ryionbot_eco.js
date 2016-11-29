@@ -59,11 +59,6 @@ var cmd_give = new command('economy', '!give', 'Give a user a certain amount of 
 		return;
 	}
 
-	if(parseInt(data.args[2]) <= 0){
-		dio.say('Amount cannot be negative or zero', data);
-		return;
-	}
-
 	var recipient = helpers.getUser(data.args[1]);
 	var amount = parseInt(data.args[2])
 
@@ -71,9 +66,12 @@ var cmd_give = new command('economy', '!give', 'Give a user a certain amount of 
 		if( res.hasOwnProperty('err') ){
 			dio.say(res.err, data);
 		}else{
-			dio.say(`${amount} ${vars.emojis.wip} were generously given to <@{recipient}> by The Great Bank of Narkamertu`, data);
+			if(amount >= 0) dio.say(`${amount} ${vars.emojis.wip} ${(amount==1?'was':'were')} generously given to <@${recipient}> by The Great Bank of Narkamertu`, data);
+			else dio.say(`${-amount} ${vars.emojis.wip} ${(-amount==1?'was':'were')} taken back from <@${recipient}> by The Great Bank of Narkamertu`, data);
 		}
 	});
 });
 
-module.exports.commands = [cmd_wip, cmd_transfer];
+cmd_give.permissions = [vars.ranger]
+
+module.exports.commands = [cmd_wip, cmd_transfer, cmd_give];

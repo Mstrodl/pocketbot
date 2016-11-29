@@ -59,13 +59,13 @@ userdata.prototype.setProp = function({ user = null, prop = null, }){
 
 userdata.prototype.transferCurrency = function(fromID, toID, amount){
     let ud = this;
-    // Check for parameters...
-    if(!toID || !amount) return {err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`};
-
+    
     return new Promise( (resolve, reject) => {
+        // Check for parameters...
+        if(!toID || !amount) return resolve({err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`});
         // ...and user's existence
         this.db.once("value", function(users){
-            if ( users.val().hasOwnProperty(fromID) ) {
+            //if ( users.val().hasOwnProperty(fromID) ) {
                 let u = users.val();
 
                 // Check for account existence for the sender.
@@ -106,9 +106,11 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                         }
                     });
                 });
-            } else {
+
+                resolve ({res: "Transfer happened sucessfully"});
+            /*} else {
                 resolve( {err: "Invalid sender. No userdata found" } );
-            }
+            }*/
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
             resolve( { err: "User has no wallet"} );

@@ -19,6 +19,8 @@ module.exports.isHeroku = function(){
 	return process.env.ISHEROKU;
 }
 
+
+
 // Count function
 module.exports.getCount = function(arr, val) {
 	let i, j, count = 0;
@@ -143,6 +145,13 @@ module.exports.getDMChannel = function(client, userID){
 	return null;
 }
 
+module.exports.collapseWhitespace = function(s){
+	//Remove any whitespace around the string
+	s = s.trim();
+	//Run some regex I found on stackoverflow which presumably does what I need it to be
+	s = s.replace(/  +/g, ' ');
+	return s;
+}
 //Gets a user's roles given the user ID
 module.exports.getUserRoles = function(client , userID, serverID = x.chan){
 	return client.servers[serverID].members[userID].roles;

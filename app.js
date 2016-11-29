@@ -125,7 +125,7 @@ bot.on('ready', function(event) {
 	helper.popCommand( globalCmdManager.cList );
 
 	// Work around to giving Lucille bot/persona info!
-	if (helper.isHeroku) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
+	if (helper.isHeroku() ) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -158,7 +158,7 @@ bot.on('presence', function(user, userID, state, game, event) {
 
 bot.on('message', function(user, userID, channelID, message, event) {
 	//Remove whitespace
-	message = message.trim()
+	message = helper.collapseWhitespace(message);
 
 	//Split message into args
 	let args = helper.getArgs(message);

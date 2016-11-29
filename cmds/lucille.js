@@ -35,7 +35,7 @@ let logger  = require('../core/logger'),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
-}
+
 
 function twitterList(watchList){
 	let x = "The Current Twitter Accounts Being Tracked Are: \n "
