@@ -20,7 +20,7 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 			let bank = udata.setProp({
 				user: data.userID,
 				prop: {
-					name: currency,
+					name: 'currency',
 					data: udata.DEFAULT_CURRENCY_AMOUNT
 				}
 			});
