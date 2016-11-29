@@ -1,80 +1,102 @@
-var fs = require('fs');
-var logger = require('./logger');
+let fs = require('fs'),
+    logger = require('./logger');
 
- 
-
-function userdata(){
+function userdata(fb){
     this.users = {};
+    this.db = (fb) ? fb : null;
     this.DEFAULT_CURRENCY_AMOUNT = 10;
 };
 
-userdata.prototype.loadFromFile = function(path){
-    var self = this;
+userdata.prototype.load = function(){
+    if (this.db === null) {
+        logger.log('User Database Loaded Unsuccessfully', 'Error');
+        return false;
+    }
 
-    fs.readFile(path, function(err, res){
-        if(err){
-            if(err.message.indexOf("ENOENT" != -1)){
-                fs.writeFileSync(path, "{}");
-                self.loadFromFile(path);
-            }else{
-                throw new Error(err);
-            }
-        }else{
-            self.users = JSON.parse(res);
-        }
+    this.db.once("value", function(ud){
+        //this.users = ud.val();
+        logger.log('Loaded User Database', 'OK');
+    }, function(err){
+        logger.log(err, 'Error');
     });
 }
 
-userdata.prototype.saveToFile = function(path){
-    fs.writeFileSync(path, JSON.stringify(this.users));
-}
+// ! -- What was this for?
+// userdata.prototype.save = function(db){
+//     console.log(this.users);
+// }
 
-userdata.prototype.getCurrency = function(userID){
-    if(this.users[userID]) return this.users[userID].currency;
-    else return false;
+userdata.prototype.getProperty = function(userID,prop){
+    // Checks userID in database, should return
+    // null if user didn't exist or on Firebase error
+    return new Promise( (resolve, reject) => {
+        this.db.child(userID).once("value", function(user){
+            if ( user.val().hasOwnProperty(prop) ) {
+                //console.log('Got :'+user.val().currency);
+                resolve( user.val()[prop] );
+            } else {
+                resolve( false );
+            }
+        }, function(err){
+            logger.log(err, logger.MESSAGE_TYPE.Error);
+            reject(false);
+        });
+    });
 }
 
 userdata.prototype.setCurrency = function(userID, amount){
-    if(!this.users[userID]) this.users[userID] = {};
-    
-    this.users[userID].currency = amount;
-    return this.users[userID].currency;
+    this.db.child(userID).update({ currency: amount });
+    return amount;
 }
 
-userdata.prototype.transferCurrency = function(fromID, toID, amount, callback){
-    //Check for parameters and users existence
-    if(!fromID || !toID || !amount) return callback(`Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`, {});
-    if(!this.users[fromID]) return callback("Invalid sender. No userdata found", {});
-    if(!this.users[toID]) this.users[toID] = {};
-    //Check for account existence for the sender. If the receiverd doesn't have one, it's fine as it will be created
-    if(!this.users[fromID].currency) return callback("User has no wallet", {});
-    if(!this.users[toID].currency) this.setCurrency(toID, this.DEFAULT_CURRENCY_AMOUNT);
-    //Check for balance
-    if(this.getCurrency(fromID) < amount) return callback("User has insufficient funds", {});
-    //Do the transfer
-    this.setCurrency(fromID, this.getCurrency(fromID) - amount);
-    this.setCurrency(toID, this.getCurrency(toID) + amount);
+userdata.prototype.transferCurrency = function(fromID, toID, amount){
+    let ud = this;
+    // Check for parameters...
+    if(!fromID || !toID || !amount) return {err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`};
 
-    return callback(null, {from: this.users[fromID], to: this.users[toID]});
+    return new Promise( (resolve, reject) => {
+        // ...and user's existence
+        this.db.once("value", function(users){
+            if ( users.val().hasOwnProperty(fromID) ) {
+                let u = users.val();
+
+                // Check for account existence for the sender.
+                if ( !u[fromID].hasOwnProperty('currency') ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
+                // If the receiver doesn't have one, it's fine as it will be created
+                if ( !u[toID].hasOwnProperty('currency') ) ud.setCurrency(toID, ud.DEFAULT_CURRENCY_AMOUNT);
+
+                // Check for balance
+                ud.getCurrency(fromID).then( (res) => {
+                    if (res < amount){
+                        resolve( {err: "User has insufficient funds" } );
+                    } else {
+                        // Do the transfer
+                        ud.setCurrency(fromID, res - amount);
+
+                        ud.getCurrency(toID).then( (toBank) => {
+                            ud.setCurrency(toID, toBank + amount);
+                        });
+
+                        // ! -- What is this for?
+                        resolve( { from: u[fromID], to: u[toID] } );
+                    }
+                });
+            } else {
+                resolve( {err: "Invalid sender. No userdata found" } );
+            }
+        }, function(err){
+            logger.log(err, logger.MESSAGE_TYPE.Error);
+            resolve( { err: "User has no wallet"} );
+        });
+    });
 }
 
-userdata.prototype.getState = function(userID){
-    if(!this.users[userID]){
-        this.users[userID] = {};
-        return null;
-    } 
-
-    return this.users[userID].state;
-}
-
-userdata.prototype.setState = function(userID, state){
-    if(!this.users[userID]){
-        this.users[userID] = {state: state};
-    } 
-
-    this.users[userID].state = state;
- 
-    return this.users[userID].state;
+userdata.prototype.setState = function(user){
+    // Copies Discord user object into FB.
+    // .update() will autoadd if user doesn't exist,
+    // and will only update new information
+    this.db.child(user.id).update(user);
+    return user.status;
 }
 
 module.exports = userdata;

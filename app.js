@@ -43,6 +43,10 @@ if ( TOKEN.FBKEY2() != false ) {
 		quotes: 	Fb.database().ref("quote")
 	}
 
+	// Ready the user data
+	userdata = new userdata(fire.soldiers);
+	userdata.load(); // ! -- Might be unneeded?
+
 	logger.log('Public Firebase initialized!', logger.MESSAGE_TYPE.OK);
 } else {
 	logger.log('Public Firebase not initialized.', logger.MESSAGE_TYPE.Warn);
@@ -93,11 +97,6 @@ globalCmdManager.addGroup(lucilleCmdGroup);
 // Clear the log file
 logger.clearLogFile();
 
-// Ready the user data
-userdata = new userdata();
-//Just stop bitching about the folders ffs
-userdata.loadFromFile('./users.json');
-
 // Parse the cmds dir and load any commands in there
 fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 	if(err){
@@ -125,13 +124,9 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
-	// May as well
-	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 
 	// Work around to giving Lucille bot/persona info!
-	setTimeout(function(){
-		dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
-	}, 5000);
+	if (TOKEN.ISHEROKU) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {
@@ -153,6 +148,8 @@ bot.on('presence', function(user, userID, state, game, event) {
 		state: state,
 		// Name of game being player OR stream title
 		game: game,
+		// Reference to the Firebase DB's
+		db: fire,
 		// Raw event
 		e: event
 	}
@@ -259,7 +256,6 @@ bot.on('message', function(user, userID, channelID, message, event) {
 				globalCmdManager.call(command_data, args[0]);
 			}
 		}
-		userdata.saveToFile('./users.json');
 	} catch(e) {
 		bot.sendMessage({
 			to: channelID,
