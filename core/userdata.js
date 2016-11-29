@@ -69,9 +69,9 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                 let u = users.val();
 
                 // Check for account existence for the sender.
-                if ( !u[fromID].hasOwnProperty('currency') ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
+                if ( !u.hasOwnProperty(fromID) || !u[fromID].hasOwnProperty('currency') ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
                 // If the receiver doesn't have one, it's fine as it will be created
-                if ( !u[toID].hasOwnProperty('currency') ) ud.setProp({
+                if ( !u.hasOwnProperty(toID) || !u[toID].hasOwnProperty('currency') ) ud.setProp({
                     user: toID,
                     prop: {
                         name: 'currency',
