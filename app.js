@@ -126,7 +126,7 @@ bot.on('ready', function(event) {
 	helper.popCommand( globalCmdManager.cList );
 
 	// Work around to giving Lucille bot/persona info!
-	if (TOKEN.ISHEROKU) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
+	if (helper.isHeroku) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {

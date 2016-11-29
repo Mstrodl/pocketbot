@@ -26,6 +26,5 @@ module.exports = {
 	TWITKEY: process.env.TWITKEY,
 	TWITTOKEN: process.env.TWITTOKEN,
 	TWITATOKEN: process.env.TWITATOKEN,
-	TWITSECRET: process.env.TWITSECRET,
-	ISHEROKU: false
+	TWITSECRET: process.env.TWITSECRET
 }
