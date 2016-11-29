@@ -194,7 +194,7 @@ if (!TOKEN.FBPKEYID()) {
 						dio.say(`:no_entry_sign: ${from} has voted against keying ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					}
 
-					if (votes === VOTE_COUNT)  {
+					if (votes - antivotes === VOTE_COUNT)  {
 						dio.say(`:tada: <@${lucky}> has been voted to receive a key.`, data, x.history);
 						newplayer.set( memsnap[lucky] ); // Yes, it resets user (w/o votes)
 						for (let code in kk) {
