@@ -10,19 +10,16 @@ let logger  = require('../core/logger'),
 	TOKEN 	= require('../core/tokens'),
 	x 		= require('../core/vars'),
 	dio 	= require('../core/dio'),
-	T		= (process.env.ISHEROKU ? require('twit') : null);
+	T		= (helpers.isHeroku() ? require('twit') : null);
 
 // These go somewhere, not sure where, definitely not here most likely.
-var stream = null;
-
-if(T){
-	let twitter = new T({
+	let twitter = (helpers.isHeroku() ? new T({
 		consumer_key:         TOKEN.TWITKEY,
 		consumer_secret:      TOKEN.TWITTOKEN,
 		// Frickin twitter needs so much crap
 		access_token:         TOKEN.TWITATOKEN,
 		access_token_secret:  TOKEN.TWITSECRET,
-	}),
+	}) : null),
 		// Needs IDs, use http://gettwitterid.com
 		watchList = [
 			'19382657', //@andyschatz
@@ -34,7 +31,7 @@ if(T){
 			'3271155122' //@ToothAndTail
 			//,'14423000' //@brianfranco
 		],
-		stream = twitter.stream('statuses/filter', { follow: watchList }),
+		stream = (helpers.isHeroku() ? twitter.stream('statuses/filter', { follow: watchList }) : null),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
@@ -87,7 +84,7 @@ let cmdLucy = new command('lucille', '!lucille', 'Activates Lucille', function(d
 });
 
 //On Twitter Message
-if(stream){
+if(helpers.isHeroku()){
 	stream.on('tweet', function(tweet) {
 		//console.log(tweet);
 		//If Tracked User
@@ -104,4 +101,5 @@ if(stream){
 		}
 	});
 }
+
 module.exports.commands = [cmdLucy, cmdTweet];

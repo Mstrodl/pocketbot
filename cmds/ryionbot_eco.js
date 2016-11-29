@@ -53,4 +53,27 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	});
 });
 
+var cmd_give = new command('economy', '!give', 'Give a user a certain amount of WIP. `!give @recipient amount`', function(data){
+	if(!data.args[1] || !data.args[2]){
+		dio.say('The command syntax is `!give @recipient amount`', data);
+		return;
+	}
+
+	if(parseInt(data.args[2]) <= 0){
+		dio.say('Amount cannot be negative or zero', data);
+		return;
+	}
+
+	var recipient = helpers.getUser(data.args[1]);
+	var amount = parseInt(data.args[2])
+
+	data.userdata.transferCurrency(null, recipient, amount).then( (res) => {
+		if( res.hasOwnProperty('err') ){
+			dio.say(res.err, data);
+		}else{
+			dio.say(`${amount} ${vars.emojis.wip} were generously given to <@{recipient}> by The Great Bank of Narkamertu`, data);
+		}
+	});
+});
+
 module.exports.commands = [cmd_wip, cmd_transfer];
