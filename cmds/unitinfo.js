@@ -24,7 +24,6 @@ function listStuff(l,data,u=false) {
 }
 
 let cmdListUnits = new command('unitinfo', '!units', `Shows you information on a given unit`, function(data) {
-	console.log('!UNITS sucka')
 	listStuff(udata.u.units, data, true);
 });
 
