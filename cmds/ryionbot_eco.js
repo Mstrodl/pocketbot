@@ -13,24 +13,24 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 	let udata = data.userdata;
 
 	// Oh snap, PROMISES.
-	udata.getCurrency(data.userID).then( (res) => {
+	udata.getProperty(data.userID, 'currency').then( (res) => {
 		if( res || res === 0){
-			dio.say(':bank: My records say you have **' + res + '** ' + vars.emojis.wip + ' coins', data, data.channelID);
+			dio.say(`:bank: My records say you have **${res}** ${vars.emojis.wip} coins`, data);
 		} else {
 			let bank = udata.setCurrency(data.userID, udata.DEFAULT_CURRENCY_AMOUNT);
-			dio.say(`Your account has been added to my records, you now have ${bank} Worthless Internet Points`, data);
+			dio.say(`<@${data.userID}>, your account has been added to my records. You now have ${bank} Worthless Internet Points`, data);
 		}
 	});
 });
 
 var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain amount of currency: `!transfer @recipient amount`, where amount > 0', function(data){
 	if(!data.args[1] || !data.args[2]){
-		dio.say('The command syntax is `!transfer @recipient amount`', data, data.channelID);
+		dio.say('The command syntax is `!transfer @recipient amount`', data);
 		return;
 	}
 
 	if(parseInt(data.args[2]) <= 0){
-		dio.say('Amount cannot be negative or zero', data, data.channelID);
+		dio.say('Amount cannot be negative or zero', data);
 		return;
 	}
 

@@ -92,7 +92,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		// Challenge accepted, Masta
 		if (fromRoles.includes(x.ranger)) {
-			let oldState = udata.getState(fromID);
+			let oldState = udata.getProperty(fromID, 'status');
 			if((oldState == 'offline' || oldState == null) && oldState != status.state){
 				if (fromID === x.nooneImportant) {
 					dio.say(`PocketBot reporting o7, Master J`, status, fromID);
@@ -102,7 +102,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		//Dev greetings(and PR greetins, in debug mode)
 		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger)) ) {
-			udata.getState(fromID).then( (oldState) => {
+			udata.getProperty(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
 					let greets = [
 						`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,

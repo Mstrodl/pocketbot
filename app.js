@@ -124,13 +124,9 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
-	// May as well
-	//bot.setPresence({game:{name: "Bot Simulator " + new Date().getFullYear()}});
 
 	// Work around to giving Lucille bot/persona info!
-	// setTimeout(function(){
-	// 	dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
-	// }, 5000);
+	if (TOKEN.ISHEROKU) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
 });
 
 bot.on('disconnect', function(err, errcode) {

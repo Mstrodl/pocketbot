@@ -26,14 +26,14 @@ userdata.prototype.load = function(){
 //     console.log(this.users);
 // }
 
-userdata.prototype.getCurrency = function(userID){
+userdata.prototype.getProperty = function(userID,prop){
     // Checks userID in database, should return
     // null if user didn't exist or on Firebase error
     return new Promise( (resolve, reject) => {
         this.db.child(userID).once("value", function(user){
-            if ( user.val().hasOwnProperty('currency') ) {
+            if ( user.val().hasOwnProperty(prop) ) {
                 //console.log('Got :'+user.val().currency);
-                resolve( user.val().currency );
+                resolve( user.val()[prop] );
             } else {
                 resolve( false );
             }
@@ -87,21 +87,6 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
             resolve( { err: "User has no wallet"} );
-        });
-    });
-}
-
-userdata.prototype.getState = function(userID){
-    return new Promise( (resolve, reject) => {
-        this.db.child(userID).once("value", function(user){
-            if ( user.val().hasOwnProperty('status') ) {
-                resolve( user.val().status );
-            } else {
-                resolve(null);
-            }
-        }, function(err){
-            logger.log(err, logger.MESSAGE_TYPE.Error);
-            reject(null);
         });
     });
 }
