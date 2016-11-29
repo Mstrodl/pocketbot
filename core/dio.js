@@ -10,9 +10,12 @@ var exports = module.exports = {};
 exports.say = function(msg,data,chan=false) {
 	let c = (chan) ? chan : data.channelID;
 
-	for(var i = 0; i < Math.floor(msg.length / 2000); i++)
-	{
-		data.bot.sendMessage({ to:c, message: msg.substring(i*2000, Math.min(msg.length - i*2000, (i+1)*2000-1)) });
+	for(let i=0; i < Math.ceil(msg.length / 2000); i++) {
+		let newmsg = msg.substring( i*2000, i+1999 );
+		data.bot.sendMessage({
+			to:c,
+			message: newmsg
+		});
 	}
 }
 

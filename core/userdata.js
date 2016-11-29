@@ -21,18 +21,12 @@ userdata.prototype.load = function(){
     });
 }
 
-// ! -- What was this for?
-// userdata.prototype.save = function(db){
-//     console.log(this.users);
-// }
-
-userdata.prototype.getProperty = function(userID,prop){
+userdata.prototype.getProp = function(userID, prop){
     // Checks userID in database, should return
     // null if user didn't exist or on Firebase error
     return new Promise( (resolve, reject) => {
         this.db.child(userID).once("value", function(user){
             if ( user.val().hasOwnProperty(prop) ) {
-                //console.log('Got :'+user.val().currency);
                 resolve( user.val()[prop] );
             } else {
                 resolve( false );
@@ -44,9 +38,23 @@ userdata.prototype.getProperty = function(userID,prop){
     });
 }
 
-userdata.prototype.setCurrency = function(userID, amount){
-    this.db.child(userID).update({ currency: amount });
-    return amount;
+userdata.prototype.setProp = function({ user = null, prop = null, }){
+        if (typeof user === 'object') {
+            // Copies full Discord user object into FB.
+            this.db.child(user.id).update(user);
+            // For user presence updates
+            if (prop.name === 'state') return user.status;
+        } else if (user != null) {
+            // .update() will autocreate user if they don't
+            // exist, and will only update new information
+            let newprop = {};
+            newprop[prop.name] = prop.data;
+            this.db.child(user).update(newprop);
+            // For user banking updates
+            if (prop.name === 'currency') return prop.data;
+
+            return user;
+        }
 }
 
 userdata.prototype.transferCurrency = function(fromID, toID, amount){
@@ -63,18 +71,36 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                 // Check for account existence for the sender.
                 if ( !u[fromID].hasOwnProperty('currency') ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
                 // If the receiver doesn't have one, it's fine as it will be created
-                if ( !u[toID].hasOwnProperty('currency') ) ud.setCurrency(toID, ud.DEFAULT_CURRENCY_AMOUNT);
+                if ( !u[toID].hasOwnProperty('currency') ) ud.setProp({
+                    user: toID,
+                    prop: {
+                        name: 'currency',
+                        data: ud.DEFAULT_CURRENCY_AMOUNT
+                    }
+                });
 
                 // Check for balance
-                ud.getCurrency(fromID).then( (res) => {
+                ud.getProp(fromID, 'currency').then( (res) => {
                     if (res < amount){
                         resolve( {err: "User has insufficient funds" } );
                     } else {
                         // Do the transfer
-                        ud.setCurrency(fromID, res - amount);
+                        ud.setProp({
+                            user: fromID,
+                            prop: {
+                                name: 'currency',
+                                data: res - amount
+                            }
+                        });
 
-                        ud.getCurrency(toID).then( (toBank) => {
-                            ud.setCurrency(toID, toBank + amount);
+                        ud.getProp(toID, 'currency').then( (toBank) => {
+                            ud.setProp({
+                                user: toID,
+                                prop: {
+                                    name: 'currency',
+                                    data: toBank + amount
+                                }
+                            });
                         });
 
                         // ! -- What is this for?
@@ -89,14 +115,6 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
             resolve( { err: "User has no wallet"} );
         });
     });
-}
-
-userdata.prototype.setState = function(user){
-    // Copies Discord user object into FB.
-    // .update() will autoadd if user doesn't exist,
-    // and will only update new information
-    this.db.child(user.id).update(user);
-    return user.status;
 }
 
 module.exports = userdata;

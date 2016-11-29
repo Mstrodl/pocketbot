@@ -13,12 +13,19 @@ var cmd_wip = new command('economy', '!wip', 'Check or create your WIP account w
 	let udata = data.userdata;
 
 	// Oh snap, PROMISES.
-	udata.getProperty(data.userID, 'currency').then( (res) => {
-		if( res || res === 0){
+	udata.getProp(data.userID, 'currency').then( (res) => {
+		if( res || res === 0) {
 			dio.say(`:bank: My records say you have **${res}** ${vars.emojis.wip} coins`, data);
 		} else {
-			let bank = udata.setCurrency(data.userID, udata.DEFAULT_CURRENCY_AMOUNT);
-			dio.say(`<@${data.userID}>, your account has been added to my records. You now have ${bank} Worthless Internet Points`, data);
+			let bank = udata.setProp({
+				user: data.userID,
+				prop: {
+					name: currency,
+					data: udata.DEFAULT_CURRENCY_AMOUNT
+				}
+			});
+
+			dio.say(`<@${data.userID}>, your account has been added to my records. You now have ${bank} Worthless Internet Points™.`, data);
 		}
 	});
 });
