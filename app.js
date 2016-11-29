@@ -120,7 +120,6 @@ var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 // Bot Events
 // ===================================
 
-
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
 	helper.popCommand( globalCmdManager.cList );
