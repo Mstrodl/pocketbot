@@ -122,14 +122,12 @@ if (!TOKEN.FBPKEYID()) {
 			return false;
 		}
 
-		logger.log(`${from} is attempting to key userID: ${lucky}.\n Server user: ${data.bot.servers[x.chan].members[lucky].username} \n Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
+		logger.log(`${from} is voting on a key for userID: ${lucky}.\n Server user: ${data.bot.servers[x.chan].members[lucky].username} \n Memsnap: ${memsnap[lucky].username}`, logger.MESSAGE_TYPE.OK);
 
 		// Grab last key in the list
 		keys.orderByKey().limitToLast(1).once("value", function(snapshot) {
 			let k = snapshot.key;
 			let kk = snapshot.val();
-			logger.log(`${from} voted!`, logger.MESSAGE_TYPE.Info);
-			logger.log(memsnap[lucky].username, logger.MESSAGE_TYPE.Info);
 			//console.log(k,kk,lucky);
 
 			// Break if no keys left
@@ -159,7 +157,8 @@ if (!TOKEN.FBPKEYID()) {
 						logger.log("user hasn't received vote before, adding 1 now.", 'Info');
 						newplayer.set( memsnap[lucky] ); // Set once if doesn't exist
 						newplayer.child('vote').update(voter); // Update with new vote
-						votes = 1; // First vote, so we know it's 1
+
+						if (vote) { votes = 1; } else { antivotes = 1; } // First vote, so we know it's 1
 					} else {
 						// Check for double vote
 						logger.log("Checking votes", 'Info');
@@ -183,14 +182,16 @@ if (!TOKEN.FBPKEYID()) {
 						} else {
 							logger.log('Doesnt have votes, adding', 'OK');
 							newplayer.child('vote').update(voter);
-							votes = 1;
+							if (vote) { votes = 1; } else { antivotes = 1; }
 						}
 					}
 
 					if (vote) {
-						dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}. \n ${votes} /${VOTE_COUNT} :thumbsup: | ${antivotes} :thumbsdown:`, data, x.history);
+						logger.log(`${from} voted for ${memsnap[lucky].username}!`, logger.MESSAGE_TYPE.Info);
+						dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					} else {
-						dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}. \n ${votes} /${VOTE_COUNT} :thumbsup: | ${antivotes} :thumbsdown:`, data, x.history);
+						logger.log(`${from} voted against ${memsnap[lucky].username}!`, logger.MESSAGE_TYPE.Info);
+						dio.say(`:no_entry_sign: ${from} has voted against keying ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					}
 
 					if (votes === VOTE_COUNT)  {
@@ -210,7 +211,9 @@ if (!TOKEN.FBPKEYID()) {
 				return false;
 			}
 
-			// Developer gives a key immediately.
+			// Developer gives a key immediately (unless its a novote, then cancel?).
+			if (!vote) return false;
+
 			for (let code in kk) {
 				// Removes key from Firebase
 				keys.child(code).set({});
@@ -247,4 +250,4 @@ if (!TOKEN.FBPKEYID()) {
 	});
 }
 
-module.exports.commands = [cmdKey];
+module.exports.commands = [cmdKey, cmdNoKey];
