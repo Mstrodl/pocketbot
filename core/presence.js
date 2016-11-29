@@ -92,17 +92,18 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		// Challenge accepted, Masta
 		if (fromRoles.includes(x.ranger)) {
-			let oldState = udata.getProperty(fromID, 'status');
-			if((oldState == 'offline' || oldState == null) && oldState != status.state){
-				if (fromID === x.nooneImportant) {
-					dio.say(`PocketBot reporting o7, Master J`, status, fromID);
+			udata.getProp(fromID, 'status').then( (oldState) => {
+				if((oldState == 'offline' || oldState == null) && oldState != status.state){
+					if (fromID === x.nooneImportant) {
+						dio.say(`PocketBot reporting o7, Master J`, status, fromID);
+					}
 				}
-			}
+			});
 		}
 
 		//Dev greetings(and PR greetins, in debug mode)
 		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger)) ) {
-			udata.getProperty(fromID, 'status').then( (oldState) => {
+			udata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
 					let greets = [
 						`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,
@@ -178,8 +179,11 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		// },6000*10);
 	}
 
-	// Update user data on Firebase - Line 63 in userdata.js
-	udata.setState( status.bot.servers[x.chan].members[fromID] );
+	// Update user data on Firebase - Line 52 in userdata.js
+	udata.setProp({
+		user: status.bot.servers[x.chan].members[fromID],
+		prop: { name: 'state' }
+	});
 
 	if ( helper.isDebug() ) logger.log("User '" + from + "' is now '" + status.state + "'");
 }
