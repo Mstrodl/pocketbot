@@ -124,7 +124,7 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 			range = 'n/a',
 			tier = (u.units[item].tier) ? `[T${Math.ceil(u.units[item].tier)}] ` : 'n/a';
 
-		// Weapon Checker
+		// Traits Checker
 		if (traits.length > 0) {
 			for (let t in traits) {
 				if ( u.filters.traits[ traits[t] ].hasOwnProperty('wpn') ) {
@@ -132,6 +132,13 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 					let w = u.filters.traits[ traits[t] ].wpn.replace('weapon_','');
 					range = u.weapons[w].AtkRange;
 				}
+			}
+
+			if (traits.length === 1) {
+				let w = u.filters.traits[ traits[0] ];
+				traits = `\`\`\`${w.label} - ${w.desc} \`\`\``
+			} else {
+				traits = `Traits: \`${traits.join('`, `')}\``;
 			}
 		}
 
@@ -164,7 +171,7 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 						dio.say(`
 ${u.units[item].name} | **${(tier != 'n/a') ? tier : ''}** ${(warren != undefined) ? warren: ''}
 ${atk}:shield: **${u.units[item].def}**    :pig2: **${cost}** ${ucost}    :gun: **${range}**    ${btime}
-Traits: \`${traits.join('`, `')}\` ${url}`, data);
+${traits} ${url}`, data);
 				});
 			}, 1000);
 		});
