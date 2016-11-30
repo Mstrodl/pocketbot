@@ -182,7 +182,7 @@ if (!TOKEN.FBPKEYID()) {
 								for ( modvote in l.vote ) {
 									if (l.vote[modvote]) {
 										votes++;
-									} else { votes--; antivotes++; }
+									} else { antivotes++; }
 								}
 							}
 						} else {
@@ -217,7 +217,7 @@ if (!TOKEN.FBPKEYID()) {
 				return false;
 			}
 
-			// Developer gives a key immediately (unless its a novote, then cancel?).
+			// Developer gives a key immediately (unless its an antivote, then cancel?).
 			if (!vote) return false;
 
 			for (let code in kk) {

@@ -59,17 +59,17 @@ userdata.prototype.setProp = function({ user = null, prop = null, }){
 
 userdata.prototype.transferCurrency = function(fromID, toID, amount){
     let ud = this;
-    
+
     return new Promise( (resolve, reject) => {
         // Check for parameters...
-        if(!toID || !amount) return resolve({err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`});
+        if(!toID || !amount) return reject(`Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`);
         // ...and user's existence
         this.db.once("value", function(users){
             //if ( users.val().hasOwnProperty(fromID) ) {
                 let u = users.val();
 
                 // Check for account existence for the sender.
-                if (fromID && (!u.hasOwnProperty(fromID) || !u[fromID].hasOwnProperty('currency')) ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
+                if (fromID && (!u.hasOwnProperty(fromID) || !u[fromID].hasOwnProperty('currency')) ) reject("You don't have a wallet. Use `!wip` to make an account.");
                 // If the receiver doesn't have one, it's fine as it will be created
                 if ( !u.hasOwnProperty(toID) || !u[toID].hasOwnProperty('currency') ) ud.setProp({
                     user: toID,
@@ -83,7 +83,7 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                 if(fromID){
                     ud.getProp(fromID, 'currency').then( (res) => {
                         if (res < amount){
-                            resolve( {err: "User has insufficient funds" } );
+                            reject("User has insufficient funds");
                         } else {
                             // Do the transfer
                             ud.setProp({
@@ -108,12 +108,9 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                 });
 
                 resolve ({res: "Transfer happened sucessfully"});
-            /*} else {
-                resolve( {err: "Invalid sender. No userdata found" } );
-            }*/
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
-            resolve( { err: "User has no wallet"} );
+            reject("User has no wallet");
         });
     });
 }
