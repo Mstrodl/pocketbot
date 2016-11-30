@@ -50,11 +50,9 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	}
 
 	data.userdata.transferCurrency(data.userID, recipient, amount).then( (res) => {
-		if( res.hasOwnProperty('err') ){
-			dio.say(res.err, data);
-		}else{
-			dio.say(`${amount} ${vars.emojis.wip} sent successfully`, data);
-		}
+		dio.say(`${amount} ${vars.emojis.wip} sent successfully`, data);
+	}).catch( (err) => {
+		dio.say(err, data);
 	});
 });
 

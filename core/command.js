@@ -149,18 +149,15 @@ CommandManager.prototype.call = function(data, trigger, group=null){
 }
 
 CommandManager.prototype.hasPermission = function(callerRoles, commandMinRole){
-    if(commandMinRole == null){
+    if (commandMinRole == null){
         return true;
-    }else{
-        for(var key in commandMinRole){
-            if(callerRoles.includes(commandMinRole[key])){
-                return true;
-            }
+    } else {
+        for (let key in commandMinRole){
+            if(callerRoles.includes(commandMinRole[key])) return true;
         }
         return false;
     }
 }
-
 
 //Gets the help text for either one or all commands
 //filter        -   command trigger or group name

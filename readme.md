@@ -1,11 +1,11 @@
 # Pocketbot
 
-Pocketbot is the collaborated effort of the original PWG Discord bots into one.
+Pocketbot is the collaborated effort of the original PWG Discord bots into one. Join the Pocketbot creators in [#techtalk](https://discord.gg/tHybJ6h) if you have any questions!
 
 
 ### Quick Start
 
-If you're just starting with Pocketbot, you most likely want to add a set of commands to it. 
+If you're just starting with Pocketbot, you most likely want to add a set of commands to it.
 The easiest way to go about this is duplicating the `cmds/basic.js` file and starting from there. Alternatively, you can start off from this base:
 
 ```javascript
@@ -31,7 +31,7 @@ Although every single one is not mandatory, you are *highly* recommended to use 
 
 - **logger**  - Gives you access to the special logging features we have
 - **command** - Will let you access the global command manager
-- **helpers** - Gives you a handful of useful functions to perform 
+- **helpers** - Gives you a handful of useful functions to perform
 - **x**       - Includes all the variables we use around the bot, such as channel, user, role, and emoji IDs
 - **dio**     - Is a set of shorthand functions for common discord.io commands
 
@@ -110,7 +110,7 @@ For complete Firebase documentation, check [here](https://firebase.google.com/do
 
 ### Writing Data
 
-You can write data in 2 main ways: a `set` will push (and overwrite any existing) data into a new object, while an `update` can be used to change 
+You can write data in 2 main ways: a `set` will push (and overwrite any existing) data into a new object, while an `update` can be used to change
 a specific property (or multiple) of an existing object.
 
 #### Set
@@ -137,7 +137,7 @@ newquoteRef.set(newquote);
 In the case of an update, here's an example of how we add votes to a player in the database:
 ```javascript
 // .child let's us grab a child object/reference. In this case we access our player database
-// under data.db.soldiers, and we look for the child reference by the user ID (in this case, 
+// under data.db.soldiers, and we look for the child reference by the user ID (in this case,
 // we've set 'lucky' to be the userID of the player being voted to receive a key)
 let newplayer = data.db.soldiers.child(lucky);
 
@@ -146,16 +146,16 @@ let newplayer = data.db.soldiers.child(lucky);
 newplayer.child('vote').update(voter);
 ```
 
-There are of course a ton of checks and stuff you'd want to do before you update info (the above example first reads all of 
-data.db.soldiers to make sure the user exists, already has votes, hasn't been voted already by same user, etc.) but this is 
+There are of course a ton of checks and stuff you'd want to do before you update info (the above example first reads all of
+data.db.soldiers to make sure the user exists, already has votes, hasn't been voted already by same user, etc.) but this is
 how you would update a user.
 
 **============================================================================**
 
-**WARNING** Unless you're writing brand new data, 
-always try to use update to be safe. 
+**WARNING** Unless you're writing brand new data,
+always try to use update to be safe.
 
-If we replaced the above with `newplayer.child('vote').set(voter);` you would 
+If we replaced the above with `newplayer.child('vote').set(voter);` you would
 
 end up nuking **all** previous data except the new stuff you just pushed in.
 
@@ -173,7 +173,7 @@ data.db.soldiers.once("value", function(snap) {
         masta = playerList[x.masta],
         mastaStatus = masta.status;
 }, function(err) {
-    // Make sure to error log the crap out of Firebase, since it fails silently 
+    // Make sure to error log the crap out of Firebase, since it fails silently
     // by default and then you'll bang your face against a wall for hours why something doesn't work!
 	logger.log(err, logger.MESSAGE_TYPE.Error);
 });

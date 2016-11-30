@@ -157,6 +157,8 @@ bot.on('presence', function(user, userID, state, game, event) {
 });
 
 bot.on('message', function(user, userID, channelID, message, event) {
+	//console.log(`${user} : ${bot.servers[vars.chan].members[userID].roles}`) // Quick role check
+
 	//Remove whitespace
 	message = helper.collapseWhitespace(message);
 

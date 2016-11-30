@@ -28,7 +28,9 @@ exports.onChange = function(status, userdata=null) {
 	// Someone goes offline
 	if (status.state === "offline") {
 		// Check if they are on ready list
-		if (status.bot.servers[x.chan].members[fromID].roles.includes(x.lfg)) {
+		let offliner = status.bot.servers[x.chan].members[fromID];
+
+		if (offliner.hasOwnProperty('roles') && offliner.roles.includes(x.lfg)) {
 			status.bot.removeFromRole({
 				serverID: x.chan,
 				userID: fromID,
@@ -67,7 +69,7 @@ exports.onChange = function(status, userdata=null) {
 	if (status.state === "online") {
 		// ! -- Update this to grab from Firebase data first, then check Discord
 		let fromRoles = status.bot.servers[x.chan].members[fromID].roles;
-		if ( fromRoles.length === 0 ) {
+		if ( fromRoles.length === 0 && helper.isHeroku() ) {
 			// Stuff to tell new person
 			let v = [
 				`Welcome to the Pocketwatch chat, <@${fromID}>`,
