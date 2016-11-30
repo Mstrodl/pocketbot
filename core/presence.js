@@ -19,7 +19,7 @@ let sTimer = 0,
 	fTimer = 0,
 	mTimer = 0;
 
-exports.onChange = function(status, udata=null) {
+exports.onChange = function(status, userdata=null) {
 	let from = status.user,
 		fromID = status.userID,
 		game = status.game,
@@ -92,7 +92,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		// Challenge accepted, Masta
 		if (fromRoles.includes(x.ranger)) {
-			udata.getProp(fromID, 'status').then( (oldState) => {
+			userdata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
 					if (fromID === x.nooneImportant) {
 						dio.say(`PocketBot reporting o7, Master J`, status, fromID);
@@ -103,7 +103,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 		//Dev greetings(and PR greetins, in debug mode)
 		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger)) ) {
-			udata.getProp(fromID, 'status').then( (oldState) => {
+			userdata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
 					let greets = [
 						`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,
@@ -180,7 +180,7 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 	}
 
 	// Update user data on Firebase - Line 52 in userdata.js
-	udata.setProp({
+	userdata.setProp({
 		user: status.bot.servers[x.chan].members[fromID],
 		prop: { name: 'state' }
 	});

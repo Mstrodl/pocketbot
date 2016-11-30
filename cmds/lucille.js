@@ -10,16 +10,16 @@ let logger  = require('../core/logger'),
 	TOKEN 	= require('../core/tokens'),
 	x 		= require('../core/vars'),
 	dio 	= require('../core/dio'),
-	T		= require('twit');
+	T		= (helpers.isHeroku() ? require('twit') : null);
 
 // These go somewhere, not sure where, definitely not here most likely.
-	let twitter = new T({
+	let twitter = (helpers.isHeroku() ? new T({
 		consumer_key:         TOKEN.TWITKEY,
 		consumer_secret:      TOKEN.TWITTOKEN,
 		// Frickin twitter needs so much crap
 		access_token:         TOKEN.TWITATOKEN,
 		access_token_secret:  TOKEN.TWITSECRET,
-	}),
+	}) : null),
 		// Needs IDs, use http://gettwitterid.com
 		watchList = [
 			'19382657', //@andyschatz
@@ -31,10 +31,11 @@ let logger  = require('../core/logger'),
 			'3271155122' //@ToothAndTail
 			//,'14423000' //@brianfranco
 		],
-		stream = twitter.stream('statuses/filter', { follow: watchList }),
+		stream = (helpers.isHeroku() ? twitter.stream('statuses/filter', { follow: watchList }) : null),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
+
 
 function twitterList(watchList){
 	let x = "The Current Twitter Accounts Being Tracked Are: \n "
@@ -83,20 +84,22 @@ let cmdLucy = new command('lucille', '!lucille', 'Activates Lucille', function(d
 });
 
 //On Twitter Message
-stream.on('tweet', function(tweet) {
-	//console.log(tweet);
-	//If Tracked User
-	if ( watchList.includes(tweet.user.id_str) ) {
-		if (!lucilleBot) return false;
-		lucilleTweet = {
-			user: tweet.user.screen_name,
-			uid: tweet.user.id,
-			tweet: tweet.text,
-			id: tweet.id_str
+if(helpers.isHeroku()){
+	stream.on('tweet', function(tweet) {
+		//console.log(tweet);
+		//If Tracked User
+		if ( watchList.includes(tweet.user.id_str) ) {
+			if (!lucilleBot) return false;
+			lucilleTweet = {
+				user: tweet.user.screen_name,
+				uid: tweet.user.id,
+				tweet: tweet.text,
+				id: tweet.id_str
+			}
+			// Work around!
+			dio.say( `!tweet`, { bot: lucilleBot, channelID: x.testing } );
 		}
-		// Work around!
-		dio.say( `!tweet`, { bot: lucilleBot, channelID: x.testing } );
-	}
-});
+	});
+}
 
 module.exports.commands = [cmdLucy, cmdTweet];

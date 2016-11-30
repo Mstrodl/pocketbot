@@ -59,17 +59,17 @@ userdata.prototype.setProp = function({ user = null, prop = null, }){
 
 userdata.prototype.transferCurrency = function(fromID, toID, amount){
     let ud = this;
-    // Check for parameters...
-    if(!fromID || !toID || !amount) return {err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`};
-
+    
     return new Promise( (resolve, reject) => {
+        // Check for parameters...
+        if(!toID || !amount) return resolve({err: `Missing parameter(s) (from: ${fromID}, to: ${toID}, amount: ${amount})`});
         // ...and user's existence
         this.db.once("value", function(users){
-            if ( users.val().hasOwnProperty(fromID) ) {
+            //if ( users.val().hasOwnProperty(fromID) ) {
                 let u = users.val();
 
                 // Check for account existence for the sender.
-                if ( !u.hasOwnProperty(fromID) || !u[fromID].hasOwnProperty('currency') ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
+                if (fromID && (!u.hasOwnProperty(fromID) || !u[fromID].hasOwnProperty('currency')) ) resolve( {err: "You don't have a wallet. Use `!wip` to make an account." } );
                 // If the receiver doesn't have one, it's fine as it will be created
                 if ( !u.hasOwnProperty(toID) || !u[toID].hasOwnProperty('currency') ) ud.setProp({
                     user: toID,
@@ -80,36 +80,37 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                 });
 
                 // Check for balance
-                ud.getProp(fromID, 'currency').then( (res) => {
-                    if (res < amount){
-                        resolve( {err: "User has insufficient funds" } );
-                    } else {
-                        // Do the transfer
-                        ud.setProp({
-                            user: fromID,
-                            prop: {
-                                name: 'currency',
-                                data: res - amount
-                            }
-                        });
-
-                        ud.getProp(toID, 'currency').then( (toBank) => {
+                if(fromID){
+                    ud.getProp(fromID, 'currency').then( (res) => {
+                        if (res < amount){
+                            resolve( {err: "User has insufficient funds" } );
+                        } else {
+                            // Do the transfer
                             ud.setProp({
-                                user: toID,
+                                user: fromID,
                                 prop: {
                                     name: 'currency',
-                                    data: toBank + amount
+                                    data: res - amount
                                 }
                             });
-                        });
+                        }
+                    });
+                }
 
-                        // ! -- What is this for?
-                        resolve( { from: u[fromID], to: u[toID] } );
-                    }
+                ud.getProp(toID, 'currency').then( (toBank) => {
+                    ud.setProp({
+                        user: toID,
+                        prop: {
+                            name: 'currency',
+                            data: toBank + amount
+                        }
+                    });
                 });
-            } else {
+
+                resolve ({res: "Transfer happened sucessfully"});
+            /*} else {
                 resolve( {err: "Invalid sender. No userdata found" } );
-            }
+            }*/
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
             resolve( { err: "User has no wallet"} );
