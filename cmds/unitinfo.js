@@ -103,7 +103,7 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 			item = 'mouse'
 			break;
 		case 'farm':
-			item = 'mouse'
+			item = 'pig'
 			break;
 		case 'windmill':
 		case 'mill':
