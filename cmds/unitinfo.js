@@ -88,9 +88,9 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 
 		// Get some of the basic unit data
 		let traits = u.units[item].traits,
-			cost = (u.units[item].cost != undefined) ? u.units[item].cost : 'na',
-			range = '-',
-			tier = (u.units[item].tier) ? `[T${Math.ceil(u.units[item].tier)}] ` : '';
+			cost = (u.units[item].cost != undefined) ? u.units[item].cost : 'n/a',
+			range = 'n/a',
+			tier = (u.units[item].tier) ? `[T${Math.ceil(u.units[item].tier)}] ` : 'n/a';
 
 		// Weapon Checker
 		for (let t in traits) {
@@ -101,6 +101,16 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 			}
 		}
 
+		// Warren Info
+		let warrenstuff = '';
+		if (!u.units[item].struct) {
+			let warren = x.emojis[`warrent${tier}`],
+				wcost = tier * 60,
+				perunit = 20 * Math.pow(3, tier-1);
+
+			warrenstuff = `\n\n ${warren} :pig2: **${wcost}** (${perunit}/unit)`
+		}
+
 		// Change Avatar
 		persona.setAvatar(`./assets/unit_${item}.png`, data, function() {
 			setTimeout(function(){
@@ -108,8 +118,8 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 						console.log('yay');
 						dio.say(`
 ${u.units[item].name} | **${tier}**
-:crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
-Traits: ${traits.join(', ')}`, data);
+:crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :gun: **${range}**
+Traits: \`${traits.join('`, `')}\` ${warrenstuff}`, data);
 				});
 			}, 1000);
 		});

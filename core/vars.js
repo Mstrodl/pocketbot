@@ -51,6 +51,10 @@ module.exports = {
 		bookbot: '<:bookbot:247030934287810563>',
 		mastabot: '<:mastabot:247030934933733376>',
 		lucille: '<:lucille:247030934929539073>',
+		// Units
+		warrent1: '<:warrent1:253571862926196736>',
+		warrent2: '<:warrent2:253571862733258754>',
+		warrent3: '<:warrent3:253571863026991124>',
 		//Other
 		wip: '<:wip:247433292587073536>',
 		wolf: '<:tntwolf:230095674283261954>'
