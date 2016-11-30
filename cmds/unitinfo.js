@@ -102,6 +102,13 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		case 'mice':
 			item = 'mouse'
 			break;
+		case 'farm':
+			item = 'mouse'
+			break;
+		case 'windmill':
+		case 'mill':
+			item = 'gristmill'
+			break;
 	}
 
 	// Check if unit exists
@@ -131,7 +138,8 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		// More Info
 		let warren = (!u.units[item].struct) ? x.emojis[`warrent${u.units[item].tier}`] : '',
 			ucost = (!u.units[item].struct && u.units[item].tier) ? `(${20*Math.pow(3, u.units[item].tier-1)}/unit)` : '',
-			url = '';
+			url = '',
+			btime = (u.units[item].time) ? `:stopwatch: ${u.units[item].time}s`: '';
 
 		// Wiki Link
 		if (u.units[item].struct) {
@@ -151,10 +159,11 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		persona.setAvatar(`./assets/unit_${item}.png`, data, function() {
 			setTimeout(function(){
 				persona.setNick(label, data, function() {
-						console.log('yay');
+						let atk = (u.units[item].atk) ? `:crossed_swords: **${u.units[item].atk}**    `: '';
+
 						dio.say(`
 ${u.units[item].name} | **${(tier != 'n/a') ? tier : ''}** ${(warren != undefined) ? warren: ''}
-:crossed_swords: **${(u.units[item].atk) ? u.units[item].atk : 'n/a'}**    :shield: **${u.units[item].def}**    :pig2: **${cost}** ${ucost}    :gun: **${range}**
+${atk}:shield: **${u.units[item].def}**    :pig2: **${cost}** ${ucost}    :gun: **${range}**    ${btime}
 Traits: \`${traits.join('`, `')}\` ${url}`, data);
 				});
 			}, 1000);
