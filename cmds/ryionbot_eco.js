@@ -45,7 +45,7 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	var amount = parseInt(data.args[2])
 
 	if(recipient == data.userID){
-		dio.say(`Cannot transfer ${vars.emojis.wip} from yourself to yourself`, data);
+		dio.say(`Cannot transfer ${vars.emojis.wip} to yourself`, data);
 		return;
 	}
 
