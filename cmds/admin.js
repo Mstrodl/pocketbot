@@ -101,9 +101,10 @@ let cmdGetEnv = new command('ryionbot', '!getenv', 'Prints a list of all the env
 cmdGetEnv.permissions = [x.ranger];
 
 let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to ban someone.', (data) => {
+	dio.del(data.messageID, data);
 	let stupid = data.bot.servers[x.chan].members[ helpers.getUser(data.args[1]) ];
 
-	if (stupid.roles.includes(x.mod) || stupid.roles.includes(x.admin)) || stupid.roles.includes(x.combot)) {
+	if (stupid.roles.includes(x.mod) || stupid.roles.includes(x.admin) || stupid.roles.includes(x.combot)) {
 		dio.say(`Whoa hey, I can't ban them. Talk to a dev.`, data);
 		return false;
 	}
