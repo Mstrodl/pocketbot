@@ -134,11 +134,15 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 			url = '';
 
 		// Wiki Link
-		if (!u.units[item].struct && tier != 'n/a') {
+		if (u.units[item].struct) {
+			if (item != 'pig' && item != 'gristmill') {
+				url = `\n\nMore info: <https://toothandtailwiki.com/structures/${item}>`;
+			} else {
+				url = `\n\nMore info: <https://toothandtailwiki.com/structures/gristmills-farms-pigs/>`;
+			}
+		} else if (!u.units[item].struct && tier != 'n/a') {
 			let t = u.units[item].tier;
 			url = (t && t != 3) ? `\n\nMore info: <https://toothandtailwiki.com/units/${item}s>` : `\n\nMore info: <https://toothandtailwiki.com/units/${item}>`;
-		} else if (u.units[item].struct && u.units[item].atk) {
-			url = `\n\nMore info: <https://toothandtailwiki.com/structures/${item}>`;
 		} else {
 			url = `\n\nMore info: <https://toothandtailwiki.com/>`;
 		}

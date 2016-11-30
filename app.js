@@ -59,7 +59,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.
 	mastabot = new persona('Pocketbot', './assets/avatars/mastabot.png', vars.emojis.mastabot),
 	bookbot = new persona('Pocketbot', './assets/avatars/bookbot.png', vars.emojis.bookbot),
 	bookbotCowboy = new persona('Last Man Standing', './assets/avatars/lms.png', vars.emojis.bookbot),
-	unitinfo = new persona('Unit/Trait Info', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
+	unitinfo = new persona('Pocketbot', './assets/avatars/mastabot.png', vars.emojis.pocketbot),
 	lucille = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
 
 // Manager and Groups

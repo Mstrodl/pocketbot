@@ -1,6 +1,7 @@
-var logger = require('./logger');
-var helpers = require('./helpers');
-var fs = require('fs');
+let logger = require('./logger'),
+	helpers = require('./helpers'),
+	x = require('./vars'),
+	fs = require('fs');
 
 //Object defining a bot 'personality', that is, a nickname and an avatar
 //name		  : string - represents the display name
@@ -24,12 +25,16 @@ Personality.prototype.set = function(command_data, callback){
 
 	if(!this.avatar_buffer) throw new Error('Cannot set client personality due to empty avatar buffer');
 
-	command_data.bot.editNickname({ serverID: command_data.serverID,
-									userID  : command_data.bot.id,
-									nick	: this.name},
-									function(err, res){
-										if(err) logger.log(err, logger.MESSAGE_TYPE.Error);
-	});
+	let currentnick = command_data.bot.servers[x.chan].members[command_data.bot.id].nick;
+	if (currentnick !== this.name) {
+		command_data.bot.editNickname({
+			serverID: command_data.serverID,
+			userID  : command_data.bot.id,
+			nick	: this.name
+		}, function(err, res) {
+			if(err) logger.log(err, logger.MESSAGE_TYPE.Error);
+		});
+	}
 
 	command_data.bot.editUserInfo({avatar  : this.avatar_buffer}, function(err, res){
 		if (err) {
