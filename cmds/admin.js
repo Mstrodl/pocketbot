@@ -10,6 +10,8 @@ let logger  = require('../core/logger'),
 	helpers	= require('../core/helpers'),
 	x 		= require('../core/vars');
 
+let STRIKE_COUNT = 5;
+
 let cmdSay = new command('admin', '!say', `Allows Masta to speak as Mastabot`, function(data) {
 	if (data.userID === x.stealth) dio.say(data.message.replace('!say ',''), data, x.chan);
 });
@@ -86,7 +88,7 @@ let cmdNoobify = new command('admin', '!noobify', `This will remove the member r
 	}
 });
 
-let cmdGetEnv = new command('ryionbot', '!getenv', 'Prints a list of all the env variables found', function(data){
+let cmdGetEnv = new command('ryionbot', '!getenv', 'Prints a list of all the env variables found.', function(data){
 	var msg = '';
 
 	for(let key in process.env){
@@ -98,4 +100,59 @@ let cmdGetEnv = new command('ryionbot', '!getenv', 'Prints a list of all the env
 
 cmdGetEnv.permissions = [x.ranger];
 
-module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck, cmdNoobify, cmdGetEnv];
+let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to ban someone.', (data) => {
+	let stupid = data.bot.servers[x.chan].members[ helpers.getUser(data.args[1]) ];
+
+	if (stupid.roles.includes(x.mod) || stupid.roles.includes(x.admin)) || stupid.roles.includes(x.combot)) {
+		dio.say(`Whoa hey, I can't ban them. Talk to a dev.`, data);
+		return false;
+	}
+
+	data.userdata.getProp(stupid.id, 'strikes').then( (strikes) => {
+		//console.log(stupid.id, strikes);
+		if (!strikes) {
+			data.userdata.setProp({
+				user: stupid.id,
+				prop: {
+					name: 'strikes',
+					data: 1
+				}
+			});
+			dio.say(`:baseball: **${stupid.username} has received their first strike.**`, data, x.history);
+		} else if (strikes+1 < STRIKE_COUNT) {
+			data.userdata.setProp({
+				user: stupid.id,
+				prop: {
+					name: 'strikes',
+					data: strikes+1
+				}
+			});
+			dio.say(`:baseball: **${stupid.username} now has ${ strikes+1 } strikes.**`, data, x.history);
+		} else if (strikes+1 === STRIKE_COUNT) {
+			data.userdata.setProp({
+				user: stupid.id,
+				prop: {
+					name: 'strikes',
+					data: strikes+1
+				}
+			});
+
+			// Goodness gracious this is scary xD
+			data.bot.ban({
+				serverID: x.chan,
+				userID: stupid.id
+			}, (err)=> {
+				if (err) {
+					logger.log(`User ban failed. ${err}`,'Error');
+					return false;
+				} else {
+					dio.say(`:baseball: **${stupid.username} has received ${STRIKE_COUNT} strikes and is now BANNED**.`, data, x.history);
+				}
+			});
+		}
+	});
+});
+
+cmdStrike.permissions = [x.mod, x.admin];
+
+module.exports.commands = [cmdSay, cmdNewBuild, cmdCheck, cmdNoobify, cmdGetEnv, cmdStrike];

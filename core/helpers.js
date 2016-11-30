@@ -19,8 +19,6 @@ module.exports.isHeroku = function(){
 	return process.env.ISHEROKU;
 }
 
-
-
 // Count function
 module.exports.getCount = function(arr, val) {
 	let i, j, count = 0;
