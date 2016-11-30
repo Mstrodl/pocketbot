@@ -44,6 +44,11 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 	var recipient = helpers.getUser(data.args[1]);
 	var amount = parseInt(data.args[2])
 
+	if(recipient == data.userID){
+		dio.say(`Cannot transfer ${vars.emojis.wip} from yourself to yourself`, data);
+		return;
+	}
+
 	data.userdata.transferCurrency(data.userID, recipient, amount).then( (res) => {
 		if( res.hasOwnProperty('err') ){
 			dio.say(res.err, data);
