@@ -41,7 +41,7 @@ userdata.prototype.getProp = function(userID, prop){
 userdata.prototype.setProp = function({ user = null, prop = null, }){
         if (typeof user === 'object') {
             // Copies full Discord user object into FB.
-            this.db.child(user.id).update(user);
+            if (user.hasOwnProperty('id')) this.db.child(user.id).update(user);
             // For user presence updates
             if (prop.name === 'state') return user.status;
         } else if (user != null) {

@@ -49,6 +49,24 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		case 'toads':
 			item = 'toad'
 			break;
+		case 'moles':
+			item = 'mole'
+			break;
+		case 'pigeons':
+			item = 'pigeon'
+			break;
+		case 'ferrets':
+			item = 'ferret'
+			break;
+		case 'skunks':
+			item = 'skunk'
+			break;
+		case 'falcons':
+			item = 'falcon'
+			break;
+		case 'snakes':
+			item = 'snake'
+			break;
 		case 'wire':
 		case 'bw':
 		case 'barbed wire':
@@ -61,6 +79,7 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 			break;
 		case 'cham':
 		case 'chams':
+		case 'chameleons':
 			item = 'chameleon'
 			break;
 		case 'sniper balloon':
@@ -77,6 +96,19 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		case 'mgn':
 			item = 'machinegun'
 			break;
+		case 'arty':
+			item = 'artillery'
+			break;
+		case 'mice':
+			item = 'mouse'
+			break;
+		case 'farm':
+			item = 'pig'
+			break;
+		case 'windmill':
+		case 'mill':
+			item = 'gristmill'
+			break;
 	}
 
 	// Check if unit exists
@@ -87,29 +119,59 @@ let cmdInfo = new command('unitinfo', '!info', `Shows you information on a given
 		if (label === undefined) label = '???';
 
 		// Get some of the basic unit data
-		let traits = u.units[item].traits,
-			cost = (u.units[item].cost != undefined) ? u.units[item].cost : 'na',
-			range = '-',
-			tier = (u.units[item].tier) ? `[T${Math.ceil(u.units[item].tier)}] ` : '';
+		let traits = (u.units[item].traits) ? u.units[item].traits : [],
+			cost = (u.units[item].cost != undefined) ? u.units[item].cost : 'n/a',
+			range = 'n/a',
+			tier = (u.units[item].tier) ? `[T${Math.ceil(u.units[item].tier)}] ` : 'n/a';
 
-		// Weapon Checker
-		for (let t in traits) {
-			if ( u.filters.traits[ traits[t] ].hasOwnProperty('wpn') ) {
-				// Is weapon, get range
-				let w = u.filters.traits[ traits[t] ].wpn.replace('weapon_','');
-				range = u.weapons[w].AtkRange;
+		// Traits Checker
+		if (traits.length > 0) {
+			for (let t in traits) {
+				if ( u.filters.traits[ traits[t] ].hasOwnProperty('wpn') ) {
+					// Is weapon, get range
+					let w = u.filters.traits[ traits[t] ].wpn.replace('weapon_','');
+					range = u.weapons[w].AtkRange;
+				}
 			}
+
+			if (traits.length === 1) {
+				let w = u.filters.traits[ traits[0] ];
+				traits = `\`\`\`${w.label} - ${w.desc} \`\`\``
+			} else {
+				traits = `Traits: \`${traits.join('`, `')}\``;
+			}
+		}
+
+		// More Info
+		let warren = (!u.units[item].struct) ? x.emojis[`warrent${u.units[item].tier}`] : '',
+			ucost = (!u.units[item].struct && u.units[item].tier) ? `(${20*Math.pow(3, u.units[item].tier-1)}/unit)` : '',
+			url = '',
+			btime = (u.units[item].time) ? `:stopwatch: ${u.units[item].time}s`: '';
+
+		// Wiki Link
+		if (u.units[item].struct) {
+			if (item != 'pig' && item != 'gristmill') {
+				url = `\n\nMore info: <https://toothandtailwiki.com/structures/${item}>`;
+			} else {
+				url = `\n\nMore info: <https://toothandtailwiki.com/structures/gristmills-farms-pigs/>`;
+			}
+		} else if (!u.units[item].struct && tier != 'n/a') {
+			let t = u.units[item].tier;
+			url = (t && t != 3) ? `\n\nMore info: <https://toothandtailwiki.com/units/${item}s>` : `\n\nMore info: <https://toothandtailwiki.com/units/${item}>`;
+		} else {
+			url = `\n\nMore info: <https://toothandtailwiki.com/>`;
 		}
 
 		// Change Avatar
 		persona.setAvatar(`./assets/unit_${item}.png`, data, function() {
 			setTimeout(function(){
 				persona.setNick(label, data, function() {
-						console.log('yay');
+						let atk = (u.units[item].atk) ? `:crossed_swords: **${u.units[item].atk}**    `: '';
+
 						dio.say(`
-${u.units[item].name} | **${tier}**
-:crossed_swords: **${u.units[item].atk}**    :shield: **${u.units[item].def}**    :pig2: **${cost}**    :straight_ruler: **${range}**
-Traits: ${traits.join(', ')}`, data);
+${u.units[item].name} | **${(tier != 'n/a') ? tier : ''}** ${(warren != undefined) ? warren: ''}
+${atk}:shield: **${u.units[item].def}**    :pig2: **${cost}** ${ucost}    :gun: **${range}**    ${btime}
+${traits} ${url}`, data);
 				});
 			}, 1000);
 		});
@@ -119,7 +181,7 @@ Traits: ${traits.join(', ')}`, data);
 		let t = u.filters.traits[item],
 			w = (t.wpn) ? ':gun:' : '',
 			wpn = (t.wpn) ? u.weapons[ t.wpn.replace('weapon_','') ] : '',
-			extra = (w != '') ? `\n \`Cooldown: ${wpn.cool} | Range: ${wpn.AtkRange} | Aggro: ${wpn.AggRange}\`` : '';
+			extra = (w != '') ? `\n\n \`Cooldown: ${wpn.cool} | Range: ${wpn.AtkRange} | Aggro: ${wpn.AggRange}\`` : '';
 
 		dio.say(`${w} **${t.label}** - ${t.desc}${extra}`, data)
 	} else {
