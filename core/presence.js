@@ -25,43 +25,54 @@ exports.onChange = function(status, userdata=null) {
 		game = status.game,
 		timer = new Date().getTime();
 
+	//console.log( status.state, status.bot.servers[x.chan].members[fromID] );
 	// Someone goes offline
 	if (status.state === "offline") {
 		// Check if they are on ready list
 		let offliner = status.bot.servers[x.chan].members[fromID];
 
-		if (offliner.hasOwnProperty('roles') && offliner.roles.includes(x.lfg)) {
-			status.bot.removeFromRole({
-				serverID: x.chan,
-				userID: fromID,
-				roleID: x.lfg
-			}, function(err, resp) {
-				if (err) {
-					logger.log(resp, logger.MESSAGE_TYPE.Error);
-					return false;
-				}
+		if (offliner) { // I don't why this returns undefined sometimes?
+			if (offliner.hasOwnProperty('roles') && offliner.roles.includes(x.lfg)) {
+				status.bot.removeFromRole({
+					serverID: x.chan,
+					userID: fromID,
+					roleID: x.lfg
+				}, function(err, resp) {
+					if (err) {
+						logger.log(resp, logger.MESSAGE_TYPE.Error);
+						return false;
+					}
 
-				dio.say(`Removing ${from} from ready list due to disconnect.`, status, x.chan);
-			});
-		}
+					dio.say(`Removing ${from} from ready list due to disconnect.`, status, x.chan);
+				});
+			}
 
-		// D/c dev Timers
-		switch (fromID) {
-			case x.schatz:
-				sTimer = new Date().getTime();
-				break;
-			case x.nguyen:
-				nTimer = new Date().getTime();
-				break;
-			case x.dex:
-				fTimer = new Date().getTime();
-				break;
-			case x.adam:
-				dTimer = new Date().getTime();
-				break;
-			case x.stealth:
-				mTimer = new Date().getTime();
-				break;
+			// D/c dev Timers
+			switch (fromID) {
+				case x.schatz:
+					sTimer = new Date().getTime();
+					break;
+				case x.nguyen:
+					nTimer = new Date().getTime();
+					break;
+				case x.dex:
+					fTimer = new Date().getTime();
+					break;
+				case x.adam:
+					dTimer = new Date().getTime();
+					break;
+				case x.stealth:
+					mTimer = new Date().getTime();
+					break;
+			}
+
+			// Update user data on Firebase - Line 52 in userdata.js
+			if ( status.bot.servers[x.chan].members.hasOwnProperty(fromID) ) {
+				userdata.setProp({
+					user: status.bot.servers[x.chan].members[fromID],
+					prop: { name: 'state' }
+				});
+			}
 		}
 	}
 
@@ -72,10 +83,10 @@ exports.onChange = function(status, userdata=null) {
 		if ( fromRoles.length === 0 && helper.isHeroku() ) {
 			// Stuff to tell new person
 			let v = [
-				`Welcome to the Pocketwatch chat, <@${fromID}>`,
-				`Ahoy <@${fromID}>, welcome!`,
-				`Glad to have you here, <@${fromID}>`,
-				`What's up <@${fromID}>, welcome to the chat!`
+				`Welcome to the Pocketwatch chat, <@${fromID}>. Please checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha.`,
+				`Ahoy <@${fromID}>, welcome! Checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha.`,
+				`Glad to have you here, <@${fromID}>. Make sure to peek into the <#${x.rules}> channel for how to get into the alpha.`,
+				`What's up <@${fromID}>, welcome to the chat! Make sure to read the <#${x.rules}> channel if you wanna get in on the alpha.`
 			];
 
 			let n = Math.floor( Math.random()*4 );
@@ -84,12 +95,14 @@ exports.onChange = function(status, userdata=null) {
 				serverID: x.chan,
 				userID: fromID,
 				roleID: x.noob
+			}, (err, res) => {
+				if (err) logger.log(`Aww frickin': ${err} | ${res}`,'Error');
 			});
 
 			dio.say(`Glad you found the Pocketwatch community, we hope you enjoy your stay. :) \n
 Please checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha. \n
 The developers hang out in the chat all the time, so feel free to say hi, ask questions, and tune in to our streams on Fridays @ 5PM EST! \n
-For a list of my commands, feel free to type \`!help\` in any channel or in a private message. :thumbsup:`,status,fromID);
+For a list of my commands, feel free to type \`!help\` in any channel or here in a private message. :thumbsup:`,status,fromID);
 		}
 
 		// Challenge accepted, Masta
@@ -104,7 +117,9 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		}
 
 		//Dev greetings(and PR greetins, in debug mode)
-		if ( fromRoles.includes(x.admin) ||( helper.isDebug() && fromRoles.includes(x.ranger)) ) {
+		if ( fromRoles.includes(x.admin) || (helper.isDebug() && fromRoles.includes(x.ranger)) ) {
+			console.log('Admin or Ranger came online...');
+
 			userdata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
 					let greets = [
@@ -163,7 +178,19 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 
 					let n = Math.floor( Math.random()*greets.length );
 					dio.say(greets[n], status, x.chan);
+
+					userdata.setProp({
+						user: status.bot.servers[x.chan].members[fromID],
+						prop: { name: 'state' }
+					});
 				}
+			}).catch( (err) => {
+				logger.log(err, 'Error');
+			});
+		} else {
+			userdata.setProp({
+				user: status.bot.servers[x.chan].members[fromID],
+				prop: { name: 'state' }
 			});
 		}
 	}
@@ -180,12 +207,6 @@ For a list of my commands, feel free to type \`!help\` in any channel or in a pr
 		// 	streamer = '';
 		// },6000*10);
 	}
-
-	// Update user data on Firebase - Line 52 in userdata.js
-	userdata.setProp({
-		user: status.bot.servers[x.chan].members[fromID],
-		prop: { name: 'state' }
-	});
 
 	if ( helper.isDebug() ) logger.log("User '" + from + "' is now '" + status.state + "'");
 }
