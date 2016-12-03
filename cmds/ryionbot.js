@@ -87,7 +87,7 @@ var cmd_roll = new command('ryionbot', '!roll', 'Returns a random number within 
         b = aux;
     }
 
-    dio.say(Math.round(Math.random() * (b - a) + a).toString(), data);
+    dio.say(Math.round(Math.random() * (b-a+1) + a-0.5).toString(), data);
 });
 
 var cmd_cointoss = new command('ryionbot', '!coin', 'Tosses a coin, result is Heads or Tails', function(data){
