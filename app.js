@@ -113,6 +113,9 @@ fs.readdir(path.join(__dirname, 'cmds'), function(err, files){
 	}
 });
 
+logger.log(`Debug mode: ${helper.isDebug()}`, logger.MESSAGE_TYPE.Info);
+logger.log(`Running on Heroku: ${helper.isHeroku() ? 'true' : 'false'}`, logger.MESSAGE_TYPE.Info);
+
 // This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
