@@ -77,7 +77,7 @@ exports.onChange = function(status, userdata=null) {
 	}
 
 	// Someone comes online
-	if (status.state === "online") {
+	if (status.state === "online") {		
 		// ! -- Update this to grab from Firebase data first, then check Discord
 		let fromRoles = status.bot.servers[x.chan].members[fromID].roles;
 		if ( fromRoles.length === 0 && helper.isHeroku() ) {
@@ -122,13 +122,14 @@ For a list of my commands, feel free to type \`!help\` in any channel or here in
 
 			userdata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
+					let nickname = (helper.getNickFromId(fromID, status.bot.servers[x.chan].members) ? helper.getNickFromId(fromID, status.bot.servers[x.chan].members) : from);
 					let greets = [
-						`I could not find Glyde around so a generic greeting is all I have this time, ${from}`,
-						`o/ ${from}`,
-						`May your devness shine light upon us all, ${from}`,
-						`One ${from} a day makes bugs go away. Welcome back!`,
-						`It\'s Butters, not Butter, ${from}!`,
-						`${from},\nRoses are red,\nViolets are blue,\n This amazing community\nWas waiting for you`,
+						`I could not find Glyde around so a generic greeting is all I have this time, ${nickname}`,
+						`o/ ${nickname}`,
+						`May your devness shine light upon us all, ${nickname}`,
+						`One ${nickname} a day makes bugs go away. Welcome back!`,
+						`It\'s Butters, not Butter, ${nickname}!`,
+						`${nickname},\nRoses are red,\nViolets are blue,\n This amazing community\nWas waiting for you`,
 					];
 
 					if (fromID === x.schatz) {

@@ -155,4 +155,9 @@ module.exports.getUserRoles = function(client , userID, serverID = x.chan){
 	return client.servers[serverID].members[userID].roles;
 }
 
+//Get a user's nickname from a member list given the ID
+module.exports.getNickFromId = function(id, memberList){
+	return memberList[id].nick;
+}
+
 module.exports.vars = x;
