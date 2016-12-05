@@ -77,10 +77,11 @@ exports.onChange = function(status, userdata=null) {
 	}
 
 	// Someone comes online
-	if (status.state === "online") {		
+	if (status.state === "online") {
 		// ! -- Update this to grab from Firebase data first, then check Discord
-		let fromRoles = status.bot.servers[x.chan].members[fromID].roles;
-		if ( fromRoles.length === 0 && helper.isHeroku() ) {
+		let mem = status.bot.servers[x.chan].members[fromID];
+			fromRoles = (mem) ? mem.roles : null;
+		if ( mem != null && fromRoles.length === 0 && helper.isHeroku() ) {
 			// Stuff to tell new person
 			let v = [
 				`Welcome to the Pocketwatch chat, <@${fromID}>. Please checkout the <#${x.rules}> channel for some basic community rules and info on how to get into the alpha.`,
