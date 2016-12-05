@@ -78,6 +78,7 @@ let cmdAddQuote = new command('quote', '!addquote', `Adds new quote to the datab
 		});
 	});
 });
+cmdAddQuote.permissions = [x.member];
 
 let cmdDelQuote = new command('quote', '!delquote', `Removes a quote by id from the database`, function(data) {
 	// Make sure we're getting Firebase
