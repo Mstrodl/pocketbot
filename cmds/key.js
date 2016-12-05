@@ -177,13 +177,14 @@ if (!TOKEN.FBPKEYID()) {
 								return false;
 							} else {
 								logger.log('Has vote and not double', 'OK');
-								newplayer.child('vote').update(voter);
 								// Check for votes/antivotes
 								for ( modvote in l.vote ) {
 									if (l.vote[modvote]) {
 										votes++;
 									} else { antivotes++; }
 								}
+								newplayer.child('vote').update(voter);
+								votes++;
 							}
 						} else {
 							logger.log('Doesnt have votes, adding', 'OK');
