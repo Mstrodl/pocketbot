@@ -35,7 +35,8 @@ module.exports = {
 		':nerfit:', ':trust:', ':fixit:', ':lol:',
 		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",
 		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
-		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:"
+		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:",
+		":dbqm:"
 	],
 	//Custom emojis
 	emojis: {
