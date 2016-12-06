@@ -221,7 +221,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 
 		if (vars.emotes.includes(msg)) {
 			dio.del(event.d.id, command_data );
-			console.log('Animated emote detected...');
+			console.log('Special emote detected...');
 			dio.sendImage('emoji/'+msg,user,{bot: bot},channelID);
 		}
 

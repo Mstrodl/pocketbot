@@ -21,9 +21,9 @@ exports.say = function(msg,data,chan=false) {
 
 exports.sendImage = function(t,user,data,chan=false) {
 	let c = (chan) ? chan : data.channelID;
-	let emoji = t.replace(/:/g, "");
+	let emoji = t.replace(/:/g, "").replace();
 	let m = (user) ? '`@'+user+':`': null;
-	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz')) {
+	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz') || emoji.startsWith('emoji/db')) {
 		logger.log('Uploading '+emoji+'.gif', logger.MESSAGE_TYPE.OK);
 		data.bot.uploadFile({
 			to: c,
