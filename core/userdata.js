@@ -57,7 +57,7 @@ userdata.prototype.setProp = function({ user = null, prop = null, }){
         }
 }
 
-userdata.prototype.transferCurrency = function(fromID, toID, amount){
+userdata.prototype.transferCurrency = function(fromID, toID, amount, ignoreSender){
     let ud = this;
 
     return new Promise( (resolve, reject) => {
@@ -79,35 +79,51 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount){
                     }
                 });
 
-                // Check for balance
-                if(fromID){
-                    ud.getProp(fromID, 'currency').then( (res) => {
-                        if (res < amount){
-                            reject("User has insufficient funds");
-                        } else {
-                            // Do the transfer
+                //Using some local functions because fuck undebuggable promises
+                function _transferHandle(res){
+                    if (res < amount){
+                        reject("User has insufficient funds");
+                    } else {
+                        // Do the transfer
+                        ud.setProp({
+                            user: fromID,
+                            prop: {
+                                name: 'currency',
+                                data: res - amount
+                            }
+                        });
+                        ud.getProp(toID, 'currency').then( (toBank) => {
                             ud.setProp({
-                                user: fromID,
+                                user: toID,
                                 prop: {
                                     name: 'currency',
-                                    data: res - amount
+                                    data: toBank + amount
                                 }
                             });
-                        }
-                    });
+                        });
+
+                        resolve ({res: "Transfer happened sucessfully"});
+                    }
                 }
 
-                ud.getProp(toID, 'currency').then( (toBank) => {
-                    ud.setProp({
-                        user: toID,
-                        prop: {
-                            name: 'currency',
-                            data: toBank + amount
-                        }
+                // Check for balance
+                if(!ignoreSender){
+                    ud.getProp(fromID, 'currency').then((res) => {_transferHandle(res)});
+                }else{
+                    ud.getProp(toID, 'currency').then( (toBank) => {
+                        ud.setProp({
+                            user: toID,
+                            prop: {
+                                name: 'currency',
+                                data: toBank + amount
+                            }
+                        });
                     });
-                });
 
-                resolve ({res: "Transfer happened sucessfully"});
+                    resolve ({res: "Transfer happened sucessfully"});
+                }
+
+                
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
             reject("User has no wallet");
