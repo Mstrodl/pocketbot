@@ -49,7 +49,7 @@ var cmd_transfer = new command('economy', '!transfer', 'Sends a user a certain a
 		return;
 	}
 
-	data.userdata.transferCurrency(data.userID, recipient, amount).then( (res) => {
+	data.userdata.transferCurrency(data.userID, recipient, amount, false).then( (res) => {
 		dio.say(`${amount} ${vars.emojis.wip} sent successfully`, data);
 	}).catch( (err) => {
 		dio.say(err, data);
@@ -65,7 +65,7 @@ var cmd_give = new command('economy', '!give', 'Give a user a certain amount of 
 	var recipient = helpers.getUser(data.args[1]);
 	var amount = parseInt(data.args[2])
 
-	data.userdata.transferCurrency(null, recipient, amount).then( (res) => {
+	data.userdata.transferCurrency(null, recipient, amount, true).then( (res) => {
 		if( res.hasOwnProperty('err') ){
 			dio.say(res.err, data);
 		}else{
