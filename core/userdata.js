@@ -81,8 +81,6 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount, ignoreSende
 
                 //Using some local functions because fuck undebuggable promises
                 function _transferHandle(res){
-                    //Fuck it, we're going old school
-                    logger.log(res.toString());
                     if (res < amount){
                         reject("User has insufficient funds");
                     } else {
