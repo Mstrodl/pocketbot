@@ -19,12 +19,15 @@ let cmdStream = new command('streaming', '!stream', `Links to the Pocketwatch st
 
 		if (moment().isoWeekday() < day) {
 			// If today is less than day needed -> "in x days"
+			console.log('Stream is this week');
 			time = moment( moment().isoWeekday(day).startOf('hour').hour(17) ).fromNow();
 		} else if (moment().isoWeekday() > day) {
 			// If today is Saturday, add a week
+			console.log('Stream was yesterday, add a week');
 			time = moment( moment().add(1, 'weeks').isoWeekday(day).startOf('hour').hour(17) ).fromNow();
 		} else if (moment().isoWeekday() === day) {
 			// If today is friday -> "in x hours, y minutes"
+			console.log('Stream is today');
 			time = moment( moment().startOf('hour').hour(17) ).fromNow();
 		}
 
