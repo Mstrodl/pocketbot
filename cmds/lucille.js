@@ -35,6 +35,7 @@ let logger  = require('../core/logger'),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
+}
 
 
 function twitterList(watchList){

@@ -152,6 +152,20 @@ CommandManager.prototype.hasPermission = function(callerRoles, commandMinRole){
     }
 }
 
+CommandManager.prototype.hasPermission = function(callerRoles, commandMinRole){
+    if(commandMinRole == null){
+        return true;
+    }else{
+        for(var key in commandMinRole){
+            if(callerRoles.includes(commandMinRole[key])){
+                return true;
+            }
+        }
+        return false;
+    }
+}
+
+
 //Gets the help text for either one or all commands
 //filter        -   command trigger or group name
 //lookupTarget  -   'all' for all commands, 'group' for one group, 'command' for one command
