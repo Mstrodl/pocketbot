@@ -5,6 +5,7 @@
 
 let logger  = require('../core/logger'),
 	command = require('../core/command').Command,
+    commandSystem    = require('../core/command'),
 	helpers = require('../core/helpers');
 
 let cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
@@ -22,6 +23,8 @@ var cmd_ding = new command('ryionbot', '!ding', 'Test command #2', function(data
         message : "Dong <:nguyen:230394513560961024>"
     });
 });
+
+cmd_ding.triggerType = commandSystem.TriggerType.InMessage;
 
 let cmd_help = new command('ryionbot', '!help', 'Sends the user a list of all command groups for further info', function(data){
     let k = (data.args[1]) ? data.args[1] : null;
