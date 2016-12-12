@@ -5,24 +5,12 @@
 let logger  = require('../core/logger'),
 	dio		= require('../core/dio'),
 	x		= require('../core/vars'),
-	command = require('../core/command').Command
+	command = require('../core/command').Command,
+	helpers = require('../core/helpers'),
 	stripIndents = require('common-tags').stripIndents;
 
-let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game', function(data){
-	dio.say(""+
-		// I love this.
-		"Most recent Documented Changes (11/15/16):\n"+
-		"<http://blog.pocketwatchgames.com/post/153237321651>\n", data);
-});
-
-let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren', function(data){
-	data.bot.sendMessage({
-		to: data.channelID,
-		embed: {
-			title: `The Warren Weekly`,
-			color: '8281503',
-			description: `The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes.`,
-			fields: [
+//Yay arrays
+let ww_issues = [
 				{
 					name: `Issue 12`,
 					value: `[Read the latest issue of the Warren Weekly](http://bit.ly/2hjxude)`,
@@ -73,12 +61,69 @@ let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent i
 					value: `[Read an archived issue](http://bit.ly/29EtwWM)`,
 					inline: true
 				}
-			],
-			footer: {
-				text: `Last issue published on 11th December`
-			}
-		},
-	});
+];
+
+let guides = [
+				{
+					name: `Introduction: A basic guide`,
+					value: `[Link to Lacante's Video](https://www.youtube.com/watch?v=w8Y2gdrgpUA)`,
+					inline: false
+				},
+				{
+					name: `The Commander and You`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/)`,
+					inline: true
+				},
+				{
+					name: `Knowing the Battlefield`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/2)`,
+					inline: true
+				},
+				{
+					name: `Economics of War`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/3)`,
+					inline: true
+				},
+				{
+					name: `Meet your Comrades`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/4)`,
+					inline: true
+				},
+				{
+					name: `The Subtleties of Battle`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
+					inline: true
+				},
+				{
+					name: `Unit Overview`,
+					value: `[Link to Shooflypi's video](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
+					inline: true
+				}
+];
+
+
+let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game', function(data){
+	dio.say(""+
+		// I love this.
+		"Most recent Documented Changes (11/15/16):\n"+
+		"<http://blog.pocketwatchgames.com/post/153237321651>\n", data);
+});
+
+let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren', function(data){
+	let ww_embed = new helpers.Embed({
+		title: `The Warren Weekly`,
+		color: '8281503',
+		description: `The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes.`,
+		footer: {
+			text: `Last issue published on 11th December`
+		}
+	})
+
+	for(var k in ww_issues){
+		ww_embed.pushItem(new helpers.EmbedItem(ww_issues[k].name, ww_issues[k].value));
+	}
+
+	dio.sendEmbed(ww_embed, data);
 });
 
 let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Troubleshoot common errors', function(data){
@@ -122,85 +167,34 @@ let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Troubleshoot com
 });
 
 let cmd_guide = new command('bookbot', '!guide', 'Get a useful list of guides for the game', function(data){
-	data.bot.sendMessage({
-		to: data.channelID,
-		embed: {
-			title: `Guides`,
-			color: '8281503',
-			description: `If you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.`,
-			fields: [
-				{
-					name: `Introduction: A basic guide`,
-					value: `[Link to Lacante's Video](https://www.youtube.com/watch?v=w8Y2gdrgpUA)`,
-					inline: false
-				},
-				{
-					name: `The Commander and You`,
-					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/)`,
-					inline: true
-				},
-				{
-					name: `Knowing the Battlefield`,
-					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/2)`,
-					inline: true
-				},
-				{
-					name: `Economics of War`,
-					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/3)`,
-					inline: true
-				},
-				{
-					name: `Meet your Comrades`,
-					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/4)`,
-					inline: true
-				},
-				{
-					name: `The Subtleties of Battle`,
-					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
-					inline: true
-				},
-				{
-					name: `Unit Overview`,
-					value: `[Link to Shooflypi's video](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
-					inline: true
-				}
-			]
-		}
+	let guide_embed = new helpers.Embed({
+		title: `Guides`,
+		color: '8281503',
+		description: `If you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.`
 	});
+
+	for(var k in guides){
+		guide_embed.pushItem(new helpers.EmbedItem(guides[k].name, guides[k].value));
+	}
+	
+	dio.sendEmbed(guide_embed, data);
 });
 
 let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comrades**', function(data) {	
-	data.bot.sendMessage({
-		to: data.channelID,
-		embed: {
-			title: `<:tntwolf:253730191556214795> **Clash of Comrades** <:tntwolf:253730191556214795>`,
-			color: '8281503',
-			description: `Clash of Comrades is a bi-monthly tournament for players of the game Tooth and Tail with the aim of friendly competition and the development of the game!`,
-			url: 'http://clashofcomrades.com',
-			fields: [
-				{
-					name: `Rules & more`,
-					value: `[Read about the rules on facebook](https://www.facebook.com/ClashOfComrades)`,
-					inline: false
-				},
-				{
-					name: `Latest Brackets`,
-					value: `[Find the latest brackets on challonge](http://challonge.com/cocnovemberknockout)`,
-					inline: false
-				},
-				{
-					name: `YouTube`,
-					value: `[Find Clash of Comrades on YouTube](https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg)`,
-					inline: true
-				},
-				{
-					name: `Twitch`,
-					value: `[Find Clash of Comrades on Twitch](https://www.twitch.tv/clashofcomrades)`,
-					inline: true
-				}
-			]
-		}
+	//Mew
+	let coc_embed = new helpers.Embed({
+		title: `<:tntwolf:253730191556214795> **Clash of Comrades** <:tntwolf:253730191556214795>`,
+		color: '8281503',
+		description: `Clash of Comrades is a bi-monthly tournament for players of the game Tooth and Tail with the aim of friendly competition and the development of the game!`,
+		url: 'http://clashofcomrades.com' 
 	});
+
+	coc_embed.pushItem(new helpers.EmbedItem(`Rules & more`, `[Read about the rules on facebook](https://www.facebook.com/ClashOfComrades)`));
+	coc_embed.pushItem(new helpers.EmbedItem(`Latest Brackets`, `[Find the latest brackets on challonge](http://challonge.com/cocnovemberknockout)`));
+	coc_embed.pushItem(new helpers.EmbedItem(`YouTube`, `[Find Clash of Comrades on YouTube](https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg)`));
+	coc_embed.pushItem(new helpers.EmbedItem(`Twitch`, `[Find Clash of Comrades on Twitch](https://www.twitch.tv/clashofcomrades)`));
+
+	dio.sendEmbed(coc_embed, data);
 });
 
 let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot', function(data) {
