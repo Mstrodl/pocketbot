@@ -4,7 +4,11 @@
 ---------------------------------------- */
 let dio = require('../core/dio'),
 	x	= require('../core/vars');
+	embed = require('../core/embed');
 // ! -- Feel free to improve any of these functions
+
+module.exports.Embed = embed.Embed;
+module.exports.EmbedItem = embed.EmbedItem;
 
 // Debug function
 module.exports.isDebug = function() {
