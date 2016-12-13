@@ -161,3 +161,19 @@ module.exports.getNickFromId = function(id, memberList){
 }
 
 module.exports.vars = x;
+
+// Shuffle a given array
+module.exports.shuffle = function shuffle(a) {
+    for (let i = a.length; i; i--) {
+        let j = Math.floor(Math.random() * i);
+        [a[i - 1], a[j]] = [a[j], a[i - 1]];
+    }
+}
+
+module.exports.isDM = function(data) {
+    if (data.channelID in data.bot.directMessages) {
+		return true;
+	} else {
+		return false;
+	}
+}
