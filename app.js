@@ -21,7 +21,8 @@ let TOKEN 		= require('./core/tokens'),
 	status 		= require('./core/presence'),
 	helper		= require('./core/helpers'),
 	vars 		= require('./core/vars'),
-	dio 		= require('./core/dio');
+	dio 		= require('./core/dio'),
+	messageManager = require('./core/messages');
 
 // ===================================
 // Initialize Firebase Stuff
@@ -119,6 +120,10 @@ logger.log(`Running on Heroku: ${helper.isHeroku() ? 'true' : 'false'}`, logger.
 // This stays a var. You change it back to let, we fight
 var bot = new chat.Client({ token: TOKEN.TOKEN, autorun: true });
 
+//Init the messageManager
+var globalMessageManager = new messageManager.MessageManager();
+globalMessageManager.AddChannels(bot);
+
 // ===================================
 // Bot Events
 // ===================================
@@ -175,6 +180,8 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		userdata: userdata,
 		//Command manager
 		commandManager: globalCmdManager,
+		//Message manager
+		messageManager: globalMessageManager,
 		// Bot client object
 		bot: bot,
 		// Name of user who sent the message
@@ -268,4 +275,6 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		});
 		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error, e);
 	}
+
+	globalMessageManager.Push(command_data.messageID, command_data.channelID);
 });
