@@ -1,7 +1,7 @@
-var EmbedItem = function(title, text, isInline=true){
+var EmbedItem = function(title, text, isInline=false){
 	this.name = title;
 	this.value = text;
-	this.isInline = isInline;
+	this.inline = isInline;
 }
 
 var Embed = function(descriptor){

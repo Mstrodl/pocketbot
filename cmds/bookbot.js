@@ -120,7 +120,7 @@ let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent i
 	})
 
 	for(var k in ww_issues){
-		ww_embed.pushItem(new helpers.EmbedItem(ww_issues[k].name, ww_issues[k].value));
+		ww_embed.pushItem(new helpers.EmbedItem(ww_issues[k].name, ww_issues[k].value, ww_issues[k].inline));
 	}
 
 	dio.sendEmbed(ww_embed, data);
