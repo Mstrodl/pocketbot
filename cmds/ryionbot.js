@@ -94,4 +94,22 @@ var cmd_cointoss = new command('ryionbot', '!coin', 'Tosses a coin, result is He
     dio.say(((Math.round(Math.random() * 300)) % 2 ? "Heads" : "Tails"), data);
 });
 
-module.exports.commands = [cmd_whois, cmd_iam, cmd_roll, cmd_cointoss];
+var cmd_mstack_del = new command('ryionbot', '!purge', 'Deletes the last *n* messages', function(data){
+    if(data.args.length != 2){
+        throw new Error("Wrong number of arguments given to purge command");
+    }
+
+    var del_count = parseInt(data.args[1]);
+
+    if(del_count <= 0){
+        throw new Error("Number of messages cannot be negative or 0");
+    }
+
+    data.messageManager.Delete(del_count, data.channelID, data);
+
+    dio.say("Nuked the last " + del_count + " messages.", data);
+});
+
+cmd_mstack_del.permissions = [helpers.vars.ranger, helpers.vars.mod];
+
+module.exports.commands = [cmd_whois, cmd_iam, cmd_roll, cmd_cointoss, cmd_mstack_del];
