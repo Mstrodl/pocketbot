@@ -31,12 +31,12 @@ let logger  = require('../core/logger'),
 			'3271155122' //@ToothAndTail
 			//,'14423000' //@brianfranco
 		],
-		stream = (helpers.isHeroku() ? twitter.stream('statuses/filter', { follow: watchList }) : null),
+		stream = (helpers.isHeroku() ? twitter.stream('statuses/filter',
+			{ follow: watchList }
+		) : null),
 		lucilleBot = false,
 		lucillePersona = false,
 		lucilleTweet = false;
-}
-
 
 function twitterList(watchList){
 	let x = "The Current Twitter Accounts Being Tracked Are: \n "
