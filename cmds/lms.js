@@ -3,18 +3,18 @@
 	Bookbot's "Last Man Standing" minigame.
  ---------------------------------------- */
 
-const logger 		= require('../core/logger');
-const dio 			= require('../core/dio');
-const isBPG 		= require('../core/helpers').isBPG;
-const shuffle 		= require('../core/helpers').shuffle;
-const isDM	 		= require('../core/helpers').isDM;
-const x				= require('../core/vars');
-const command 		= require('../core/command').Command;
-const stripIndents 	= require('common-tags').stripIndents;
+const logger 		= require('../core/logger'),
+	dio 			= require('../core/dio'),
+	isBPG 			= require('../core/helpers').isBPG,
+	shuffle 		= require('../core/helpers').shuffle,
+	isDM	 		= require('../core/helpers').isDM,
+	x				= require('../core/vars'),
+	command 		= require('../core/command').Command,
+	stripIndents 	= require('common-tags').stripIndents;
 
 let match = {
-	turn: 0,
-	minPlayers: 1,
+	turn: 0, // keeps number of player whose turn it is; should probably rename this to turnIndex or similar
+	minPlayers: 1, // number of players required to start a game
 	playerEmbed: [],
 	inProgress: false
 };
