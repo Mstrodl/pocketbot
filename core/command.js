@@ -44,7 +44,7 @@ CommandManager.prototype.getCommand = function(words, group=null){
 
             for(var key in this.groups){
                 var cmd = this.groups[key].getCommand((trigger[0] == this.debugSymbol ? trigger.substring(1, trigger.length) : trigger));
-            
+
                 if(cmd != null){
                     return cmd;
                 }
@@ -334,7 +334,7 @@ function Command(groupName, triggers, description="", action=null, permission=nu
 //Execute command action on trigger
 //command_data  : object - object containing command/message data(user, channel, service, etc.)
 Command.prototype.call = function(command_data){
-    try{  
+    try{
         //Check if user has permission to call the command
         if(!command_data.commandManager.hasPermission(helpers.getUserRoles(command_data.bot, command_data.userID), this.permissions)){
             throw new Error("User does not have permission to call command");
@@ -342,17 +342,20 @@ Command.prototype.call = function(command_data){
 
         switch(this.triggerType){
             case TriggerType.Start:{
+                console.log("Almost there...", command_data.args[0], this.trigger);
                 if(command_data.args[0] != this.trigger){
-                    return;
+                    let cmdResult = this.action(command_data);
+                    logger.log(this.groupName +': ' + (cmdResult ? cmdResult : '<no return value>'), logger.MESSAGE_TYPE.OK);
+                    return cmdResult;
                 }
             }
             case TriggerType.InMessage:
             default:{
-                var cmdResult = this.action(command_data);
+                let cmdResult = this.action(command_data);
                 logger.log(this.groupName +': ' + (cmdResult ? cmdResult : '<no return value>'), logger.MESSAGE_TYPE.OK);
                 return cmdResult;
             }
-                
+
         }
     }catch(e){
         logger.log(this.groupName + ' - ' + this.triggers + ': Failed to execute command:\n' + e, logger.MESSAGE_TYPE.Error, e);
