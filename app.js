@@ -63,7 +63,7 @@ let mjPersona = new persona('Pocketbot', './assets/avatars/mj.png', vars.emojis.
 	lucille = new persona('Pocketbot', './assets/avatars/lucille.png', vars.emojis.lucille);
 
 // Manager and Groups
-let globalCmdManager	= new command.CommandManager('d'),
+let globalCmdManager	= new command.CommandManager('a'),
 	basicCmdGroup 		= new command.CommandGroup('basic', mastabot, 'Basic commands'),
 	ryionbotCmdGroup 	= new command.CommandGroup('ryionbot', mjPersona, 'Commands brought to you by RyionBot'),
 	ryionbot_ecoCmdGroup= new command.CommandGroup('economy', mjPersona, 'RyionBot\'s currency system commands'),
@@ -77,6 +77,7 @@ let globalCmdManager	= new command.CommandManager('d'),
 	lmsCmdGroup			= new command.CommandGroup('lms', bookbotCowboy, 'Commands for Last Man Standing, a chat minigame made by Glyde'),
 	infoCmdGroup		= new command.CommandGroup('unitinfo', unitinfo, 'Unit/Trait Information command'),
 	streamCmdGroup		= new command.CommandGroup('streaming', mastabot, 'Twitch stream related commands'),
+	freakCmdGroup		= new command.CommandGroup('freak', lucille, 'Freakyyy wuaaah'),
 	lucilleCmdGroup 	= new command.CommandGroup('lucille', lucille, 'Lucille gives us the latest tweets.');
 
 globalCmdManager.addGroup(basicCmdGroup);
@@ -92,6 +93,7 @@ globalCmdManager.addGroup(bookbotCmdGroup);
 globalCmdManager.addGroup(lmsCmdGroup);
 globalCmdManager.addGroup(infoCmdGroup);
 globalCmdManager.addGroup(streamCmdGroup);
+globalCmdManager.addGroup(freakCmdGroup);
 globalCmdManager.addGroup(lucilleCmdGroup);
 
 // Clear the log file
