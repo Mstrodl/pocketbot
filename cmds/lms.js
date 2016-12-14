@@ -30,7 +30,7 @@ let player, // holds only the person whose turn it is
 // This used to be ?rules
 let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame **Last Man Standing**", function(data){   // Explanation of game command and rules.
 	if (!isBPG(data)) {
-		dio.say(`Last Man Standing (and all relevant commands) can only be done in the <#172429393501749248>`, data);
+		dio.say(`Last Man Standing (and all relevant commands) can only be done in the <${x.playground}>`, data);
 	} else {
 		dio.say(stripIndents`
 			__Last Man Standing Rules__
@@ -44,7 +44,8 @@ let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame *
 			**!start**: Start the game.
 			**!ff**: Leave a game in progress.
 
-			**!load #**: load a bullet into your revolver chamber at location # (You start the game with a bullet at position 0.) After you load your gun the barrels will be spun and a random chamber will be at the trigger.\n# = 0,1,2,3, or 4
+			**!load #**: load a bullet into your revolver chamber at location # (You start the game with a bullet at position 0.) After you load your gun the barrels will be spun and a random chamber will be at the trigger.
+			# = 1, 2, 3, 4 or 5
 
 			**!attack #**: Attack a target at position # **continuously** until you hit an empty barrel. type in '!players' to see the list of players and their positions. If you want to fire multiple shots, line your bullets up in a row.
 
@@ -72,19 +73,16 @@ let cmd_join = new command('lms', '!join', "Join a round **'Last Man Standing'**
 		if (match.inProgress) {
 			dio.say(`This game is currently in session, please wait until the game is finished.`, data);
 		} else {
-			// check if players has joined already
-			let isInPlayers = players.some(function(val, index, arr) {
-				return players[index].ID === data.userID;
-			});
-
-			if (isInPlayers) {
+			// check if player has joined already
+			if (isInPlayers(data)) {
 				dio.say(`Hold up, there's only one of you, and that one's already joined.`, data);
 			} else {
+				// add a new player to the players array
 				players.push({
 					ID: data.userID,
 					name: data.user,
 					hitpoints: 5,
-					bullets: [true, true, true, true, true],
+					bullets: [true, true, true, true, false],
 					triggerPos: Math.floor(Math.random() * 5),
 					avoids: 3,
 					isAvoiding: false
@@ -98,11 +96,12 @@ let cmd_join = new command('lms', '!join', "Join a round **'Last Man Standing'**
 
 // fix this --- did it I think
 let cmd_leave = new command('lms', '!leave', "Leave a round of **'Last Man Standing'**", function(data){
+	console.log(players);
 	if (isBPG(data)) {
 		if (match.inProgress) {
 			dio.say("This game is currently in session, please wait until the game is finished.", data);
 		} else {
-			if (data.userID in players) {
+			if (isInPlayers(data)) {
 				removePlayer(data.userID);
 				dio.say("Deciding to stay alive today I see, wise.", data);
 			} else {
@@ -114,7 +113,7 @@ let cmd_leave = new command('lms', '!leave', "Leave a round of **'Last Man Stand
 
 let cmd_players = new command('lms', '!players', "Show all currently living players for **'Last Man Standing'**", function(data){
 	if (isBPG(data)) {
-		if (match.inProgress) {
+		if (!match.inProgress || match.inProgress) {
 			players.forEach(function(val, index) {
 				match.playerEmbed.push({
 					name: `#${index + 1} ${players[index].name}`,
@@ -185,14 +184,14 @@ let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel",
 						\`\`\`**Current Bullet configuration**:
 
 						Chamber: 1-2-3-4-5
-						Bullets: `;
+						Bullets:`;
 					player.bullets[chamberInt - 1] = true; // insert bullet
 					for(let i = 0; i < 5 ; i++) {
 						if (i != 4) {
 							if (player.bullets[i] === true) {
-								bulletConfig += `O-`;
+								bulletConfig += ` O-`;
 							} else {
-								bulletConfig += `X-`;
+								bulletConfig += ` X-`;
 							}
 						} else if (player.bullets[i] === true) {
 							bulletConfig += `O\`\`\``;
@@ -349,12 +348,13 @@ let cmd_attack = new command('lms', '!attack', "Attack one of your opponents", f
 
 							if (target.hitpoints < 1) { // target died
 								atkMessage += ` eliminating the player. :dizzy_face::gun:\n`;
-								removePlayer(target);
+								removePlayer(target.ID);
 
 								nextTurn(data, atkMessage);
+								return;
 							}
 
-							nextTurn(data, atkMessage + ".");
+							nextTurn(data, atkMessage);
 						}
 					}
 				}
@@ -363,18 +363,20 @@ let cmd_attack = new command('lms', '!attack', "Attack one of your opponents", f
 	}
 });
 
+module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_reset, cmd_load, cmd_avoid, cmd_attack];
+
 /* ----------------------------------------
 	Some helper functions specific
-	to this file
+	to this module
  ---------------------------------------- */
 
 function removePlayer(him) {
-	players.forEach(function(val, index) {
-		if (players[index].ID === him) {
-			players.splice[index, 1];
-			return;
-		}
-	});
+    players.forEach(function(val, index) {
+        if (players[index].ID === him) {
+            players.splice(index, 1);
+            return;
+        }
+    });
 }
 
 function nextTurn(data, msg=null) {
@@ -386,24 +388,24 @@ function nextTurn(data, msg=null) {
 
 	player = players[match.turn];
 
-	if (msg != null) {
-		dio.say(msg, data);
-	}
-
 	if (players.length === 1) {
 		dio.say(stripIndents`
 			${msg}
 
 			:tada: Congratulations, <@${player.ID}>! You are the Last Man Standing! :tada:
 		`, data);
-		//Send the winner some WIPs
-		userdata.transferCurrency(null, playerList[0], prize).then((res) => {
+		
+		// Send the winner some WIPs
+		data.userdata.transferCurrency(null, player.ID, match.prize).then((res) => {
 			dio.say(`${amount} ${x.emojis.wip} rewarded to you.`, data);
 		}).catch((err) =>{
 			dio.say(`Hmm, for some reason I was unable to send ${x.emojis.wip} to you.`, data);
 		});
+
 		resetGame();
 		return;
+	} else {
+		dio.say(msg, data);
 	}
 
 	player.isAvoiding = false; // remove avoid-buff from player
@@ -414,11 +416,8 @@ function nextTurn(data, msg=null) {
 };
 
 function isMyTurn(data) {
-	if (data.userID != players[match.turn].ID) {
-		return false;
-	} else {
-		return true;
-	}
+	if (data.userID != players[match.turn].ID) { return false; } 
+	else { return true; }
 };
 
 function resetGame() {
@@ -433,4 +432,11 @@ function resetGame() {
 	players = [];
 };
 
-module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_reset, cmd_load, cmd_avoid, cmd_attack];
+function isInPlayers(data) {
+	let isInPlayers = players.some(function(val, index) {
+		return players[index].ID === data.userID;
+	});
+
+	if (isInPlayers) { return true; }
+	else { return false; }
+}
