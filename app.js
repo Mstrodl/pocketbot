@@ -248,24 +248,29 @@ bot.on('message', function(user, userID, channelID, message, event) {
 			logger.log(`[DIRECT MESSAGE] ${user}: ${message}`);
 		}
 
-		if (message && globalCmdManager.isTrigger(args[0])){
-			let cmdGroup = globalCmdManager.getGroup(globalCmdManager.getCommand(args[0]).groupName);
+		let cmd_trigger = globalCmdManager.isTrigger(args);
+
+		if (message && cmd_trigger){
+			let cmd = globalCmdManager.getCommand(args);
+			let cmdGroup = globalCmdManager.getGroup(cmd.groupName);
+
+			command_data.trigger = cmd_trigger;
 
 			// Personality Check
 			if (globalCmdManager.activePersona != cmdGroup.personality) {
 				cmdGroup.personality.set(command_data, function(){
-					globalCmdManager.call(command_data, args[0]);
+					globalCmdManager.call(command_data, cmd, cmdGroup);
 				});
 				globalCmdManager.activePersona = cmdGroup.personality;
 			} else {
-				globalCmdManager.call(command_data, args[0]);
+				globalCmdManager.call(command_data, cmd, cmdGroup);
 			}
 		}
 	} catch(e) {
 		bot.sendMessage({
 			to: channelID,
-			message: `An error occured inside the \`${args[0]}\` command code`
+			message: `An error occured while looking up or trying to call \`${args[0]}\``
 		});
-		logger.log(`An error occured inside the \`${args[0]}\` command code: ${e.message}`, logger.MESSAGE_TYPE.Error, e);
+		logger.log(`An error occured while looking up or trying to call \`${args[0]}\``, logger.MESSAGE_TYPE.Error, e);
 	}
 });
