@@ -10,13 +10,15 @@ const logger 		= require('../core/logger'),
 	isDM	 		= require('../core/helpers').isDM,
 	x				= require('../core/vars'),
 	command 		= require('../core/command').Command,
+	userdata		= require('../core/userdata'),
 	stripIndents 	= require('common-tags').stripIndents;
 
 let match = {
 	turn: 0, // keeps number of player whose turn it is; should probably rename this to turnIndex or similar
 	minPlayers: 1, // number of players required to start a game
 	playerEmbed: [],
-	inProgress: false
+	inProgress: false,
+	prize: 0
 };
 
 let players = []; // gonna hold all players
@@ -34,7 +36,7 @@ let cmd_lms = new command('lms', '!lms', "Find out more about Glyde's minigame *
 			__Last Man Standing Rules__
 			The objective of this game is simple. Be the last man standing. Players are each equipped with a Revolver with 5 chambers.
 			Players will take turns doing one of 3 actions: load, attack, or avoid.
-			Each player will have 5 lives, and is eliminated once they lose all 5. Once all but one if left standing, that person wins.
+			Each player will have 5 lives, and is eliminated once they lose all 5. Once all but one if left standing, that person wins and earns a small amount of ${x.emojis.wip}.
 
 			__Commands__
 			**!join**: Adds yourself into the lobby. The game needs at least 2 but ideally 3 or more players to start.
@@ -143,6 +145,7 @@ let cmd_start = new command('lms', '!start', "Start playing a round of **'Last M
 				shuffle(players);
 				player = players[match.turn];
 				match.inProgress = true;
+				match.prize = (players.length - 1) * 2;
 				dio.say(stripIndents`
 					Well well well... looks like this saloon ain't big enough for the ${players.length} of ya. Well then, let's just see who'll be the Last Man Standing.
 				
@@ -163,67 +166,6 @@ let cmd_reset = new command('lms', '!reset', "Reset and abort a round of **'Last
 		}
 	}
 });
-
-function removePlayer(him) {
-	players.forEach(function(val, index) {
-		if (players[index].ID === him) {
-			players.splice[index, 1];
-			return;
-		}
-	});
-}
-
-function nextTurn(data, msg=null) {
-	if (match.turn === players.length - 1) {
-		match.turn = 0;
-	} else {
-		match.turn++;
-	}
-
-	player = players[match.turn];
-
-	if (msg != null) {
-		dio.say(msg, data);
-	}
-
-	console.log(players);
-	console.log(players.length);
-
-	if (players.length === 1) {
-		dio.say(stripIndents`
-			${msg}
-
-			:tada: Congratulations, <@${player.ID}>! You are the Last Man Standing! :tada:
-		`, data);
-		resetGame();
-		return;
-	}
-
-	player.isAvoiding = false; // remove avoid-buff from player
-
-	dio.say(stripIndents`
-		<@${player.ID}>: It is now your turn.
-	`, data, x.playground);
-};
-
-function isMyTurn(data) {
-	if (data.userID != players[match.turn].ID) {
-		return false;
-	} else {
-		return true;
-	}
-};
-
-function resetGame() {
-	let match = {
-		turn: 0,
-		minPlayers: 1,
-		playerEmbed: [],
-		inProgress: false
-	};
-
-	players = [];
-};
 
 let cmd_load = new command('lms', '!load', "Load a new bullet into your barrel", function(data){
 	if (match.inProgress) {
@@ -420,5 +362,75 @@ let cmd_attack = new command('lms', '!attack', "Attack one of your opponents", f
 		}
 	}
 });
+
+/* ----------------------------------------
+	Some helper functions specific
+	to this file
+ ---------------------------------------- */
+
+function removePlayer(him) {
+	players.forEach(function(val, index) {
+		if (players[index].ID === him) {
+			players.splice[index, 1];
+			return;
+		}
+	});
+}
+
+function nextTurn(data, msg=null) {
+	if (match.turn === players.length - 1) {
+		match.turn = 0;
+	} else {
+		match.turn++;
+	}
+
+	player = players[match.turn];
+
+	if (msg != null) {
+		dio.say(msg, data);
+	}
+
+	if (players.length === 1) {
+		dio.say(stripIndents`
+			${msg}
+
+			:tada: Congratulations, <@${player.ID}>! You are the Last Man Standing! :tada:
+		`, data);
+		//Send the winner some WIPs
+		userdata.transferCurrency(null, playerList[0], prize).then((res) => {
+			dio.say(`${amount} ${x.emojis.wip} rewarded to you.`, data);
+		}).catch((err) =>{
+			dio.say(`Hmm, for some reason I was unable to send ${x.emojis.wip} to you.`, data);
+		});
+		resetGame();
+		return;
+	}
+
+	player.isAvoiding = false; // remove avoid-buff from player
+
+	dio.say(stripIndents`
+		<@${player.ID}>: It is now your turn.
+	`, data, x.playground);
+};
+
+function isMyTurn(data) {
+	if (data.userID != players[match.turn].ID) {
+		return false;
+	} else {
+		return true;
+	}
+};
+
+function resetGame() {
+	let match = {
+		turn: 0,
+		minPlayers: 1,
+		playerEmbed: [],
+		inProgress: false,
+		prize: 0
+	};
+
+	players = [];
+};
 
 module.exports.commands = [cmd_lms, cmd_game, cmd_join, cmd_leave, cmd_players, cmd_start, cmd_reset, cmd_load, cmd_avoid, cmd_attack];
