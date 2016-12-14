@@ -56,6 +56,11 @@ module.exports = {
 		warrent1: '<:warrent1:253571862926196736>',
 		warrent2: '<:warrent2:253571862733258754>',
 		warrent3: '<:warrent3:253571863026991124>',
+		squirrel: '<:squirrel:258695748831543296>',
+		tnttoad: '<:tnttoad:258698162867273728>',
+		tntlizard: '<:tntlizard:258698111554289675>',
+		mole: '<:mole:258698270493245440>',
+		pigeon: '<:pigeon:258698263711055876>',
 		//Other
 		wip: '<:wip:247433292587073536>',
 		wolf: '<:tntwolf:230095674283261954>'
