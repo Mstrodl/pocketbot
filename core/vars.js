@@ -42,7 +42,7 @@ module.exports = {
 	emojis: {
 		//Devs
 		schatz: '<:schatz:230393920842891264>',
-		nguyen: '<:nguyen:230394513560961024> ',
+		nguyen: '<:nguyen:230394513560961024>',
 		masta: '<:masta:230396612797661185>',
 		dexter: '<:dexter:230393518386970626>',
 		adam: '<:adam:230394845108240384>',
@@ -56,11 +56,11 @@ module.exports = {
 		warrent1: '<:warrent1:253571862926196736>',
 		warrent2: '<:warrent2:253571862733258754>',
 		warrent3: '<:warrent3:253571863026991124>',
-		squirrel: '<:squirrel:258695748831543296>',
-		tnttoad: '<:tnttoad:258698162867273728>',
-		tntlizard: '<:tntlizard:258698111554289675>',
-		mole: '<:mole:258698270493245440>',
-		pigeon: '<:pigeon:258698263711055876>',
+		squirrel: '<:squirrel:253727216251174915>',
+		toad: '<:tnttoad:253732160706445313>',
+		lizard: '<:tntlizard:253727216456695808>',
+		mole: '<:mole:253728669808197643>',
+		pigeon: '<:pigeon:253732160878411776>',
 		//Other
 		wip: '<:wip:247433292587073536>',
 		wolf: '<:tntwolf:230095674283261954>'

@@ -81,27 +81,29 @@ let cmdVerify = new command('matchmake', '!verify', `This posts a Steam link whi
 
 let player1 = 0,
 	player2 = 0,
+	playersReady = false;
 	dStart = false;
 	
 let cmdDraft = new command('matchmake', '!draft', `This will begin the drafting mode`, function(data) {
 	
-	if(!dStart) {
-		if(player1 === 0 && player2 === 0) {
-			player1 = data.userID;
-			dio.say("You have entered the draft",data);
-		} else {
-			player2 = data.userID;
-			dio.say("Drafting has begun, type !select <:schatz:230393920842891264> to end draft",data);
-			dStart = true;
-		}
+	if(player1 === 0 && player2 === 0) {
+		player1 = data.userID;
+		dio.say("You have entered the draft",data);
 	} else {
+		player2 = data.userID;
+		dio.say("Both players have entered", data);
+		playersReady = true;
+	}
+	if(playersReady) {
 		if(player1 != 0 && player2 != 0) {
-			dio.say("Looks like everything is in order, beginning draft...", data);
+			dio.say("Drafting has begun!\nType `!select` <:schatz:230393920842891264> to end the draft\nType `!select` <:nguyen:230394513560961024> to reset the draft\nType `!select` <:masta:230396612797661185> to see how to draft", data);
+			dStart = true;
 		} else {
 			dio.say("Looks like a player isn't in my database, resetting", data);
 			player1 = 0,
 			player2 = 0,
 			dStart = false;
+			playersReady = false;
 		}
 	}
 });
@@ -109,90 +111,109 @@ let cmdDraft = new command('matchmake', '!draft', `This will begin the drafting 
 let searching;
 
 let tntUnits = [
-	"squirrel", "lizard", "toad", "mole", "pigeon",
-	"skunk", "ferret", "falcon", "chameleon", "snake",
-	"wolf", "owl", "fox", "badger", "boar",
-	"turret","barbedWire","artillery","balloon","mine",
-	];
+	"Squirrel", "Lizard", "Toad", "Mole", "Pigeon",
+	"Skunk", "Ferret", "Falcon", "Chameleon", "Snake",
+	"Wolf", "Owl", "Fox", "Badger", "Boar",
+	"Turret","Barbed Wire","Artillery","Balloon","Mine",
+	],
+	player1Units = ["","","","","",""],
+	player2Units = ["","","","","",""],
+	player1TurnCounter = 0,
+	player2TurnCounter = 0,
+	player1Turn = false,
+	player2Turn = false;
 	
 let cmdSelect = new command ('matchmake', '!select', `This will select a unit for the players draft`, function(data) {
-	if(dStart) {
+	if(!dStart) {
 		dio.say("Looks like a draft hasn't been started, use `!draft` to start one", data);
 	} else {
-		/*if (data.args[1] === "<:schatz:230393920842891264>") {
-			dio.say("Ending draft...", data);
-			player1 = 0,
-			player2 = 0,
-			dStart = false;	
-		}*/
-		switch(data.args[1]) {
-			case "<:schatz:230393920842891264>":
-				dio.say("Ending draft...", data);
-				player1 = 0,
-				player2 = 0,
-				dStart = false;	
-				break;
-			case "<:squirrel:258695748831543296>":
-				searching = "squirrel";
-				for (var i=tntUnits.length-1; i>=0; i--) {
-					if (tntUnits[i] === searching) {
-						dio.say("Squirrel selected", data);
-						tntUnits.splice(i, 1);
-					} else {
-						dio.say("Unit already selected", data);
-					}
-				}
-				break;
-			case "<:tntlizard:258698111554289675>":
-				searching = "lizard";
-				for (var i=tntUnits.length-1; i>=0; i--) {
-					if (tntUnits[i] === searching) {
-						dio.say("Lizard selected", data);
-						tntUnits.splice(i, 1);
-					} else {
-						dio.say("Unit already selected", data);
-					}
-				}
-				break;
-			case "<:tnttoad:258698162867273728>":
-				searching = "toad";
-				for (var i=tntUnits.length-1; i>=0; i--) {
-					if (tntUnits[i] === searching) {
-						dio.say("Toad selected", data);
-						tntUnits.splice(i, 1);
-					} else {
-						dio.say("Unit already selected", data);
-					}
-				}
-				break;
-			case "<:pigeon:258698263711055876>":
-				searching = "pigeon";
-				for (var i=tntUnits.length-1; i>=0; i--) {
-					if (tntUnits[i] === searching) {
-						dio.say("Pigeon selected", data);
-						tntUnits.splice(i, 1);
-					} else {
-						dio.say("Unit already selected", data);
-					}
-				}
-				break;
-			case "<:mole:258698270493245440>":
-				searching = "mole";
-				for (var i=tntUnits.length-1; i>=0; i--) {
-					if (tntUnits[i] === searching) {
-						dio.say("Mole selected", data);
-						tntUnits.splice(i, 1);
-					} else {
-						dio.say("Unit already selected", data);
-					}
-				}
-				break;
-			default:
-				dio.say("HELP", data);
-				break;
+		if(player1TurnCounter === 0 || player2TurnCounter % 2 === 0) {
+			player1Turn = true;
+			player2Turn = false;
 		}
+		if(player1TurnCounter % 3 === 0 && player1TurnCounter != 0) {
+			player1Turn = false;
+			player2Turn = true;
+		}
+		if(player1TurnCounter === 6) {
+			if( (player1Turn && data.userID === player1) || (player2Turn && data.userID === player2) ) {
+				switch(data.args[1]) {
+					case "<:schatz:230393920842891264>":
+						dio.say("Ending draft...", data);
+						player1 = 0,
+						player2 = 0,
+						player1TurnCounter = 0,
+						player2TurnCounter = 0,
+						player1Turn = false,
+						player2Turn = false,
+						player1Units = [],
+						player2Units = [],
+						playersReady = false;
+						dStart = false;	
+						break;
+					case "<:nguyen:230394513560961024>":
+						dio.say("Draft reset", data);
+						player1TurnCounter = 0,
+						player2TurnCounter = 0,
+						player1Turn = false,
+						player2Turn = false,
+						player1Units = [],
+						player2Units = [];
+						break;
+					case "<:squirrel:253727216251174915>":
+						searching = "Squirrel";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntlizard:253727216456695808>":
+						searching = "Lizard";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tnttoad:253732160706445313>":
+						searching = "Toad";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:pigeon:253732160878411776>":
+						searching = "Pigeon";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:mole:253728669808197643>":
+						searching = "Mole"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					default:
+						dio.say("Unit not recognized", data);
+						break;
+				}
+			} else {
+				dio.say("Patience is a virtue, wait your turn", data);
+			}
+		} else {
+			dio.say("<@${player1.ID}> Your units are "+player1Units, data);
+			dio.say("<@${player2.ID}> Your units are "+player1Units, data);
 	}
 });
 
+function findUnit(searching, data, tntUnits, player1Units, player2Units) {
+	for (var i=0; i<=tntUnits.length; i++) {
+		if (tntUnits[i] === searching) {
+			dio.say(searching + " selected", data);
+			tntUnits.splice(i, 1);
+			if(player1Turn) {
+				player1Units.push(searching);
+			} else {
+				player2Units.push(searching);
+			}
+			break;
+		} else {
+			dio.say("Unit already selected", data);
+			break;
+		}
+	}
+	if(player1Turn) {
+		player1TurnCounter++;
+	} else {
+		player2TurnCounter++;
+	}
+};
 
 module.exports.commands = [cmdReady, cmdUnready, cmdVerify, cmdDraft, cmdSelect];
