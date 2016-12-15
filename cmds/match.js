@@ -116,8 +116,8 @@ let tntUnits = [
 	"Wolf", "Owl", "Fox", "Badger", "Boar",
 	"Turret","Barbed Wire","Artillery","Balloon","Mine",
 	],
-	player1Units = ["","","","","",""],
-	player2Units = ["","","","","",""],
+	player1Units = [],
+	player2Units = [],
 	player1TurnCounter = 0,
 	player2TurnCounter = 0,
 	player1Turn = false,
@@ -128,14 +128,16 @@ let cmdSelect = new command ('matchmake', '!select', `This will select a unit fo
 		dio.say("Looks like a draft hasn't been started, use `!draft` to start one", data);
 	} else {
 		if(player1TurnCounter === 0 || player2TurnCounter % 2 === 0) {
+			dio.say(`<@${player1}> it's your pick`, data);
 			player1Turn = true;
 			player2Turn = false;
 		}
 		if(player1TurnCounter % 3 === 0 && player1TurnCounter != 0) {
+			dio.say(`<@${player2}> it's your pick`, data);
 			player1Turn = false;
 			player2Turn = true;
 		}
-		if(player1TurnCounter === 6) {
+		if(player1TurnCounter != 6) {
 			if( (player1Turn && data.userID === player1) || (player2Turn && data.userID === player2) ) {
 				switch(data.args[1]) {
 					case "<:schatz:230393920842891264>":
@@ -180,6 +182,66 @@ let cmdSelect = new command ('matchmake', '!select', `This will select a unit fo
 						searching = "Mole"
 						findUnit(searching, data, tntUnits, player1Units, player2Units);
 						break;
+					case "<:falcon:253728670299062272>":
+						searching = "Falcon"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:ferret:253727216398106625>":
+						searching = "Ferret"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:skunk:253730191514402816>":
+						searching = "Skunk"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:chameleon:253730191556214784>":
+						searching = "Chameleon"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntsnake:253732160916291594>":
+						searching = "Snake"
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntwolf:253730191556214795>":
+						searching = "Wolf";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntowl:230095674148913164>":
+						searching = "Owl";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntboar:230096277541486592>":
+						searching = "Boar";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:badger:230094635903483904>":
+						searching = "Badger";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntfox:253728670009524226>":
+						searching = "Fox";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:turret:253571159264591873>":
+						searching = "Turret";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:tntballoon:253570336967229450>":
+						searching = "Balloon";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:mine:253570337340522496>":
+						searching = "Mine";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:arty:253571159252140032>":
+						searching = "Artillery";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
+					case "<:barbedwire:259083677571481611>":
+						searching = "Artillery";
+						findUnit(searching, data, tntUnits, player1Units, player2Units);
+						break;
 					default:
 						dio.say("Unit not recognized", data);
 						break;
@@ -188,8 +250,20 @@ let cmdSelect = new command ('matchmake', '!select', `This will select a unit fo
 				dio.say("Patience is a virtue, wait your turn", data);
 			}
 		} else {
-			dio.say("<@${player1.ID}> Your units are "+player1Units, data);
-			dio.say("<@${player2.ID}> Your units are "+player1Units, data);
+			dio.say(`The draft is now over`, data);
+			dio.say(`<@${player1}> Your units are ${player1Units}`, data);
+			dio.say(`<@${player2}> Your units are ${player1Units}`, data);
+			player1 = 0,
+			player2 = 0,
+			player1TurnCounter = 0,
+			player2TurnCounter = 0,
+			player1Turn = false,
+			player2Turn = false,
+			player1Units = [],
+			player2Units = [],
+			playersReady = false;
+			dStart = false;
+		}
 	}
 });
 

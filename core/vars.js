@@ -61,8 +61,22 @@ module.exports = {
 		lizard: '<:tntlizard:253727216456695808>',
 		mole: '<:mole:253728669808197643>',
 		pigeon: '<:pigeon:253732160878411776>',
+		falcon: '<:falcon:253728670299062272>',
+		ferret: '<:ferret:253727216398106625>',
+		skunk: '<:skunk:253730191514402816>',
+		snake: '<:tntsnake:253732160916291594>',
+		chameleon: '<:chameleon:253730191556214784>',
+		wolf: '<:tntwolf:230095674283261954>',
+		fox: '<:tntfox:253728670009524226>',
+		badger: '<:badger:230094635903483904>',
+		boar: '<:tntboar:230096277541486592>',
+		owl: '<:tntowl:230095674148913164>',
+		turret: '<:turret:253571159264591873>',
+		mine: '<:mine:253570337340522496>',
+		balloon: '<:tntballoon:253570336967229450>',
+		artillery: '<:arty:253571159252140032>',
+		barbedwire: '<:barbedwire:259083677571481611>',
 		//Other
-		wip: '<:wip:247433292587073536>',
-		wolf: '<:tntwolf:230095674283261954>'
+		wip: '<:wip:247433292587073536>'
 	}
 }
