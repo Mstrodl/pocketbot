@@ -75,10 +75,9 @@ CommandManager.prototype.getGroup = function(name){
 }
 
 CommandManager.prototype.isTrigger = function(words){
-    if(!words){
-        throw new Error("Bad argument");
+    if(!words || words == ''){
+        return false;
     }
-
 
     //Check every word in the message
     for(var key in words){
