@@ -265,6 +265,8 @@ bot.on('message', function(user, userID, channelID, message, event) {
 			} else {
 				globalCmdManager.call(command_data, cmd, cmdGroup);
 			}
+		}else{
+			return;
 		}
 	} catch(e) {
 		bot.sendMessage({
