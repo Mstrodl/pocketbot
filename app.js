@@ -214,8 +214,12 @@ bot.on('message', function(user, userID, channelID, message, event) {
 			case ":yourmother:":
 				msg = ':yomama:'
 				break;
+			case ":patch22:":
 			case ":patch17:":
 				msg = ':schatzmeteor:'
+				break;
+			case ":wenmeteor:":
+				msg = ':wenbalance:'
 				break;
 		}
 
