@@ -33,7 +33,7 @@ module.exports = {
 	emotes: [
 		':rekt:', ':yomama:', ':facefeel:',
 		':nerfit:', ':trust:', ':fixit:', ':lol:',
-		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",":wenbalance:"
+		":wenwut:",":wenclap:", ":wenyes:", ":wenno:", ":wenmore:",":wencheer:",":wenbalance:",
 		":dexclap:",":dexdance:",":dexlittle:",":dexofc:",":dexwut:",
 		":schatzeh:",":schatzdance:",":schatzdrop:",":schatzmeteor:",
 		":dbqm:"
