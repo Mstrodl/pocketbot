@@ -179,7 +179,7 @@ if (!TOKEN.FBPKEYID()) {
 								logger.log('Has vote and not double', 'OK');
 								// Check for votes/antivotes
 								for ( modvote in l.vote ) {
-									if (l.vote[modvote]) {
+									if (l.vote[modvote] === true) {
 										votes++;
 									} else { antivotes++; }
 								}
@@ -195,9 +195,9 @@ if (!TOKEN.FBPKEYID()) {
 
 					if (vote) {
 						logger.log(`${from} voted for ${memsnap[lucky].username}!`, logger.MESSAGE_TYPE.Info);
-						dio.say(`:key: ${from} has voted to key ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
+						dio.say(`:key: ${from} has voted to key <@${lucky}>. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					} else {
-						logger.log(`${from} voted against ${memsnap[lucky].username}!`, logger.MESSAGE_TYPE.Info);
+						logger.log(`${from} voted against <@${lucky}>!`, logger.MESSAGE_TYPE.Info);
 						dio.say(`:no_entry_sign: ${from} has voted against keying ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					}
 

@@ -51,9 +51,25 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 		let d = new Date(user['joined_at']),
 			join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`;
 
-		dio.say(`${online} **${uname} #${disc}** ${nick}
-	**ID:** ${user.id}
-	**Joined:** ${join}`, data, data.userID);
+			data.userdata.getProp(user.id, 'vote').then( (res) => {
+				let votes = 0,
+					antivotes = 0;
+				console.log(res);
+				if( res || res === 0) {
+					for ( modvote in res ) {
+						if (res[modvote] === true) {
+							votes++;
+						} else { antivotes++; }
+					}
+
+					dio.say(`${online} **${uname} #${disc}** ${nick}
+		**ID:** ${user.id}
+		**Joined:** ${join}
+		**${votes}** :thumbsup: | **${antivotes}** :thumbsdown:`, data);
+				} else {
+					dio.say(`Could not check <@${user.id}>`, data);
+				}
+			});
 	}
 });
 
