@@ -75,12 +75,14 @@ CommandManager.prototype.getGroup = function(name){
 }
 
 CommandManager.prototype.isTrigger = function(words){
-    if(!words || words == '' || words.length < 3){
+    if(!words || words == ''){
         return false;
     }
 
     //Check every word in the message
     for(var key in words){
+        if (words[key].length < 3) return false;
+        
         if(words[key][0] == this.debugSymbol){
             if(this.getCommand([words[key].substring(1, words[key].length)])){
                 return words[key].substring(1, words[key].length);

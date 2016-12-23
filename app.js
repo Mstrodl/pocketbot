@@ -244,6 +244,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 	}
 
 	try {
+		// Log direct messages to Pocketbot OR all messages in debug mode
 		if (channelID === vars.modchan) {
 			// Stop spying on us Freakspot.
 		} else if (!(channelID in bot.directMessages)) {
