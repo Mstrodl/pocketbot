@@ -65,9 +65,9 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 					dio.say(`${online} **${uname} #${disc}** ${nick}
 		**ID:** ${user.id}
 		**Joined:** ${join}
-		**${votes}** :thumbsup: | **${antivotes}** :thumbsdown:`, data);
+		**${votes}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, data.userID);
 				} else {
-					dio.say(`Could not check <@${user.id}>`, data);
+					dio.say(`Could not check <@${user.id}>`, data, data.userID);
 				}
 			});
 	}
