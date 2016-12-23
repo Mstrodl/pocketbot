@@ -75,7 +75,7 @@ CommandManager.prototype.getGroup = function(name){
 }
 
 CommandManager.prototype.isTrigger = function(words){
-    if(!words || words == ''){
+    if(!words || words == '' || words.length < 3){
         return false;
     }
 
