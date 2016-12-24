@@ -55,7 +55,7 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 				let votes = 0,
 					antivotes = 0;
 				console.log(res);
-				if( res || res === 0) {
+				if( res != false) {
 					for ( modvote in res ) {
 						if (res[modvote] === true) {
 							votes++;
@@ -67,7 +67,9 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 		**Joined:** ${join}
 		**${votes}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, data.userID);
 				} else {
-					dio.say(`Could not check <@${user.id}>`, data, data.userID);
+					dio.say(`${online} **${uname} #${disc}** ${nick}
+		**ID:** ${user.id}
+		**Joined:** ${join}`, data, data.userID);
 				}
 			});
 	}
