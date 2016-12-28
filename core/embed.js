@@ -10,6 +10,7 @@ var Embed = function(descriptor){
 	}
 	
 	this.fields = [];
+	this.type = 'rich';
 }
 
 Embed.prototype.pushItem = function(item){
@@ -18,6 +19,30 @@ Embed.prototype.pushItem = function(item){
 	}
 
 	this.fields.push(item);
+}
+
+Embed.prototype.setImage = function(url, width=128, height=128){
+	this.image = {
+		url: url,
+		width: width,
+		height: height
+	}
+}
+
+Embed.prototype.setThumbnail = function(url, width=128, height=128){
+	this.thumbnail = {
+		url: url,
+		width: width,
+		height: height
+	}
+}
+
+Embed.prototype.setVideo = function(url, width=128, height=128){
+	this.image = {
+		url: url,
+		width: width,
+		height: height
+	}
 }
 
 
