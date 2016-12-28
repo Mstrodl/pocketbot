@@ -7,6 +7,8 @@ let dio = require('../core/dio'),
 	embed = require('../core/embed');
 // ! -- Feel free to improve any of these functions
 
+const DEFAULT_AVATAR_URL = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
+
 module.exports.Embed = embed.Embed;
 module.exports.EmbedItem = embed.EmbedItem;
 
@@ -162,6 +164,19 @@ module.exports.getUserRoles = function(client , userID, serverID = x.chan){
 //Get a user's nickname from a member list given the ID
 module.exports.getNickFromId = function(id, memberList){
 	return memberList[id].nick;
+}
+
+//Get a user's avatar URL given their ID, returns a default avatar if one cannot be found
+module.exports.getAvatarURLFromId = function(id, client, callback){
+	//I'm sorry for this hack
+	client.createDMChannel(id, function(err, res){
+		if(err || !res || !res.recipient.avatar){
+			res = DEFAULT_AVATAR_URL;
+		}else{
+			res = `https://cdn.discordapp.com/avatars/${id}/${res.recipient.avatar}.png`;
+		}	
+		callback(err, res);
+	});
 }
 
 module.exports.vars = x;
