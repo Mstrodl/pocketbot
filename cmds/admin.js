@@ -36,44 +36,46 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 		user = data.bot.servers[x.chan].members[u],
 		uRoles = data.bot.servers[x.chan].members[data.userID].roles;
 
-	if (!uRoles.includes(x.mod) && !uRoles.includes(x.admin)) return false;
-
 	if (!user) {
 		dio.say(`🕑 Dont recognize member: \`${u}\``, data)
 		return false;
-	} else {
-		dio.del(data.messageID, data);
-		let uname = user.username,
-			online = (user.status === "online") ? ":large_blue_circle:" : ':white_circle:',
-			nick = (user.nick != undefined) ? `\n aka ${user.nick}` : '',
-			disc = user.discriminator;
+	} 
 
-		let d = new Date(user['joined_at']),
-			join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`;
+	dio.del(data.messageID, data);
 
-			data.userdata.getProp(user.id, 'vote').then( (res) => {
-				let votes = 0,
-					antivotes = 0;
-				console.log(res);
-				if( res != false) {
-					for ( modvote in res ) {
-						if (res[modvote] === true) {
-							votes++;
-						} else { antivotes++; }
-					}
+	let uname = user.username,
+		nick = (user.nick != undefined) ? `${user.nick}` : '<no nickname>',
+		disc = user.discriminator;
+	let d = new Date(user['joined_at']),
+		join = `${d.getMonth() + 1}/${d.getDate()}/${d.getFullYear()} @ ${d.getHours()}:${d.getMinutes()}`;
 
-					dio.say(`${online} **${uname} #${disc}** ${nick}
-		**ID:** ${user.id}
-		**Joined:** ${join}
-		**${votes}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, data.userID);
-				} else {
-					dio.say(`${online} **${uname} #${disc}** ${nick}
-		**ID:** ${user.id}
-		**Joined:** ${join}`, data, data.userID);
-				}
+	data.userdata.getProp(user.id, 'vote').then( (res) => {
+		let votes = 0,
+			antivotes = 0;
+		console.log(res);
+		if( res != false) {
+			for ( modvote in res ) {
+				if (res[modvote] === true) {
+					votes++;
+				} else { antivotes++; }
+			}
+		}
+		
+		data.userdata.getProp(user.id, 'strikes').then( (res) => {
+			let info_embed = new helpers.Embed({
+				title: `${uname} - #${user.id}`,
+				color: (user.status === "online") ? 0x33ff33 : 0xff3333,
+				description: `**Nickname**: ${nick}\n**Joined:** ${join}\n**Votes**: **${votes}** :thumbsup: | **${antivotes}** :thumbsdown: \n**Strikes**: **${+res}** ⚾`
 			});
-	}
+			helpers.getAvatarURLFromId(user.id, data.bot, function(err, res){
+				info_embed.setThumbnail(res, 64, 64);
+				dio.sendEmbed(info_embed, data);
+			});
+		});
+	});
 });
+
+cmdCheck.permissions = [x.mod, x.admin];
 
 // works, albeit throwing errors. Only available to people with the pocketranger group. USE WITH CAUTION!!!
 let cmdNoobify = new command('admin', '!noobify', `This will remove the member role.`, function(data) {
