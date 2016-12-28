@@ -191,10 +191,10 @@ let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comr
 
 	coc_embed.setImage('http://www.clashofcomrades.com/images/v71/banner2.png', 900, 200);
 
-	coc_embed.pushItem(new helpers.EmbedItem(`Rules & more`, `[Read about the rules on facebook](https://www.facebook.com/ClashOfComrades)`), true);
-	coc_embed.pushItem(new helpers.EmbedItem(`Latest Brackets`, `[Find the latest brackets on challonge](http://challonge.com/cocnovemberknockout)`), true);
-	coc_embed.pushItem(new helpers.EmbedItem(`YouTube`, `[Find Clash of Comrades on YouTube](https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg)`), true);
-	coc_embed.pushItem(new helpers.EmbedItem(`Twitch`, `[Find Clash of Comrades on Twitch](https://www.twitch.tv/clashofcomrades)`), true);
+	coc_embed.pushItem(new helpers.EmbedItem(`Rules & more`, `[Read about the rules on facebook](https://www.facebook.com/ClashOfComrades)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`Latest Brackets`, `[Find the latest brackets on challonge](http://challonge.com/cocnovemberknockout)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`YouTube`, `[Find Clash of Comrades on YouTube](https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`Twitch`, `[Find Clash of Comrades on Twitch](https://www.twitch.tv/clashofcomrades)`, true));
 
 	dio.sendEmbed(coc_embed, data);
 });
