@@ -105,9 +105,9 @@ var cmd_mstack_del = new command('ryionbot', '!purge', 'Deletes the last *n* mes
         throw new Error("Number of messages cannot be negative or 0");
     }
 
-    data.messageManager.Delete(del_count, data.channelID, data);
+    data.messageManager.Delete(del_count + 1, data.channelID, data);
 
-    dio.say("Nuked the last " + del_count + " messages.", data);
+    dio.say("<@" + data.userID + "> nuked the last " + del_count + " messages", data);
 });
 
 cmd_mstack_del.permissions = [helpers.vars.ranger, helpers.vars.mod];

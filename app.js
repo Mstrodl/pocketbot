@@ -203,6 +203,8 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		db: fire
 	}
 
+	globalMessageManager.Push(command_data.messageID, command_data.channelID);
+
 	// Dance Detector
 	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {
 		if ( message.includes('/') || message.includes('\\') || message.includes('<') || message.includes('>') ) {
@@ -280,6 +282,4 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		});
 		logger.log(`An error occured while looking up or trying to call \`${args[0]}\``, logger.MESSAGE_TYPE.Error, e);
 	}
-
-	globalMessageManager.Push(command_data.messageID, command_data.channelID);
 });
