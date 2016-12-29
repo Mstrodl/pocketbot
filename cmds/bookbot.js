@@ -5,36 +5,137 @@
 let logger  = require('../core/logger'),
 	dio		= require('../core/dio'),
 	x		= require('../core/vars'),
-	command = require('../core/command').Command;
+	command = require('../core/command').Command,
+	helpers = require('../core/helpers'),
+	stripIndents = require('common-tags').stripIndents;
+
+//Yay arrays
+let ww_issues = [
+				{
+					name: `Issue 12`,
+					value: `[Read the latest issue of the Warren Weekly](http://bit.ly/2hjxude)`,
+					inline: false
+				},
+				{
+					name: `Issue 11`,
+					value: `[Read an archived issue](http://bit.ly/2fbgODo)`,
+					inline: true
+				},
+				{
+					name: `Issue 9`,
+					value: `[Read an archived issue](http://bit.ly/2dgEmU6)`,
+					inline: true
+				},
+				{
+					name: `Issue 7`,
+					value: `[Read an archived issue](http://bit.ly/2aT5dGI)`,
+					inline: true
+				},
+				{
+					name: `Issue 6`,
+					value: `[Read an archived issue](http://bit.ly/29wcywy)`,
+					inline: true
+				},
+				{
+					name: `Issue 5`,
+					value: `[Read an archived issue](http://bit.ly/29Yz5TG)`,
+					inline: true
+				},
+				{
+					name: `Issue 4`,
+					value: `[Read an archived issue](http://bit.ly/2aaf7BK)`,
+					inline: true
+				},
+				{
+					name: `Issue 3`,
+					value: `[Read an archived issue](http://bit.ly/29JQD3Z)`,
+					inline: true
+				},
+				{
+					name: `Issue 2`,
+					value: `[Read an archived issue](http://bit.ly/29SLMfC)`,
+					inline: true
+				},
+				{
+					name: `Issue 1`,
+					value: `[Read an archived issue](http://bit.ly/29EtwWM)`,
+					inline: true
+				}
+];
+
+let guides = [
+				{
+					name: `Introduction: A basic guide`,
+					value: `[Link to Lacante's Video](https://www.youtube.com/watch?v=w8Y2gdrgpUA)`,
+					inline: false
+				},
+				{
+					name: `The Commander and You`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/)`,
+					inline: true
+				},
+				{
+					name: `Knowing the Battlefield`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/2)`,
+					inline: true
+				},
+				{
+					name: `Economics of War`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/3)`,
+					inline: true
+				},
+				{
+					name: `Meet your Comrades`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/4)`,
+					inline: true
+				},
+				{
+					name: `The Subtleties of Battle`,
+					value: `[Link (written by Glyde)](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
+					inline: true
+				},
+				{
+					name: `Unit Overview`,
+					value: `[Link to Shooflypi's video](https://toothandtailwiki.com/guides/glydes-beginner-guide/5)`,
+					inline: true
+				}
+];
+
 
 let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game', function(data){
 	dio.say(""+
 		// I love this.
-		"Most recent Documented Changes (8/8/16):\n"+
-		"<http://blog.pocketwatchgames.com/post/150743867811/tooth-and-tail-patch-notes-pre-alpha-19>\n", data);
+		"Most recent Documented Changes (11/15/16):\n"+
+		"<http://blog.pocketwatchgames.com/post/153237321651>\n", data);
 });
 
 let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren', function(data){
-	dio.say("The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes. \n\n"+
-		"Issue 9: http://bit.ly/2dgEmU6\n"+
-		"Issue 7: <http://bit.ly/2aT5dGI>\n"+
-		"Issue 6: <http://bit.ly/29wcywy>\n"+
-		"Issue 5: <http://bit.ly/29Yz5TG>\n"+
-		"Issue 4: <http://bit.ly/2aaf7BK>\n"+
-		"Issue 3: <http://bit.ly/29JQD3Z>\n"+
-		"Issue 2: <http://bit.ly/29SLMfC>\n"+
-		"Issue 1: <http://bit.ly/29EtwWM>", data);
+	let ww_embed = new helpers.Embed({
+		title: `The Warren Weekly`,
+		color: '8281503',
+		description: `The Warren Weekly is a newspaper written by Glyde in the Tooth and Tail universe explaining certain changes noted in the most recent patch notes.`,
+		footer: {
+			text: `Last issue published on 11th December`
+		}
+	})
+
+	for(var k in ww_issues){
+		ww_embed.pushItem(new helpers.EmbedItem(ww_issues[k].name, ww_issues[k].value, ww_issues[k].inline));
+	}
+
+	dio.sendEmbed(ww_embed, data);
 });
 
 let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Troubleshoot common errors', function(data){
 	if (data.args[1] == null) {
-		dio.say(`What seems to be the trouble with your game? Type in '!troubleshoot #' by choosing an option below:
-
-:one: Game starts in top left corner OR Menu UI doesn't show
-:two: Can't see game lobby
-:three: Steam crashes
-:four: Cannot add Bots to Splitscreen
-:five: Other`, data);
+		dio.say(stripIndents`
+			What seems to be the trouble with your game? Type in '!troubleshoot #' by choosing an option below:
+			
+			:one: Game starts in top left corner OR Menu UI doesn't show
+			:two: Can't see game lobby
+			:three: Steam crashes
+			:four: Cannot add Bots to Splitscreen
+			:five: Other`, data);
 	} else {
 		let k = data.args[1];
 		let res;
@@ -66,37 +167,40 @@ let cmd_troubleshoot = new command('bookbot', '!troubleshoot', 'Troubleshoot com
 });
 
 let cmd_guide = new command('bookbot', '!guide', 'Get a useful list of guides for the game', function(data){
-	dio.say("Ah, hello there, if you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.\n\n"+
+	let guide_embed = new helpers.Embed({
+		title: `Guides`,
+		color: '8281503',
+		description: `If you're new to the game, this is a great place to start and I hope by the end of this, you'll have a solid understanding of Tooth and Tail and be better equipped with knowledge to win your battles.`
+	});
 
-		"**0) Introduction: A basic guide (Courtesy of Lacante)**\n"+
-		"<https://www.youtube.com/watch?v=w8Y2gdrgpUA>\n"+
-		"**1) The Commander and You: Understanding What You Can Do**\n"+
-		"<https://www.reddit.com/r/ToothAndTail/comments/4l4c8k/tooth_and_tail_guide_chapter_1_the_commander_and/>\n"+
-		"**2) Knowing the Battlefield: Understanding and Utilizing the Map**\n"+
-		"<https://www.reddit.com/r/ToothAndTail/comments/4lzmn3/tooth_and_tail_guide_chapter_2_knowing_the/>\n"+
-		"**3) The Economics of Battle: Food for the Army, Army for the Food**\n"+
-		"<https://www.reddit.com/r/ToothAndTail/comments/4n9ji5/tooth_and_tail_guide_chapter_3_economics_of_war/>\n"+
-		"**3.5) The Time and Tempo of Battle: Opening Build Orders (Courtesy of Shooflypi)**\n"+
-		"<https://www.youtube.com/watch?v=vOuE3aDZRGo>\n"+
-		"**4) The Warren: Bringing your troops to battle**\n"+
-		"<https://www.reddit.com/r/ToothAndTail/comments/4th99d/tooth_and_tail_guide_chapter_4_meet_your_comrades/>\n"+
-		"**4.5) Unit Overview (Courtesy of Shooflypi)**\n"+
-		"<https://www.youtube.com/watch?v=PmEPEuHRoJM>\n"+
-		"**5) Subtleties of Battle: Targetting and Micro\n**"+
-		"<https://www.reddit.com/r/ToothAndTail/comments/4zmelb/tooth_and_tail_guide_chapter_5_the_subtleties_of/>", data);
+	for(var k in guides){
+		guide_embed.pushItem(new helpers.EmbedItem(guides[k].name, guides[k].value));
+	}
+	
+	dio.sendEmbed(guide_embed, data);
 });
 
-let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comrades**', function(data) {
-	dio.say("Sign up for Clash of Comrades' bi-monthly tournament: November Knockout **is now closed!**\n"+
-		"Tournament Rules and other info: https://www.facebook.com/ClashOfComrades/ \n"+
-		"Bracket Info: <http://challonge.com/cocnovemberknockout>\n\n"+
+let cmd_coc = new command('bookbot', '!coc', 'Get Information on **Clash of Comrades**', function(data) {	
+	//Mew
+	let coc_embed = new helpers.Embed({
+		title: `<:tntwolf:253730191556214795> **Clash of Comrades** <:tntwolf:253730191556214795>`,
+		color: '8281503',
+		description: `Clash of Comrades is a bi-monthly tournament for players of the game Tooth and Tail with the aim of friendly competition and the development of the game!`,
+		url: 'http://clashofcomrades.com'
+	});
 
-		"**Youtube page:** <https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg>\n"+
-		"**Twitch Channel:** <https://www.twitch.tv/clashofcomrades>\n", data);
+	coc_embed.setImage('http://www.clashofcomrades.com/images/v71/banner2.png', 900, 200);
+
+	coc_embed.pushItem(new helpers.EmbedItem(`Rules & more`, `[Read about the rules on facebook](https://www.facebook.com/ClashOfComrades)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`Latest Brackets`, `[Find the latest brackets on challonge](http://challonge.com/cocnovemberknockout)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`YouTube`, `[Find Clash of Comrades on YouTube](https://www.youtube.com/channel/UCesgJAY8oYO9xxX_wR22WBg)`, true));
+	coc_embed.pushItem(new helpers.EmbedItem(`Twitch`, `[Find Clash of Comrades on Twitch](https://www.twitch.tv/clashofcomrades)`, true));
+
+	dio.sendEmbed(coc_embed, data);
 });
 
 let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot', function(data) {
-	dio.say("Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.", data);
+	dio.say(`Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.`, data);
 });
 
 module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc, cmd_bookbot];

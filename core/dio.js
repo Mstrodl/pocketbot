@@ -1,4 +1,5 @@
 var logger = require('./logger');
+var embed = require('./embed');
 
 /* ----------------------------------------
 	These are simplified versions of the
@@ -17,6 +18,18 @@ exports.say = function(msg,data,chan=false) {
 			message: newmsg
 		});
 	}
+}
+
+exports.sendEmbed = function(embedObj, data, chan=false){
+	let c = (chan) ? chan : data.channelID;
+	data.bot.sendMessage({
+		to: c,
+		embed: embedObj
+	}, function(err, res){
+		if(err){
+			logger.log(err, logger.MESSAGE_TYPE.Error);
+		}
+	});
 }
 
 exports.sendImage = function(t,user,data,chan=false) {
