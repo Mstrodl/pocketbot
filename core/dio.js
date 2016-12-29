@@ -25,7 +25,11 @@ exports.sendEmbed = function(embedObj, data, chan=false){
 	data.bot.sendMessage({
 		to: c,
 		embed: embedObj
-	})
+	}, function(err, res){
+		if(err){
+			logger.log(err, logger.MESSAGE_TYPE.Error);
+		}
+	});
 }
 
 exports.sendImage = function(t,user,data,chan=false) {
