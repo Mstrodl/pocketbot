@@ -101,12 +101,41 @@ let guides = [
 				}
 ];
 
+let lore_bits = {
+	commanders: [
+		{
+			name: `Commanders`,
+			value: `[Hopper](http://blog.pocketwatchgames.com/post/128043577046/fleshing-out-marrow-creating-a-commander)\
+			[Arroyo Bellafide](http://blog.pocketwatchgames.com/post/130150388556/building-bellafide-creating-a-commander)\
+			[Quartermaster](http://blog.pocketwatchgames.com/post/134278475206/hatching-hopper-creating-a-commander)\
+			[Archimedes](http://blog.pocketwatchgames.com/got_nothing_yet_fam)`,
+			inline: false
+		}
+	]
+};
+
 
 let cmd_patch = new command('bookbot', '!patch', 'See the most recent changes to the game', function(data){
 	dio.say(""+
 		// I love this.
 		"Most recent Documented Changes (11/15/16):\n"+
 		"<http://blog.pocketwatchgames.com/post/153237321651>\n", data);
+});
+
+let cmd_lore = new command('bookbot', '!lore', 'A list of Tooth and Tail lore resources', function(data){
+	let lore_embed = new helpers.Embed({
+		title: 'Tooth and Tail Lore',
+		color: 14962714,
+		description: 'Here are some helpful resources on the lore of the Tooth and Tail world and characters.',
+	});
+
+	lore_embed.setThumbnail('http://www.pocketwatchgames.com/presskit/Tooth%20and%20Tail/images/icon.png', 64, 64);
+
+	for(var k in lore_bits.commanders){
+		lore_embed.pushItem(new helpers.EmbedItem(lore_bits.commanders[k].name, lore_bits.commanders[k].value, lore_bits.commanders[k].inline));
+	}
+
+	dio.sendEmbed(lore_embed, data);
 });
 
 let cmd_newspaper = new command('bookbot', '!newspaper', 'Read the most recent issue of the Weekly Warren', function(data){
@@ -203,4 +232,4 @@ let cmd_bookbot = new command('bookbot', '!bookbot', 'Read up on Bookbot', funct
 	dio.say(`Bookbot was a bot created by Glyde Borealis that used to be of great service for this community. His soul lives on in Pocketbot.`, data);
 });
 
-module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc, cmd_bookbot];
+module.exports.commands = [cmd_patch, cmd_newspaper, cmd_troubleshoot, cmd_guide, cmd_coc, cmd_bookbot, cmd_lore];
