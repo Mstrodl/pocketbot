@@ -13,8 +13,7 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
         return;
     }
 
-    var targetID = helpers.getIDFromName(data.bot, data.args[1]);
-    //var targetID = data.userID;
+    var targetID = helpers.getUser(data.args[1]);
 
     //Check if the user exists
     if(!targetID || !data.bot.users[targetID]){
@@ -26,17 +25,19 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
     }
 
     //Check if the user has a description set
-    if(!data.userdata.users[targetID] || !data.userdata.users[targetID].description){
+    data.userdata.getProp(targetID, 'description').then((res) => {
+        if(!res){
+            data.bot.sendMessage({
+                to      : data.channelID,
+                message : "No user description found for '" + data.args[1] + "'!"
+            });
+            return;
+        }
+
         data.bot.sendMessage({
             to      : data.channelID,
-            message : "No user description found for '" + data.args[1] + "'!"
+            message : helpers.getNickFromId(targetID, data.bot)+ ': ' + res
         });
-        return;
-    }
-
-    data.bot.sendMessage({
-        to      : data.channelID,
-        message : data.args[1] + ': ' + data.userdata.users[targetID].description
     });
 });
 
@@ -50,14 +51,17 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
         return;
     }
 
-    if(!data.userdata.users[data.userID]){
-        data.userdata.users[data.userID] = {description: data.args[1]};
-    }else{
-        data.userdata.users[data.userID].description = data.args[1];
-    }
-    data.bot.sendMessage({
+    data.userdata.setProp({
+        user: data.userID,
+        prop: {
+            name: 'description',
+            data: data.args[1]
+        }
+    });
+
+     data.bot.sendMessage({
         to      : data.channelID,
-        message : data.user + ": " + data.userdata.users[data.userID].description
+        message : data.user + ': ' + data.args[1]
     });
 });
 
@@ -94,4 +98,36 @@ var cmd_cointoss = new command('ryionbot', '!coin', 'Tosses a coin, result is He
     dio.say(((Math.round(Math.random() * 300)) % 2 ? "Heads" : "Tails"), data);
 });
 
-module.exports.commands = [cmd_whois, cmd_iam, cmd_roll, cmd_cointoss];
+var cmd_mstack_del = new command('ryionbot', '!purge', 'Deletes the last *n* messages', function(data){
+    if(data.args.length != 2){
+        throw new Error("Wrong number of arguments given to purge command");
+    }
+
+    var del_count = parseInt(data.args[1]);
+
+    if(del_count <= 0){
+        throw new Error("Number of messages cannot be negative or 0");
+    }
+
+    data.messageManager.Delete(del_count + 1, data.channelID, data);
+
+    dio.say("<@" + data.userID + "> nuked the last " + del_count + " messages", data);
+});
+
+cmd_mstack_del.permissions = [helpers.vars.ranger, helpers.vars.mod];
+
+var cmd_mstack_find = new command('ryionbot', '!findmessages', 'Retrieves a user\'s messages. This is mostly a debug command', function(data){
+    if(data.args.length != 2){
+        throw new Error("Wrong number of arguments given to purge command");
+    }
+
+    var targetID = helpers.getUser(data.args[1]);
+    var messageArray = data.messageManager.GetUserMessages(targetID);
+
+    dio.say(JSON.stringify(messageArray), data);
+});
+
+cmd_mstack_find.permissions = [helpers.vars.ranger, helpers.vars.mod];
+
+
+module.exports.commands = [cmd_whois, cmd_iam, cmd_roll, cmd_cointoss, cmd_mstack_del, cmd_mstack_find];

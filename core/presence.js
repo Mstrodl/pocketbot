@@ -123,7 +123,8 @@ For a list of my commands, feel free to type \`!help\` in any channel or here in
 
 			userdata.getProp(fromID, 'status').then( (oldState) => {
 				if((oldState == 'offline' || oldState == null) && oldState != status.state){
-					let nickname = (helper.getNickFromId(fromID, status.bot.servers[x.chan].members) ? helper.getNickFromId(fromID, status.bot.servers[x.chan].members) : from);
+					//TODO: Since getNickFromId got changed to default to a user's account name, maybe the check is unnecessary
+					let nickname = (helper.getNickFromId(fromID, status.bot) ? helper.getNickFromId(fromID, status.bot) : from);
 					let greets = [
 						`I could not find Glyde around so a generic greeting is all I have this time, ${nickname}`,
 						`o/ ${nickname}`,
