@@ -116,7 +116,7 @@ var cmd_mstack_del = new command('ryionbot', '!purge', 'Deletes the last *n* mes
 
 cmd_mstack_del.permissions = [helpers.vars.ranger, helpers.vars.mod];
 
-var cmd_mstack_find = new command('ryionbot', '!findmessages', 'Retrieves a user\'s messages', function(data){
+var cmd_mstack_find = new command('ryionbot', '!findmessages', 'Retrieves a user\'s messages. This is mostly a debug command', function(data){
     if(data.args.length != 2){
         throw new Error("Wrong number of arguments given to purge command");
     }
