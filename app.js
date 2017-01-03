@@ -203,7 +203,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		db: fire
 	}
 
-	globalMessageManager.Push(command_data.messageID, command_data.channelID);
+	globalMessageManager.Push(new messageManager.Message(command_data.messageID, command_data.message, command_data.userID, command_data.channelID, Date.now()), command_data.channelID);
 
 	// Dance Detector
 	if ((message.includes('o') || message.includes('0')) && userID === "149541152322879489" ) {

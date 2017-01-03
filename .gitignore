@@ -56,3 +56,6 @@ yay2.js
 #Local bot userdata
 data
 users.json
+
+#ESLint config
+.eslintrc.json

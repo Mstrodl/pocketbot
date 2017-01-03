@@ -162,8 +162,8 @@ module.exports.getUserRoles = function(client , userID, serverID = x.chan){
 }
 
 //Get a user's nickname from a member list given the ID
-module.exports.getNickFromId = function(id, memberList){
-	return memberList[id].nick;
+module.exports.getNickFromId = function(id, client){
+	return (client.servers[x.chan].members[id].nick ? client.servers[x.chan].members[id].nick : client.users[id].username);
 }
 
 //Get a user's avatar URL given their ID, returns a default avatar if one cannot be found
@@ -177,6 +177,10 @@ module.exports.getAvatarURLFromId = function(id, client, callback){
 		}	
 		callback(err, res);
 	});
+}
+
+module.exports.getChannelNameFromId = function(id, client){
+	return client.channels[id].name;
 }
 
 module.exports.vars = x;
