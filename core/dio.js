@@ -1,5 +1,6 @@
-var logger = require('./logger');
-var embed = require('./embed');
+var logger = require('./logger'),
+    embed = require('./embed'),
+    vars = require('./vars');
 
 /* ----------------------------------------
 	These are simplified versions of the
@@ -36,7 +37,7 @@ exports.sendImage = function(t,user,data,chan=false) {
 	let c = (chan) ? chan : data.channelID;
 	let emoji = t.replace(/:/g, "").replace();
 	let m = (user) ? '`@'+user+':`': null;
-	if (emoji.startsWith('emoji/wen') || emoji.startsWith('emoji/dex') || emoji.startsWith('emoji/schatz') || emoji.startsWith('emoji/db')) {
+	if (vars.gifemotes.indexOf(emoji) > -1) {
 		logger.log('Uploading '+emoji+'.gif', logger.MESSAGE_TYPE.OK);
 		data.bot.uploadFile({
 			to: c,
