@@ -14,7 +14,7 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
     }
 
     var targetID = helpers.getUser(data.args[1]);
-    if(targetID === "@everyone" || targertID === "@here") {
+    if(targetID === "@everyone" || targetID === "@here") {
         data.bot.sendMessage({
             to: data.channelID,
             message: "Yeah. Nice try..."
