@@ -56,7 +56,7 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
         });
         return;
     }
-    if(data.args[1].indexOf(substring) !== -1) {
+    if(data.args[1].indexOf("@everyone") !== -1 || data.args[1].indexOf("@here") !== -1) {
         data.bot.sendMessage({
             to: data.channelID,
             message: "Yeah. Nice try..."
