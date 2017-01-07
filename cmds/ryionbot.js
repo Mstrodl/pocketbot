@@ -14,7 +14,13 @@ var cmd_whois = new command('ryionbot', '!whois', 'Displays a user\'s self writt
     }
 
     var targetID = helpers.getUser(data.args[1]);
-
+    if(targetID === "@everyone" || targertID === "@here") {
+        data.bot.sendMessage({
+            to: data.channelID,
+            message: "Yeah. Nice try..."
+        });
+        return;
+    }
     //Check if the user exists
     if(!targetID || !data.bot.users[targetID]){
         data.bot.sendMessage({
@@ -50,7 +56,13 @@ var cmd_iam = new command('ryionbot', '!iam', 'Sets a short description for your
         });
         return;
     }
-
+    if(data.args[1].indexOf(substring) !== -1) {
+        data.bot.sendMessage({
+            to: data.channelID,
+            message: "Yeah. Nice try..."
+        });
+        return;
+    }
     data.userdata.setProp({
         user: data.userID,
         prop: {
