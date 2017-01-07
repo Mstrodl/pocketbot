@@ -144,7 +144,7 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 					data: 1
 				}
 			});
-			dio.say(`:baseball: **${stupid.username} has received their first strike from <@${data.userID}>.**`, data, x.testing);
+			dio.say(`:baseball: **${stupid.username} has received their first strike from <@${data.userID}>.**`, data, x.history);
 		} else if (strikes+1 < STRIKE_COUNT) {
 			data.userdata.setProp({
 				user: stupid.id,
@@ -153,7 +153,7 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 					data: strikes+1
 				}
 			});
-			dio.say(`:baseball: **${stupid.username} has received a strike from <@${data.userID}> and now has ${ strikes+1 } strikes.**`, data, x.testing);
+			dio.say(`:baseball: **${stupid.username} has received a strike from <@${data.userID}> and now has ${ strikes+1 } strikes.**`, data, x.history);
 		} else if (strikes+1 === STRIKE_COUNT) {
 			data.userdata.setProp({
 				user: stupid.id,
