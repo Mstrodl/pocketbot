@@ -176,11 +176,11 @@ bot.on('message', function(user, userID, channelID, message, event) {
 
 	//Prepare command_data object
 	let command_data = {
-		//User data created by bots
+		// User data created by bots
 		userdata: userdata,
-		//Command manager
+		// Command manager
 		commandManager: globalCmdManager,
-		//Message manager
+		// Message manager
 		messageManager: globalMessageManager,
 		// Bot client object
 		bot: bot,
@@ -192,11 +192,12 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		channelID: channelID,
 		// ID of the server(guild)
 		serverID: vars.chan,
-		// ! -- bot.channels[channelID].guild_id Isn't correct
-		//Raw message string
+		// Raw message string
 		message: message,
 		// ID of the message sent
 		messageID: event.d.id,
+		// Attachments Array
+		attachments: event.d.attachments,
 		// Array of arguments/words in the message
 		args: args,
 		// Reference to the Firebase DB's
