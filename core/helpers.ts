@@ -2,31 +2,31 @@
 	These are simple helper functions to do
 	some quick task/calculation
 ---------------------------------------- */
-let dio = require('../core/dio'),
-	x	= require('../core/vars');
-	embed = require('../core/embed');
+var dio = require('../core/dio');
+var x	= require('../core/vars');
 // ! -- Feel free to improve any of these functions
+
+import * as Embeds from "./embed"
 
 const DEFAULT_AVATAR_URL = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
 
-module.exports.Embed = embed.Embed;
-module.exports.EmbedItem = embed.EmbedItem;
+export import Embeds = Embeds;
 
 // Debug function
-module.exports.isDebug = function() {
-	if ((process.argv.includes("--debug")) || (process.argv.includes("--d"))) {
+export function isDebug() {
+	if ((process.argv.indexOf("--debug") >= 0) || (process.argv.indexOf("--d") >= 0)) {
 		return true;
 	}
 	return false;
 }
 
 //Lazyness has no limits
-module.exports.isHeroku = function(){
+export function isHeroku(){
 	return process.env.ISHEROKU;
 }
 
 // Count function
-module.exports.getCount = function(arr, val) {
+export function getCount(arr, val) {
 	let i, j, count = 0;
 	for (i=0,j=arr.length;i<j;i++) {
 		(arr[i] === val) && count++;
@@ -34,17 +34,16 @@ module.exports.getCount = function(arr, val) {
 	return count;
 }
 
-// Command timer
-module.exports.popCommand = function(arr) {
+export function popCommand(arr: any) {
 	if (arr.length>0)  arr.shift();
 	//console.log(command);
 	setTimeout( function() {
-		module.exports.popCommand(arr);
+		popCommand(arr);
 	},4000);
 }
 
 // Gets player ID out of any string
-module.exports.getUser = function(txt) {
+export function getUser(txt) {
 	if (txt.match(/\b\d{10,}\b/g)) {
 		return txt.match(/\b\d{10,}\b/g)[0];
 	} else {
@@ -58,7 +57,7 @@ module.exports.getUser = function(txt) {
 // c = channelID
 // n = steps?
 // b - Bot
-module.exports.countdownMessage = function(m,t,c,n,b) {
+export function countdownMessage(m,t,c,n,b) {
 	if (n > 0) {
 		//console.log('Counting Down', n, m);
 		setTimeout(function() {
@@ -89,7 +88,7 @@ module.exports.countdownMessage = function(m,t,c,n,b) {
 }
 
 // Message argument parser
-module.exports.getArgs = function(message) {
+export function getArgs(message) {
 	//Split the input by spaces
 	var word_array = message.split(" ");
 	var args_array = [];
@@ -121,7 +120,7 @@ module.exports.getArgs = function(message) {
 }
 
 //Find the ID of a user given the client and the username
-module.exports.getIDFromName = function(client, name){
+export function getIDFromName(client, name){
     for(var key in client.users){
         if(client.users[key].username == name){
             return key;
@@ -131,7 +130,7 @@ module.exports.getIDFromName = function(client, name){
 }
 
 //Checks if the current channel is x.playground
-module.exports.isBPG = function(chan) {
+export function isBPG(chan) {
 	if (chan.channelID != x.playground) {
 		return false;
 	} else {
@@ -140,7 +139,7 @@ module.exports.isBPG = function(chan) {
 }
 
 //Get the DM channel for a given user ID
-module.exports.getDMChannel = function(client, userID){
+export function getDMChannel(client, userID){
 	for(var k in client.directMessages){
 		if(client.directMessages[k].recipient.id == userID){
 			return client.directMessages[k].id;
@@ -149,7 +148,7 @@ module.exports.getDMChannel = function(client, userID){
 	return null;
 }
 
-module.exports.collapseWhitespace = function(s){
+export function collapseWhitespace(s){
 	//Remove any whitespace around the string
 	s = s.trim();
 	//Run some regex I found on stackoverflow which presumably does what I need it to be
@@ -157,17 +156,17 @@ module.exports.collapseWhitespace = function(s){
 	return s;
 }
 //Gets a user's roles given the user ID
-module.exports.getUserRoles = function(client , userID, serverID = x.chan){
+export function getUserRoles(client , userID, serverID = x.chan){
 	return client.servers[serverID].members[userID].roles;
 }
 
 //Get a user's nickname from a member list given the ID
-module.exports.getNickFromId = function(id, client){
+export function getNickFromId(id, client){
 	return (client.servers[x.chan].members[id].nick ? client.servers[x.chan].members[id].nick : client.users[id].username);
 }
 
 //Get a user's avatar URL given their ID, returns a default avatar if one cannot be found
-module.exports.getAvatarURLFromId = function(id, client, callback){
+export function getAvatarURLFromId(id, client, callback){
 	//I'm sorry for this hack
 	client.createDMChannel(id, function(err, res){
 		if(err || !res || !res.recipient.avatar){
@@ -179,8 +178,6 @@ module.exports.getAvatarURLFromId = function(id, client, callback){
 	});
 }
 
-module.exports.getChannelNameFromId = function(id, client){
+export function getChannelNameFromId(id, client){
 	return client.channels[id].name;
 }
-
-module.exports.vars = x;
