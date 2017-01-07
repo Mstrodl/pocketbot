@@ -11,10 +11,9 @@ let logger  = require('../core/logger'),
 	dio		= require('../core/dio'),
 	help	= require('../core/helpers'),
 	x 		= require('../core/vars'),
-	//ud 		= require('../core/userdata'),
 	cmdKey	= null,
 	cmdNoKey = null,
-	VOTE_COUNT = 5;
+	VOTE_COUNT = 3;
 
 // If there is no FB token (localhost), ABORT!
 if (!TOKEN.FBPKEYID()) {
@@ -201,7 +200,7 @@ if (!TOKEN.FBPKEYID()) {
 						dio.say(`:no_entry_sign: ${from} has voted against keying ${memsnap[lucky].username}. \n **${votes}/${VOTE_COUNT}** :thumbsup: | **${antivotes}** :thumbsdown:`, data, x.history);
 					}
 
-					if (votes - antivotes === VOTE_COUNT)  {
+					if (votes - antivotes >= VOTE_COUNT)  {
 						dio.say(`:tada: <@${lucky}> has been voted to receive a key.`, data, x.history);
 						newplayer.set( memsnap[lucky] ); // Yes, it resets user (w/o votes)
 						for (let code in kk) {

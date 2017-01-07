@@ -75,25 +75,31 @@ CommandManager.prototype.getGroup = function(name){
 }
 
 CommandManager.prototype.isTrigger = function(words){
-    if(!words || words == ''){
-        return false;
-    }
+    // console.log(words);
+    if(!words || words == '') return false;
 
     //Check every word in the message
     for(var key in words){
-        if (words[key].length < 3) return false;
-        
-        if(words[key][0] == this.debugSymbol){
-            if(this.getCommand([words[key].substring(1, words[key].length)])){
-                return words[key].substring(1, words[key].length);
-            }else{
+        let word = words[key];
+        // Ignore short words, !ping is the shortest command
+        if (word.length < 3) return false;
+
+        // If the first letter is debug symbol
+        if(word[0] == this.debugSymbol){
+            let cmdSansDebug = word.substring(1);
+            // Strip debug symbol to see if command is still real
+            if ( this.getCommand([cmdSansDebug]) ){
+                if ( helpers.isHeroku() ) {
+                    return false;
+                } else {
+                    return cmdSansDebug;
+                }
+            } else{
                 return false;
             }
         }
 
-        if(this.getCommand([words[key]])){
-            return words[key];
-        }
+        if (this.getCommand([word])) return word;
     }
     return false;
 }

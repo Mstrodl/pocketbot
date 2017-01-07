@@ -3,14 +3,14 @@
 	a new command file. Also the !help
  ---------------------------------------- */
 
-let logger  = require('../core/logger'),
-	command = require('../core/command').Command,
-    commandSystem    = require('../core/command'),
-	helpers = require('../core/helpers');
+let logger  		= require('../core/logger'),
+	command 		= require('../core/command').Command,
+	commandSystem   = require('../core/command'),
+	helpers 		= require('../core/helpers');
 
 let cmd_ping = new command('basic', '!ping', 'Test command #1', function(data){
 	data.bot.sendMessage({
-		to	  : data.channelID,
+		to		: data.channelID,
 		message : "Pong!"
 	});
 });

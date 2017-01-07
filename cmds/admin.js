@@ -39,7 +39,7 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 	if (!user) {
 		dio.say(`🕑 Dont recognize member: \`${u}\``, data)
 		return false;
-	} 
+	}
 
 	dio.del(data.messageID, data);
 
@@ -60,7 +60,7 @@ let cmdCheck = new command('admin','!check',`Gets data about the user being chec
 				} else { antivotes++; }
 			}
 		}
-		
+
 		data.userdata.getProp(user.id, 'strikes').then( (res) => {
 			let info_embed = new helpers.Embed({
 				title: `${uname} - #${user.id}`,
@@ -124,13 +124,18 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 	dio.del(data.messageID, data);
 	let stupid = data.bot.servers[x.chan].members[ helpers.getUser(data.args[1]) ];
 
+	// Can't strike mods, admins, or bots
 	if (stupid.roles.includes(x.mod) || stupid.roles.includes(x.admin) || stupid.roles.includes(x.combot)) {
 		dio.say(`Whoa hey, I can't ban them. Talk to a dev.`, data);
 		return false;
 	}
 
+	// Make sure a strike is accompanied with a picture
+	dio.say(`🕑 Remember to add screenshot in history of the offense the strike is for, <@${data.userID}>.`, data);
+
 	data.userdata.getProp(stupid.id, 'strikes').then( (strikes) => {
-		//console.log(stupid.id, strikes);
+		//console.log(stupid.id, strikes, data.attachments);
+
 		if (!strikes) {
 			data.userdata.setProp({
 				user: stupid.id,
@@ -139,7 +144,7 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 					data: 1
 				}
 			});
-			dio.say(`:baseball: **${stupid.username} has received their first strike.**`, data, x.history);
+			dio.say(`:baseball: **${stupid.username} has received their first strike from <@${data.userID}>.**`, data, x.testing);
 		} else if (strikes+1 < STRIKE_COUNT) {
 			data.userdata.setProp({
 				user: stupid.id,
@@ -148,7 +153,7 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 					data: strikes+1
 				}
 			});
-			dio.say(`:baseball: **${stupid.username} now has ${ strikes+1 } strikes.**`, data, x.history);
+			dio.say(`:baseball: **${stupid.username} has received a strike from <@${data.userID}> and now has ${ strikes+1 } strikes.**`, data, x.testing);
 		} else if (strikes+1 === STRIKE_COUNT) {
 			data.userdata.setProp({
 				user: stupid.id,
@@ -167,7 +172,7 @@ let cmdStrike = new command('admin', '!strike', 'Allows mods to cast a vote to b
 					logger.log(`User ban failed. ${err}`,'Error');
 					return false;
 				} else {
-					dio.say(`:baseball: **${stupid.username} has received ${STRIKE_COUNT} strikes and is now BANNED**.`, data, x.history);
+					dio.say(`:baseball: **${stupid.username} has received final strike from <@${data.userID}> and is now BANNED**.`, data, x.history);
 				}
 			});
 		}
