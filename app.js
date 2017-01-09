@@ -288,6 +288,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 					logger.log(`${err} - ${resp}`, 'Warn');
 				} else {
 					dio.say(`You have been muted for 2 minutes because you were detected as spamming a channel. If you weren't, and were wrongly flagged by the bot, please let a Moderator know. If you were, please try to use proper internet etiquette when engaging in chat.`, command_data, userID);
+					dio.say(`Muted: ${user}`, command_data, vars.history);
 					logger.log(`Muted: ${user} | ${userID}`, 'OK');
 				}
 
