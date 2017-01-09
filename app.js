@@ -130,7 +130,7 @@ globalMessageManager.AddChannels(bot);
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
-	helper.popCommand( globalCmdManager.cList );
+	helper.popCommand( cList );
 
 	// Work around to giving Lucille bot/persona info!
 	if (helper.isHeroku() ) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
@@ -163,6 +163,9 @@ bot.on('presence', function(user, userID, state, game, event) {
 
 	if (fire) status.onChange(statusData, userdata);
 });
+
+let spammers = {},
+	cList = [];
 
 bot.on('message', function(user, userID, channelID, message, event) {
 	//console.log(`${user} : ${bot.servers[vars.chan].members[userID].roles}`) // Quick role
@@ -250,6 +253,37 @@ bot.on('message', function(user, userID, channelID, message, event) {
 			// Do nothing
 		} else {
 			return false;
+		}
+	}
+
+	// ===================================
+	// SPAM Control
+	// ===================================
+	if ( spammers.hasOwnProperty(userID) ) {
+		logger.log(`${user} is spamming`, logger.MESSAGE_TYPE.Warn)
+		return false;
+	} else {
+		if (channelID != vars.testing) return false;
+
+		cList.push(userID);
+		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
+
+		if (c===4) {
+			let v = [
+				`Take it easy on the spam <@${userID}>. :warning:`,
+				`<@${userID}> simmer down please. :neutral_face: `,
+				`<@${userID}> take a chill pill. :pill:`,
+				`Calm down <@${userID}>, no one likes the spam. :unamused:`
+				],
+				n = Math.floor( Math.random()*4 );
+			dio.say(v[n], command_data);
+		} else if (c>4) {
+			dio.say(`<@${userID}>, you are going to be muted for the next 2 minutes. Please adjust your chat etiquette.`, command_data);
+			spammers[userID] = true;
+
+			setTimeout( function() {
+				delete spammers[userID];
+			},120000);
 		}
 	}
 
