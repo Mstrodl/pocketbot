@@ -263,12 +263,10 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		logger.log(`${user} is spamming`, logger.MESSAGE_TYPE.Warn)
 		return false;
 	} else {
-		if (channelID != vars.testing) return false;
-
 		cList.push(userID);
 		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
 
-		if (c===4) {
+		if (c===5) {
 			let v = [
 				`Take it easy on the spam <@${userID}>. :warning:`,
 				`<@${userID}> simmer down please. :neutral_face: `,
@@ -277,13 +275,38 @@ bot.on('message', function(user, userID, channelID, message, event) {
 				],
 				n = Math.floor( Math.random()*4 );
 			dio.say(v[n], command_data);
-		} else if (c>4) {
+		} else if (c>5) {
 			dio.say(`<@${userID}>, you are going to be muted for the next 2 minutes. Please adjust your chat etiquette.`, command_data);
 			spammers[userID] = true;
 
-			setTimeout( function() {
-				delete spammers[userID];
-			},120000);
+			bot.addToRole({
+				serverID: vars.chan,
+				userID: userID,
+				roleID: vars.muted
+			}, function(err,resp) {
+				if (err) {
+					logger.log(`${err} - ${resp}`, 'Warn');
+				} else {
+					dio.say(`You have been muted for 2 minutes because you were detected as spamming a channel. If you weren't, and were wrongly flagged by the bot, please let a Moderator know. If you were, please try to use proper internet etiquette when engaging in chat.`, command_data, userID);
+					logger.log(`Muted: ${user} | ${userID}`, 'OK');
+				}
+
+				setTimeout( function() {
+					delete spammers[userID];
+					bot.removeFromRole({
+						serverID: vars.chan,
+						userID: userID,
+						roleID: vars.muted
+					}, function(err,resp) {
+						if (err) {
+							logger.log(`${err} - ${resp}`, 'Warn');
+						} else {
+							logger.log(`Muted: ${user} | ${userID}`, 'OK');
+							dio.say(`You have now been unmuted. :tada: Please let a Moderator know if the mute is still in effect, as I sometimes have issues changing roles, sorry! :flushed:`, command_data, userID);
+						}
+					});
+				},120000);
+			})
 		}
 	}
 
