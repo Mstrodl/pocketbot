@@ -26,7 +26,7 @@ userdata.prototype.getProp = function(userID, prop){
     // null if user didn't exist or on Firebase error
     return new Promise( (resolve, reject) => {
         this.db.child(userID).once("value", function(user){
-            if ( user.val().hasOwnProperty(prop) ) {
+            if ( user.val() && user.val().hasOwnProperty(prop) ) {
                 resolve( user.val()[prop] );
             } else {
                 resolve( false );
@@ -123,7 +123,7 @@ userdata.prototype.transferCurrency = function(fromID, toID, amount, ignoreSende
                     resolve ({res: "Transfer happened sucessfully"});
                 }
 
-                
+
         }, function(err){
             logger.log(err, logger.MESSAGE_TYPE.Error);
             reject("User has no wallet");
