@@ -8,7 +8,7 @@ let logger  = require('../core/logger'),
 	x		= require('../core/vars'),
 	dio 	= require('../core/dio');
 
-let cmdReady = new command('matchmake', '!ready', `This marks a player as **'Looking for a Game'**`, function(data) {
+let cmdReady = new command('matchmake', ['!ready', '!lfg'], `This marks a player as **'Looking for a Game'**`, function(data) {
 	//regPlayer(fromID,'');
 	let chan = data.channelID,
 		from = data.user,
