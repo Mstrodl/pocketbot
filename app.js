@@ -259,9 +259,8 @@ bot.on('message', function(user, userID, channelID, message, event) {
 	// ===================================
 	// SPAM Control
 	// ===================================
-	if ( spammers.hasOwnProperty(userID) ) {
-		logger.log(`${user} is spamming`, logger.MESSAGE_TYPE.Warn)
-		return false;
+	if ( bot.servers[vars.chan].members[userID].roles.includes( vars.member ) ) {
+		// return false;
 	} else {
 		cList.push(userID);
 		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
@@ -313,7 +312,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 
 		setTimeout( function() {
 			cList.splice( cList.indexOf(userID) , 1);
-		},4000);
+		},3000);
 	}
 
 	try {
