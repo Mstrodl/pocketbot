@@ -260,7 +260,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 	// SPAM Control
 	// ===================================
 	if ( bot.servers[vars.chan].members[userID].roles.includes( vars.member ) ) {
-		return false;
+		// return false;
 	} else {
 		cList.push(userID);
 		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
