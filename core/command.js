@@ -9,8 +9,6 @@ function CommandManager(debugSymbol){
     this.debugSymbol = debugSymbol;
     this.activePersona = null;
     this.groups = {};
-    this.spammers = {};
-    this.cList = [];
 }
 
 //Add/overwrites a given group in the CommandManager
@@ -113,38 +111,7 @@ CommandManager.prototype.call = function(command_data, cmd, group=null){
         throw new Error("No command given");
     }
 
-    // ===================================
-    // SPAM Control
-    // ===================================
-    if ( this.spammers.hasOwnProperty(command_data.userID) ) {
-        logger.log(`${command_data.user} is spamming commands`, logger.MESSAGE_TYPE.Warn)
-        return false;
-    } else {
-        this.cList.push(command_data.userID);
-        let c = helpers.getCount(this.cList,command_data.userID), // Check how many commands user has called recently
-            spammers = this.spammers;
-
-        if (c===3) {
-            let v = [
-                `Take it easy on the command spam <@${command_data.userID}> or you'll be in big trouble.`,
-                `<@${command_data.userID}> simmer down, OR ELSE.`,
-                `<@${command_data.userID}> take a chill pill or I'll make you.`,
-                `Calm down <@${command_data.userID}>, too much spam and you're in for it.`
-                ],
-                n = Math.floor( Math.random()*4 );
-
-            dio.say(v[n], command_data);
-        } else if (c>2) {
-            dio.say(`<@${command_data.userID}>, I'm going to ignore you for the next 2 minutes. Way to go.`, command_data);
-            spammers[command_data.userID] = true;
-
-            setTimeout( function() {
-                delete spammers[command_data.userID];
-            },120000);
-        }
-
-        cmd.call(command_data);
-    }
+    cmd.call(command_data);
     return false;
 }
 

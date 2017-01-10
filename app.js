@@ -130,7 +130,7 @@ globalMessageManager.AddChannels(bot);
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
-	helper.popCommand( globalCmdManager.cList );
+	//helper.popCommand( cList );
 
 	// Work around to giving Lucille bot/persona info!
 	if (helper.isHeroku() ) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
@@ -163,6 +163,9 @@ bot.on('presence', function(user, userID, state, game, event) {
 
 	if (fire) status.onChange(statusData, userdata);
 });
+
+let spammers = {},
+	cList = [];
 
 bot.on('message', function(user, userID, channelID, message, event) {
 	//console.log(`${user} : ${bot.servers[vars.chan].members[userID].roles}`) // Quick role
@@ -251,6 +254,66 @@ bot.on('message', function(user, userID, channelID, message, event) {
 		} else {
 			return false;
 		}
+	}
+
+	// ===================================
+	// SPAM Control
+	// ===================================
+	if ( spammers.hasOwnProperty(userID) ) {
+		logger.log(`${user} is spamming`, logger.MESSAGE_TYPE.Warn)
+		return false;
+	} else {
+		cList.push(userID);
+		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
+		//if (channelID != vars.testing) return false;
+		if (c===3) {
+			let v = [
+				`Take it easy on the spam <@${userID}>. :warning:`,
+				`<@${userID}> simmer down please. :neutral_face: `,
+				`<@${userID}> take a chill pill. :pill:`,
+				`Calm down <@${userID}>, no one likes the spam. :unamused:`
+				],
+				n = Math.floor( Math.random()*4 );
+			dio.say(v[n], command_data);
+		} else if (c>5) {
+			dio.say(`<@${userID}>, you are going to be muted for the next 2 minutes. Please adjust your chat etiquette.`, command_data);
+			spammers[userID] = true;
+
+			// Add them to mute role, and remove in 2 minutes
+			bot.addToRole({
+				serverID: vars.chan,
+				userID: userID,
+				roleID: vars.muted
+			}, function(err,resp) {
+				if (err) {
+					logger.log(`${err} - ${resp}`, 'Warn');
+				} else {
+					dio.say(`You have been muted for 2 minutes because you were detected as spamming a channel. If you weren't, and were wrongly flagged by the bot, please let a Moderator know. If you were, please try to use proper internet etiquette when engaging in chat.`, command_data, userID);
+					dio.say(`:zipper_mouth:  Muted: ${user}`, command_data, vars.history);
+					logger.log(`Muted: ${user} | ${userID}`, 'OK');
+				}
+
+				setTimeout( function() {
+					delete spammers[userID];
+					bot.removeFromRole({
+						serverID: vars.chan,
+						userID: userID,
+						roleID: vars.muted
+					}, function(err,resp) {
+						if (err) {
+							logger.log(`${err} - ${resp}`, 'Warn');
+						} else {
+							logger.log(`Muted: ${user} | ${userID}`, 'OK');
+							dio.say(`You have now been unmuted. :tada: Please let a Moderator know if the mute is still in effect, as I sometimes have issues changing roles, sorry! :flushed:`, command_data, userID);
+						}
+					});
+				},120000);
+			});
+		}
+
+		setTimeout( function() {
+			cList.splice( cList.indexOf(userID) , 1);
+		},4000);
 	}
 
 	try {
