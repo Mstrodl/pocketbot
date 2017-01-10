@@ -130,7 +130,7 @@ globalMessageManager.AddChannels(bot);
 
 bot.on('ready', function(event) {
 	logger.log("Bot logged in successfully.", logger.MESSAGE_TYPE.OK);
-	helper.popCommand( cList );
+	//helper.popCommand( cList );
 
 	// Work around to giving Lucille bot/persona info!
 	if (helper.isHeroku() ) dio.say( `!lucille`, { bot: bot, channelID: vars.testing } );
@@ -265,8 +265,8 @@ bot.on('message', function(user, userID, channelID, message, event) {
 	} else {
 		cList.push(userID);
 		let c = helper.getCount(cList,userID); // Check how many messages user has posted recently
-
-		if (c===5) {
+		//if (channelID != vars.testing) return false;
+		if (c===3) {
 			let v = [
 				`Take it easy on the spam <@${userID}>. :warning:`,
 				`<@${userID}> simmer down please. :neutral_face: `,
@@ -279,6 +279,7 @@ bot.on('message', function(user, userID, channelID, message, event) {
 			dio.say(`<@${userID}>, you are going to be muted for the next 2 minutes. Please adjust your chat etiquette.`, command_data);
 			spammers[userID] = true;
 
+			// Add them to mute role, and remove in 2 minutes
 			bot.addToRole({
 				serverID: vars.chan,
 				userID: userID,
@@ -307,8 +308,12 @@ bot.on('message', function(user, userID, channelID, message, event) {
 						}
 					});
 				},120000);
-			})
+			});
 		}
+
+		setTimeout( function() {
+			cList.splice( cList.indexOf(userID) , 1);
+		},4000);
 	}
 
 	try {
