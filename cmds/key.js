@@ -13,7 +13,7 @@ let logger  = require('../core/logger'),
 	x 		= require('../core/vars'),
 	cmdKey	= null,
 	cmdNoKey = null,
-	VOTE_COUNT = 5;
+	VOTE_COUNT = 3;
 
 // If there is no FB token (localhost), ABORT!
 if (!TOKEN.FBPKEYID()) {
